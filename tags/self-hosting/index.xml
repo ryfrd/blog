@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>self-hosting on james mclaren</title>
+    <link>https://jdysmcl.xyz/tags/self-hosting/</link>
+    <description>Recent content in self-hosting on james mclaren</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 16 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://jdysmcl.xyz/tags/self-hosting/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>tailscale, caddy, and nixos containers - a match made in heaven</title>
+      <link>https://jdysmcl.xyz/posts/tailscale-caddy-nixos-containers/</link>
+      <pubDate>Tue, 16 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://jdysmcl.xyz/posts/tailscale-caddy-nixos-containers/</guid>
+      <description>For a little while now I&amp;rsquo;ve been running some services (jellyfin etc.) on an old laptop in my house. I&amp;rsquo;m not trying to sound like a podcast ad but as a networking novice, the simplicity tailscale brings to accessing these services remotely is very nice. Until recently though, I had been accessing my services like a heathen with http and port numbers (eg http://tailscale-ip:service-port). This works and is perfectly secure thanks to tailscale though it lacks a certain finesse.</description>
+    </item>
+    
+  </channel>
+</rss>

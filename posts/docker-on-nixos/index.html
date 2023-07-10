@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
+    
+    <link href="/drk.css" rel="stylesheet" id="stylesheet">
+    <title>james mclaren</title>
+  </head>
+  <body>
+  <script src="https://kit.fontawesome.com/460d3298b2.js" crossorigin="anonymous"></script>
+  <script src="/tggl.js"></script>
+
+  <div class="nav left-right">
+    <div class="left">
+      <a href="/" class="title nav-left-item squishy">james mclaren</a>
+      <button id="themeButton" class="toggle-button nav-left-item squishy" onclick="toggleTheme()">
+<i class="fa-solid fa-circle-half-stroke"></i>
+      </button>
+    </div>
+    <div class="right">
+      
+        <a class="nav-right-item squishy" href="/posts/">all posts</a>
+      
+        <a class="nav-right-item squishy" href="/tags/">topics</a>
+      
+    </div>
+  </div>
+  
+  <div class="body-container">
+
+
+<div class="body-container">
+  <h3>translating docker to nix?!</h3>
+  <p>In my opinion, there are moments when the convenience of docker and its surrounding ecosystem can&rsquo;t be beat. I&rsquo;ve been dabbling in the self hosting world and oftentimes the best maintained packaging option is a docker image. As a result of this I&rsquo;ve been playing around with the nixos approach to managing docker containers.</p>
+<h3 id="nix---docker-compose---docker-run">nix -&gt; docker compose -&gt; docker run</h3>
+<p>To illustrate how to translate a simple example from the world of docker to nix let&rsquo;s have a look at the config for my <a href="https://docs.searxng.org/">searxng</a> instance.</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>virtualisation<span style="color:#fe8019">.</span>oci-containers<span style="color:#fe8019">.</span>containers<span style="color:#fe8019">.</span><span style="color:#b8bb26">&#34;searxng&#34;</span> = {
+</span></span><span style="display:flex;"><span>  autoStart <span style="color:#fe8019">=</span> <span style="color:#d3869b">true</span>;
+</span></span><span style="display:flex;"><span>  image <span style="color:#fe8019">=</span> <span style="color:#b8bb26">&#34;searxng/searxng&#34;</span>;
+</span></span><span style="display:flex;"><span>  volumes <span style="color:#fe8019">=</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#b8bb26">&#34;/srv/searx:/etc/searxng&#34;</span>
+</span></span><span style="display:flex;"><span>  ];
+</span></span><span style="display:flex;"><span>  environment <span style="color:#fe8019">=</span> {
+</span></span><span style="display:flex;"><span>    BASE_URL <span style="color:#fe8019">=</span> <span style="color:#b8bb26">&#34;https://searx.jdysmcl.xyz/&#34;</span>;
+</span></span><span style="display:flex;"><span>    INSTANCE_NAME <span style="color:#fe8019">=</span> <span style="color:#b8bb26">&#34;go on big boy dont be shy&#34;</span>;
+</span></span><span style="display:flex;"><span>  };
+</span></span><span style="display:flex;"><span>  ports <span style="color:#fe8019">=</span> [ <span style="color:#b8bb26">&#34;8080:8080&#34;</span> ];
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>Here is the same thing written in a <code>docker-compose.yml</code> style format.</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#fb4934">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#fb4934">searxng</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#fb4934">image</span>: searxng/searxng
+</span></span><span style="display:flex;"><span>    <span style="color:#fb4934">volumes</span>:
+</span></span><span style="display:flex;"><span>      - /srv/searxng:/etc/searxng
+</span></span><span style="display:flex;"><span>    <span style="color:#fb4934">environment</span>:
+</span></span><span style="display:flex;"><span>      - BASE_URL=https://searx.jdysmcl.xyz/;
+</span></span><span style="display:flex;"><span>	  - INSTANCE_NAME=go on big boy dont be shy;
+</span></span><span style="display:flex;"><span>    <span style="color:#fb4934">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#b8bb26">&#34;8080:8080&#34;</span>
+</span></span></code></pre></div><p>Also, this is what it would look like as a simple old <code>docker run</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ docker pull searxng/searxng
+</span></span><span style="display:flex;"><span>$ docker run --rm <span style="color:#b8bb26">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b8bb26"></span>             -d -p 8080:8080 <span style="color:#b8bb26">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b8bb26"></span>             -v <span style="color:#b8bb26">&#34;/srv/searxng:/etc/searxng&#34;</span> <span style="color:#b8bb26">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b8bb26"></span>             -e <span style="color:#b8bb26">&#34;BASE_URL=http://searx.jdysmcl.xyz/&#34;</span> <span style="color:#b8bb26">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b8bb26"></span>             -e <span style="color:#b8bb26">&#34;INSTANCE_NAME=go on big boy dont be shy&#34;</span> <span style="color:#b8bb26">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b8bb26"></span>             searxng/searxng
+</span></span></code></pre></div><h3 id="bits-and-bobs">bits and bobs</h3>
+<p>As you can see, nix very kindly provides you with convenient options for the most essential tasks: mounting volumes, exposing ports, passing environment variables etc. But what about some more niche configurations that aren&rsquo;t exposed in <a href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/oci-containers.nix">oci-containers.nix</a>. As far as I can tell, your best bet in these scenarios is <code>virtualisation.oci-containers.containers.&lt;name&gt;.extraOptions</code>; this lets you pass a list of command line arguments to your docker run command. For example, I had this in my config for a vpn container.</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>virtualisation<span style="color:#fe8019">.</span>oci-containers<span style="color:#fe8019">.</span>containers<span style="color:#fe8019">.</span><span style="color:#b8bb26">&#34;vpn&#34;</span><span style="color:#fe8019">.</span>extraOptions = [
+</span></span><span style="display:flex;"><span>  <span style="color:#b8bb26">&#34;--cap-add=net_admin&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8bb26">&#34;--device=/dev/net/tun&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8bb26">&#34;--network=bridge&#34;</span>
+</span></span><span style="display:flex;"><span>];
+</span></span></code></pre></div><p>With a mishmash of these different bits and bobs I was able to do everything that I needed to. It doesn&rsquo;t really open any more doors than docker compose but it&rsquo;s nice to have the option when you&rsquo;re already invested in the nix ecosystem.</p>
+<p>One final note: nix provides the option to choose between docker and podman with <code>virtualisation.oci-containers.containers.backend</code>. This defaults to podman.</p>
+
+</div>
+
+<footer>
+  <small>
+    <div class="foot-message">made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a></div>
+  </small>
+</footer>
+</div> 
+</body>
+</html>
+

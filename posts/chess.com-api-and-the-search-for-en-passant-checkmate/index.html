@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
+    
+    <link href="/drk.css" rel="stylesheet" id="stylesheet">
+    <title>james mclaren</title>
+  </head>
+  <body>
+  <script src="https://kit.fontawesome.com/460d3298b2.js" crossorigin="anonymous"></script>
+  <script src="/tggl.js"></script>
+
+  <div class="nav left-right">
+    <div class="left">
+      <a href="/" class="title nav-left-item squishy">james mclaren</a>
+      <button id="themeButton" class="toggle-button nav-left-item squishy" onclick="toggleTheme()">
+<i class="fa-solid fa-circle-half-stroke"></i>
+      </button>
+    </div>
+    <div class="right">
+      
+        <a class="nav-right-item squishy" href="/posts/">all posts</a>
+      
+        <a class="nav-right-item squishy" href="/tags/">topics</a>
+      
+    </div>
+  </div>
+  
+  <div class="body-container">
+
+
+<div class="body-container">
+  <h3>chess.com api and the search for en passant checkmate</h3>
+  <p>The chess.com API gives you access to a crazy amount of data on games played on the site. Armed with the knowledge that this data was at my fingertips, I set out to do what any sane person would do: find en passant checkmates. For those not in the know, en passant check mate is kind of the king of moves in chess meme circles. So some sort of python script that identified en passant check mates that occured on the site would be of great value to me.</p>
+<p>First things first, I would need a method of grabbing lots of games from the api. This would be achieved by looking at players on the site and searching their game archives. As I couldn&rsquo;t think of any obvious way to get completely random players on the site, I used the API&rsquo;s lists of all titled players (GM, IM, WIM, etc.) on the site. This is what I came up with -&gt;</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  <span style="color:#fe8019">def</span> <span style="color:#fabd2f">get_archive_urls</span>(titled_urls):
+</span></span><span style="display:flex;"><span>	  players <span style="color:#fe8019">=</span> []
+</span></span><span style="display:flex;"><span>	  <span style="color:#fe8019">for</span> url <span style="color:#fe8019">in</span> titled_urls:
+</span></span><span style="display:flex;"><span>		  title_list <span style="color:#fe8019">=</span> requests<span style="color:#fe8019">.</span>get(url)<span style="color:#fe8019">.</span>json()
+</span></span><span style="display:flex;"><span>		  title_list <span style="color:#fe8019">=</span> title_list[<span style="color:#b8bb26">&#39;players&#39;</span>]
+</span></span><span style="display:flex;"><span>		  players<span style="color:#fe8019">.</span>extend(title_list)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	  archive_urls <span style="color:#fe8019">=</span> []
+</span></span><span style="display:flex;"><span>	  <span style="color:#fe8019">for</span> username <span style="color:#fe8019">in</span> players:
+</span></span><span style="display:flex;"><span>		  games <span style="color:#fe8019">=</span> <span style="color:#b8bb26">&#39;https://api.chess.com/pub/player/&#39;</span> <span style="color:#fe8019">+</span> username <span style="color:#fe8019">+</span> <span style="color:#b8bb26">&#39;/games/2022/05&#39;</span>
+</span></span><span style="display:flex;"><span>		  archive_urls<span style="color:#fe8019">.</span>append(games)
+</span></span><span style="display:flex;"><span>	  <span style="color:#fe8019">return</span> archive_urls
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  get_archive_urls([
+</span></span><span style="display:flex;"><span>	  <span style="color:#b8bb26">&#39;https://api.chess.com/pub/titled/GM&#39;</span>,
+</span></span><span style="display:flex;"><span>	  <span style="color:#b8bb26">&#39;https://api.chess.com/pub/titled/WGM&#39;</span>
+</span></span><span style="display:flex;"><span>	  ]) 
+</span></span></code></pre></div><p>This function reads a list of urls, gets a list of all the usernames from the api and then inserts this username into a new url which will allow us to access their games from a particular month. I then returns a list of all of these game archive urls.</p>
+<p>The next order of business is taking this list of urls and turning it into a list of games. It looks quite similar to the previous example -&gt;</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  <span style="color:#fe8019">def</span> <span style="color:#fabd2f">grab_games</span>(archive_urls):
+</span></span><span style="display:flex;"><span>    games <span style="color:#fe8019">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">for</span> url <span style="color:#fe8019">in</span> archive_urls:
+</span></span><span style="display:flex;"><span>        archive <span style="color:#fe8019">=</span> requests<span style="color:#fe8019">.</span>get(url)<span style="color:#fe8019">.</span>json()
+</span></span><span style="display:flex;"><span>        archive_games <span style="color:#fe8019">=</span> archive[<span style="color:#b8bb26">&#39;games&#39;</span>]
+</span></span><span style="display:flex;"><span>        games<span style="color:#fe8019">.</span>extend(archive_games)
+</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">return</span> games
+</span></span></code></pre></div><p>Feeding the first function into the second -&gt;</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  grab_games(get_archive_urls([
+</span></span><span style="display:flex;"><span>      <span style="color:#b8bb26">&#39;https://api.chess.com/pub/titled/GM&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#b8bb26">&#39;https://api.chess.com/pub/titled/WGM&#39;</span>
+</span></span><span style="display:flex;"><span>      ]))
+</span></span></code></pre></div><p>We get a very long list of json objects (is that the right phrase? um). Each corresponding to one of games played by GMs and WGMs on chess.com during May of 2022. Come back next time to see what we can do with this very long list. Here&rsquo;s a taster of what the list looks like printed to a terminal - lots of possiblities.</p>
+<p><img src="/image/output.webp" alt="image alt text"></p>
+
+</div>
+
+<footer>
+  <small>
+    <div class="foot-message">made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a></div>
+  </small>
+</footer>
+</div> 
+</body>
+</html>
+

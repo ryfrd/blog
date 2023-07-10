@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>music on james mclaren</title>
+    <link>https://jdysmcl.xyz/tags/music/</link>
+    <description>Recent content in music on james mclaren</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 13 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://jdysmcl.xyz/tags/music/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>rudimentary local scrobbling with bash</title>
+      <link>https://jdysmcl.xyz/posts/rudimentary-local-scrobbling-with-bash/</link>
+      <pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://jdysmcl.xyz/posts/rudimentary-local-scrobbling-with-bash/</guid>
+      <description>There are lots of music players on linux. I have used lots of them, I quite like some of them. But for some reason I decided I wanted more. With this in mind, over the past few months I have been constructing a sprawling ecosystem of bash scripts all geared towards delivering a customised listening experience tailored perfectly to my every need. In short, the setup uses a simple dmenu file manager to browse my local files and mpv to play them.</description>
+    </item>
+    
+  </channel>
+</rss>

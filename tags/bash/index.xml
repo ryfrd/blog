@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>bash on james mclaren</title>
+    <link>https://jdysmcl.xyz/tags/bash/</link>
+    <description>Recent content in bash on james mclaren</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Sat, 10 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://jdysmcl.xyz/tags/bash/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>teeny tiny bash fetch script</title>
+      <link>https://jdysmcl.xyz/posts/teeny-tiny-bash-fetch-script/</link>
+      <pubDate>Sat, 10 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://jdysmcl.xyz/posts/teeny-tiny-bash-fetch-script/</guid>
+      <description>This is my attempt at a neofetch, pfetch, whateverfetch style system info utility. My main concern was making something which looked nice, was easily configurable, and as portable as possible (I didn&amp;rsquo;t really try that hard with the portability). I didn&amp;rsquo;t think much about performance; I&amp;rsquo;m personally not a man who stresses too much when a command takes a quarter of a second instead of a tenth. The basic gameplan was to get an array of bash commands which would fetch various bits and bobs, then loop through this array formatting the text with ANSI escape codes.</description>
+    </item>
+    
+    <item>
+      <title>rudimentary local scrobbling with bash</title>
+      <link>https://jdysmcl.xyz/posts/rudimentary-local-scrobbling-with-bash/</link>
+      <pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://jdysmcl.xyz/posts/rudimentary-local-scrobbling-with-bash/</guid>
+      <description>There are lots of music players on linux. I have used lots of them, I quite like some of them. But for some reason I decided I wanted more. With this in mind, over the past few months I have been constructing a sprawling ecosystem of bash scripts all geared towards delivering a customised listening experience tailored perfectly to my every need. In short, the setup uses a simple dmenu file manager to browse my local files and mpv to play them.</description>
+    </item>
+    
+  </channel>
+</rss>

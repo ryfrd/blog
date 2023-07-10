@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>nix-colors on james mclaren</title>
+    <link>https://jdysmcl.xyz/tags/nix-colors/</link>
+    <description>Recent content in nix-colors on james mclaren</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Mon, 13 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://jdysmcl.xyz/tags/nix-colors/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>theming nirvana</title>
+      <link>https://jdysmcl.xyz/posts/nix-colors/</link>
+      <pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://jdysmcl.xyz/posts/nix-colors/</guid>
+      <description>As I fall deeper and deeper down the nixos rabbit hole, I find myself becoming more and more obsessed with controlling every little thing on my computers declaratively. It starts with: &amp;lsquo;oh this is cool I can specify which desktop environment to use in my configuration.nix&amp;rsquo;. Next thing you know you&amp;rsquo;ve discovered home-manager and every program on every linux system you use needs to be controlled in your nix-config. Of course this slightly insane approach has its downsides; it also opens some doors though.</description>
+    </item>
+    
+  </channel>
+</rss>

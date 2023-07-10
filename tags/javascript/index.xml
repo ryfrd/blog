@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>javascript on james mclaren</title>
+    <link>https://jdysmcl.xyz/tags/javascript/</link>
+    <description>Recent content in javascript on james mclaren</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Mon, 26 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://jdysmcl.xyz/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>vanilla javascript theme toggle for simpletons</title>
+      <link>https://jdysmcl.xyz/posts/vanilla-javascript-theme-toggle-for-simpletons/</link>
+      <pubDate>Mon, 26 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://jdysmcl.xyz/posts/vanilla-javascript-theme-toggle-for-simpletons/</guid>
+      <description>Sometimes when I&amp;rsquo;m trawling the internet and happen upon a particularly nice looking website, I develop css and javascript FOMO. The thing I&amp;rsquo;ve been lusting after above all else is one of those fancy little dark theme toggle buttons. As you can probably tell from the website you&amp;rsquo;re looking at my web dev skills are limited. As a result of this I had assumed such niceties were out of reach.</description>
+    </item>
+    
+  </channel>
+</rss>

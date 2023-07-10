@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
+    
+    <link href="/drk.css" rel="stylesheet" id="stylesheet">
+    <title>james mclaren</title>
+  </head>
+  <body>
+  <script src="https://kit.fontawesome.com/460d3298b2.js" crossorigin="anonymous"></script>
+  <script src="/tggl.js"></script>
+
+  <div class="nav left-right">
+    <div class="left">
+      <a href="/" class="title nav-left-item squishy">james mclaren</a>
+      <button id="themeButton" class="toggle-button nav-left-item squishy" onclick="toggleTheme()">
+<i class="fa-solid fa-circle-half-stroke"></i>
+      </button>
+    </div>
+    <div class="right">
+      
+        <a class="nav-right-item squishy" href="/posts/">all posts</a>
+      
+        <a class="nav-right-item squishy" href="/tags/">topics</a>
+      
+    </div>
+  </div>
+  
+  <div class="body-container">
+
+
+<div class="body-container">
+  <h3>chess.com api and the continuing search for en passant checkmate</h3>
+  <p>Last time we worked out how to get info for all the games played by titled players in a particular month. Today, we have three objectives:</p>
+<ul>
+<li>Parse this info for the pgn (portable game notation) of each game.</li>
+<li>Write these to a file so we dont have to spend forever downloading them everytime we run the script.</li>
+<li>Devise a way to convert this pgn to a more convenient pythonic format so we can analyse it later.</li>
+</ul>
+<p>First of all, I wrote a little function to get the pgn from the games we downloaded. I added this KeyError exception, but if I&rsquo;m honest I&rsquo;m not sure why I was getting this error. Maybe, chess.com doesn&rsquo;t store pgn for all games? I don&rsquo;t know.</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#fe8019">def</span> <span style="color:#fabd2f">get_pgns</span>(games):
+</span></span><span style="display:flex;"><span>    pgns <span style="color:#fe8019">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">for</span> game <span style="color:#fe8019">in</span> games:
+</span></span><span style="display:flex;"><span>        <span style="color:#fe8019">try</span>:
+</span></span><span style="display:flex;"><span>            pgn <span style="color:#fe8019">=</span> game[<span style="color:#b8bb26">&#39;pgn&#39;</span>]
+</span></span><span style="display:flex;"><span>            pgns<span style="color:#fe8019">.</span>append(pgn)
+</span></span><span style="display:flex;"><span>        <span style="color:#fe8019">except</span> <span style="color:#fb4934">KeyError</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">print</span>(<span style="color:#b8bb26">&#39;key error um&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">return</span> pgns
+</span></span></code></pre></div><p>Now we have this list of pgns, the next goal is to write them to a file so we theoretically only have to run the stuff from last post once. All the analysis we do on the games can then just be done on the files we save without any talking to the internet required.</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#fe8019">def</span> <span style="color:#fabd2f">write_pgns</span>(pgns):
+</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">with</span> <span style="color:#fabd2f">open</span>(month<span style="color:#fe8019">.</span>replace(<span style="color:#b8bb26">&#39;/&#39;</span>,<span style="color:#b8bb26">&#39;_&#39;</span>)<span style="color:#fe8019">+</span><span style="color:#b8bb26">&#39;.csv&#39;</span>, <span style="color:#b8bb26">&#39;w&#39;</span>) <span style="color:#fe8019">as</span> f:
+</span></span><span style="display:flex;"><span>        <span style="color:#fe8019">for</span> pgn <span style="color:#fe8019">in</span> pgns:
+</span></span><span style="display:flex;"><span>	    f<span style="color:#fe8019">.</span>write(pgn)
+</span></span></code></pre></div><p>Now a pgn looks something like this if it&rsquo;s just printed as a string:</p>
+<p><img src="/image/pgn.webp" alt="image alt text"></p>
+<p>It contains lots of very useful info but for our purposes of finding en passant checkmates, we would ideally just have a list of each move looking something like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>moves <span style="color:#fe8019">=</span> [ <span style="color:#b8bb26">&#39;e4&#39;</span>, <span style="color:#b8bb26">&#39;e5&#39;</span>, <span style="color:#b8bb26">&#39;Bc4&#39;</span>, <span style="color:#b8bb26">&#39;Nc6&#39;</span>, <span style="color:#b8bb26">&#39;Qh5&#39;</span>, <span style="color:#b8bb26">&#39;Nf6&#39;</span>, <span style="color:#b8bb26">&#39;Qxf7#&#39;</span>]
+</span></span></code></pre></div><p>We don&rsquo;t need the headers, we don&rsquo;t need the result, and we don&rsquo;t really need the move numbers (these can be deduced from the list indexes). So the challenge is how to convert the pgn to a list; this is the slightly janky solution I came up wtih.</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#fe8019">def</span> <span style="color:#fabd2f">get_move_list</span>(pgn):
+</span></span><span style="display:flex;"><span>    x <span style="color:#fe8019">=</span> pgn<span style="color:#fe8019">.</span>split()
+</span></span><span style="display:flex;"><span>    moves <span style="color:#fe8019">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">for</span> item <span style="color:#fe8019">in</span> x:
+</span></span><span style="display:flex;"><span>        <span style="color:#928374;font-style:italic"># start fresh list at move 1 - effectively skipping the headers from the list</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fe8019">if</span> item <span style="color:#fe8019">==</span> <span style="color:#b8bb26">&#39;1.&#39;</span>:
+</span></span><span style="display:flex;"><span>            moves <span style="color:#fe8019">=</span> []
+</span></span><span style="display:flex;"><span>            moves<span style="color:#fe8019">.</span>append(item)
+</span></span><span style="display:flex;"><span>        <span style="color:#928374;font-style:italic"># gets rid of clock bits and bobs</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fe8019">elif</span> item[<span style="color:#d3869b">0</span>] <span style="color:#fe8019">==</span> <span style="color:#b8bb26">&#39;{&#39;</span> <span style="color:#fe8019">or</span> item[<span style="color:#fe8019">-</span><span style="color:#d3869b">1</span>] <span style="color:#fe8019">==</span> <span style="color:#b8bb26">&#39;}&#39;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#fe8019">pass</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fe8019">else</span>:
+</span></span><span style="display:flex;"><span>            moves<span style="color:#fe8019">.</span>append(item)
+</span></span><span style="display:flex;"><span>    <span style="color:#928374;font-style:italic">#remove even indexes from list</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#928374;font-style:italic">#this gets rid of move numbers and the result of the game</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">del</span> moves[::<span style="color:#d3869b">2</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">return</span> moves
+</span></span></code></pre></div><p>I don&rsquo;t doubt it could be done more elegantly but it works I guess. Next time, we&rsquo;ll deal with working out what a list containing an en passant checkmate would look like.</p>
+
+</div>
+
+<footer>
+  <small>
+    <div class="foot-message">made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a></div>
+  </small>
+</footer>
+</div> 
+</body>
+</html>
+

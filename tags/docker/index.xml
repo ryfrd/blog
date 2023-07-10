@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>docker on james mclaren</title>
+    <link>https://jdysmcl.xyz/tags/docker/</link>
+    <description>Recent content in docker on james mclaren</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 28 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://jdysmcl.xyz/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>translating docker to nix?!</title>
+      <link>https://jdysmcl.xyz/posts/docker-on-nixos/</link>
+      <pubDate>Tue, 28 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://jdysmcl.xyz/posts/docker-on-nixos/</guid>
+      <description>In my opinion, there are moments when the convenience of docker and its surrounding ecosystem can&amp;rsquo;t be beat. I&amp;rsquo;ve been dabbling in the self hosting world and oftentimes the best maintained packaging option is a docker image. As a result of this I&amp;rsquo;ve been playing around with the nixos approach to managing docker containers.
+nix -&amp;gt; docker compose -&amp;gt; docker run To illustrate how to translate a simple example from the world of docker to nix let&amp;rsquo;s have a look at the config for my searxng instance.</description>
+    </item>
+    
+  </channel>
+</rss>
