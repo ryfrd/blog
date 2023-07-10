@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>emacs on james mclaren</title>
-    <link>https://jdysmcl.xyz/tags/emacs/</link>
+    <link>https://read.jdysmcl.xyz/tags/emacs/</link>
     <description>Recent content in emacs on james mclaren</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Fri, 18 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://jdysmcl.xyz/tags/emacs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 18 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://read.jdysmcl.xyz/tags/emacs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>lowkey emacs setup</title>
-      <link>https://jdysmcl.xyz/posts/lowkey-emacs-setup/</link>
+      <link>https://read.jdysmcl.xyz/posts/lowkey-emacs-setup/</link>
       <pubDate>Fri, 18 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/lowkey-emacs-setup/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/lowkey-emacs-setup/</guid>
       <description>About a month ago I was a little bored and thought I&amp;rsquo;d give emacs a go. There&amp;rsquo;s something fun about trying out these mythical pieces of software that have been around forever; kind of like watching The Godfather for the first time. Like many extensible, super configurable programs, emacs seems kind of impenetrable at first glance. I tried doing the tutorial but kind of glazed over after a while with the endless stream of C-a C-b C-c.</description>
     </item>
     

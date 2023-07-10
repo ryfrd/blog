@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>hugo on james mclaren</title>
-    <link>https://jdysmcl.xyz/tags/hugo/</link>
+    <link>https://read.jdysmcl.xyz/tags/hugo/</link>
     <description>Recent content in hugo on james mclaren</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 10 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://jdysmcl.xyz/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://read.jdysmcl.xyz/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>setting up a lean mean hugo blogging theme</title>
-      <link>https://jdysmcl.xyz/posts/setting-up-a-lean-mean-hugo-blogging-theme/</link>
+      <link>https://read.jdysmcl.xyz/posts/setting-up-a-lean-mean-hugo-blogging-theme/</link>
       <pubDate>Thu, 10 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/setting-up-a-lean-mean-hugo-blogging-theme/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/setting-up-a-lean-mean-hugo-blogging-theme/</guid>
       <description>When I first started messing around with hugo, I found the whole thing slihtly mystifying. I downloaded a theme like they asked me, edited the config file to try and customise things a little and quickly broke everything. To be fair, this was mainly due to my tinkering instinct to fly to close to the sun. But anyway, the point at which I started to really appreciate the power of hugo was when I tried to make my own - admittedly less feautureful - theme.</description>
     </item>
     

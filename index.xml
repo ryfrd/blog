@@ -2,176 +2,176 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>james mclaren</title>
-    <link>https://jdysmcl.xyz/</link>
+    <link>https://read.jdysmcl.xyz/</link>
     <description>Recent content on james mclaren</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 26 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://jdysmcl.xyz/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 26 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://read.jdysmcl.xyz/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>vanilla javascript theme toggle for simpletons</title>
-      <link>https://jdysmcl.xyz/posts/vanilla-javascript-theme-toggle-for-simpletons/</link>
+      <link>https://read.jdysmcl.xyz/posts/vanilla-javascript-theme-toggle-for-simpletons/</link>
       <pubDate>Mon, 26 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/vanilla-javascript-theme-toggle-for-simpletons/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/vanilla-javascript-theme-toggle-for-simpletons/</guid>
       <description>Sometimes when I&amp;rsquo;m trawling the internet and happen upon a particularly nice looking website, I develop css and javascript FOMO. The thing I&amp;rsquo;ve been lusting after above all else is one of those fancy little dark theme toggle buttons. As you can probably tell from the website you&amp;rsquo;re looking at my web dev skills are limited. As a result of this I had assumed such niceties were out of reach.</description>
     </item>
     
     <item>
       <title>tailscale, caddy, and nixos containers - a match made in heaven</title>
-      <link>https://jdysmcl.xyz/posts/tailscale-caddy-nixos-containers/</link>
+      <link>https://read.jdysmcl.xyz/posts/tailscale-caddy-nixos-containers/</link>
       <pubDate>Tue, 16 May 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/tailscale-caddy-nixos-containers/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/tailscale-caddy-nixos-containers/</guid>
       <description>For a little while now I&amp;rsquo;ve been running some services (jellyfin etc.) on an old laptop in my house. I&amp;rsquo;m not trying to sound like a podcast ad but as a networking novice, the simplicity tailscale brings to accessing these services remotely is very nice. Until recently though, I had been accessing my services like a heathen with http and port numbers (eg http://tailscale-ip:service-port). This works and is perfectly secure thanks to tailscale though it lacks a certain finesse.</description>
     </item>
     
     <item>
       <title>learning about qtile widgets via the medium of cricket</title>
-      <link>https://jdysmcl.xyz/posts/writing-a-qtile-widget/</link>
+      <link>https://read.jdysmcl.xyz/posts/writing-a-qtile-widget/</link>
       <pubDate>Mon, 03 Apr 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/writing-a-qtile-widget/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/writing-a-qtile-widget/</guid>
       <description>I&amp;rsquo;m a person who has spent an unreasonable amount of time making minute changes to the appearance of my bar in qtile. Despite the very nice selection of widgets availabe by default with qtile, it was only a matter of time before I decided I wanted to experiment with making my own custom widget. Fortunately, if you can do a bit of python this is quite an approachable undertaking.
 The dream widget I was lacking was a little live crikcet score ticker type thing; something which would scroll along on my bar showing me the score in live cricket matches.</description>
     </item>
     
     <item>
       <title>theming nirvana</title>
-      <link>https://jdysmcl.xyz/posts/nix-colors/</link>
+      <link>https://read.jdysmcl.xyz/posts/nix-colors/</link>
       <pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/nix-colors/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/nix-colors/</guid>
       <description>As I fall deeper and deeper down the nixos rabbit hole, I find myself becoming more and more obsessed with controlling every little thing on my computers declaratively. It starts with: &amp;lsquo;oh this is cool I can specify which desktop environment to use in my configuration.nix&amp;rsquo;. Next thing you know you&amp;rsquo;ve discovered home-manager and every program on every linux system you use needs to be controlled in your nix-config. Of course this slightly insane approach has its downsides; it also opens some doors though.</description>
     </item>
     
     <item>
       <title>translating docker to nix?!</title>
-      <link>https://jdysmcl.xyz/posts/docker-on-nixos/</link>
+      <link>https://read.jdysmcl.xyz/posts/docker-on-nixos/</link>
       <pubDate>Tue, 28 Feb 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/docker-on-nixos/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/docker-on-nixos/</guid>
       <description>In my opinion, there are moments when the convenience of docker and its surrounding ecosystem can&amp;rsquo;t be beat. I&amp;rsquo;ve been dabbling in the self hosting world and oftentimes the best maintained packaging option is a docker image. As a result of this I&amp;rsquo;ve been playing around with the nixos approach to managing docker containers.
 nix -&amp;gt; docker compose -&amp;gt; docker run To illustrate how to translate a simple example from the world of docker to nix let&amp;rsquo;s have a look at the config for my searxng instance.</description>
     </item>
     
     <item>
       <title>simple nixos config for vps static site</title>
-      <link>https://jdysmcl.xyz/posts/simple-nixos-config-for-static-site-on-vps/</link>
+      <link>https://read.jdysmcl.xyz/posts/simple-nixos-config-for-static-site-on-vps/</link>
       <pubDate>Sun, 29 Jan 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/simple-nixos-config-for-static-site-on-vps/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/simple-nixos-config-for-static-site-on-vps/</guid>
       <description>Setting up a little static site is something I&amp;rsquo;ve done a few different times on a few different operating systems. It&amp;rsquo;s a slightly fiddly task with a few disparate jobs that all need looking after: ssh, let&amp;rsquo;s encrypt, nginx. In my opinion, it is one of the moments where consolidating all the little bits and bobs you need to setup into one common configuration is very useful.
 I&amp;rsquo;m going to go through a bit of the nixos config I&amp;rsquo;ve got for my vps.</description>
     </item>
     
     <item>
       <title>podcast setup for broke boys whose trash phone cant hack modern apps</title>
-      <link>https://jdysmcl.xyz/posts/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/</link>
+      <link>https://read.jdysmcl.xyz/posts/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/</link>
       <pubDate>Tue, 24 Jan 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/</guid>
       <description>I have an old sad android phone with 2GB of ram which nowadays seems to struggle with anything but the most lightweight apps. As a result of this I have been &amp;lsquo;podcast-player-hopping&amp;rsquo; without success for the last couple of months trying to find something which doesn&amp;rsquo;t nuke my phone whenever I use it. In a moment of desperation it occured to me that a creative solution might be required. The gameplan was this:</description>
     </item>
     
     <item>
       <title>elite bread dough for lazy boys</title>
-      <link>https://jdysmcl.xyz/posts/elite-dough-philosophy/</link>
+      <link>https://read.jdysmcl.xyz/posts/elite-dough-philosophy/</link>
       <pubDate>Sun, 22 Jan 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/elite-dough-philosophy/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/elite-dough-philosophy/</guid>
       <description>INGREDIENTI flour (ideally bread flour but if you don&amp;rsquo;t have it, it&amp;rsquo;s not the end of the world) water salt yeast (i use the little dried packet stuff) RATIOS To start measure the weight of flour; this is what we&amp;rsquo;ll work from. You can now work out how much of the other ingredients you need using these ratios:
 65% water 2% salt 0.5% yeast (this amount doesn&amp;rsquo;t particularly matter, as long as it&amp;rsquo;s in this ballpark) So if we used 1kg of flour for example, the recipe would look like this:</description>
     </item>
     
     <item>
       <title>multi user qtile fiddling</title>
-      <link>https://jdysmcl.xyz/posts/multi-user-qtile-fiddling/</link>
+      <link>https://read.jdysmcl.xyz/posts/multi-user-qtile-fiddling/</link>
       <pubDate>Tue, 20 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/multi-user-qtile-fiddling/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/multi-user-qtile-fiddling/</guid>
       <description>This post is going to detail how I solved a very particular problem I had created for myself. First, a quick description of the problem. I use home-manager on nixos to declaratively configure what happens on my computer. In the cases where home-manager does not expose sufficient configuration options for my liking (qtile for example), I instead link a configuration file from my nixos config to where it belongs in my home using xdg.</description>
     </item>
     
     <item>
       <title>teeny tiny bash fetch script</title>
-      <link>https://jdysmcl.xyz/posts/teeny-tiny-bash-fetch-script/</link>
+      <link>https://read.jdysmcl.xyz/posts/teeny-tiny-bash-fetch-script/</link>
       <pubDate>Sat, 10 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/teeny-tiny-bash-fetch-script/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/teeny-tiny-bash-fetch-script/</guid>
       <description>This is my attempt at a neofetch, pfetch, whateverfetch style system info utility. My main concern was making something which looked nice, was easily configurable, and as portable as possible (I didn&amp;rsquo;t really try that hard with the portability). I didn&amp;rsquo;t think much about performance; I&amp;rsquo;m personally not a man who stresses too much when a command takes a quarter of a second instead of a tenth. The basic gameplan was to get an array of bash commands which would fetch various bits and bobs, then loop through this array formatting the text with ANSI escape codes.</description>
     </item>
     
     <item>
       <title>get the thoughts out of your head and into a digital format with this python journal script</title>
-      <link>https://jdysmcl.xyz/posts/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/</link>
+      <link>https://read.jdysmcl.xyz/posts/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/</link>
       <pubDate>Thu, 01 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/</guid>
       <description>Since getting going with emacs I&amp;rsquo;ve gone down the org-mode rabbit hole a little bit. In particular the very nice org-journal package. It basically does what it says on the tin: maintains a journal with a selection of org files. This has been very nice for me. I have often thought about journalling but never really got up a head of steam. Somehow having an entry a keybinding away while I&amp;rsquo;m doing something with my text editor makes it a lot more palletable.</description>
     </item>
     
     <item>
       <title>lowkey emacs setup</title>
-      <link>https://jdysmcl.xyz/posts/lowkey-emacs-setup/</link>
+      <link>https://read.jdysmcl.xyz/posts/lowkey-emacs-setup/</link>
       <pubDate>Fri, 18 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/lowkey-emacs-setup/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/lowkey-emacs-setup/</guid>
       <description>About a month ago I was a little bored and thought I&amp;rsquo;d give emacs a go. There&amp;rsquo;s something fun about trying out these mythical pieces of software that have been around forever; kind of like watching The Godfather for the first time. Like many extensible, super configurable programs, emacs seems kind of impenetrable at first glance. I tried doing the tutorial but kind of glazed over after a while with the endless stream of C-a C-b C-c.</description>
     </item>
     
     <item>
       <title>setting up a lean mean hugo blogging theme</title>
-      <link>https://jdysmcl.xyz/posts/setting-up-a-lean-mean-hugo-blogging-theme/</link>
+      <link>https://read.jdysmcl.xyz/posts/setting-up-a-lean-mean-hugo-blogging-theme/</link>
       <pubDate>Thu, 10 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/setting-up-a-lean-mean-hugo-blogging-theme/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/setting-up-a-lean-mean-hugo-blogging-theme/</guid>
       <description>When I first started messing around with hugo, I found the whole thing slihtly mystifying. I downloaded a theme like they asked me, edited the config file to try and customise things a little and quickly broke everything. To be fair, this was mainly due to my tinkering instinct to fly to close to the sun. But anyway, the point at which I started to really appreciate the power of hugo was when I tried to make my own - admittedly less feautureful - theme.</description>
     </item>
     
     <item>
       <title>chess.com api and the continuing search for en passant checkmate</title>
-      <link>https://jdysmcl.xyz/posts/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/</link>
+      <link>https://read.jdysmcl.xyz/posts/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/</link>
       <pubDate>Tue, 08 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/</guid>
       <description>Last time we worked out how to get info for all the games played by titled players in a particular month. Today, we have three objectives:
 Parse this info for the pgn (portable game notation) of each game. Write these to a file so we dont have to spend forever downloading them everytime we run the script. Devise a way to convert this pgn to a more convenient pythonic format so we can analyse it later.</description>
     </item>
     
     <item>
       <title>chess.com api and the search for en passant checkmate</title>
-      <link>https://jdysmcl.xyz/posts/chess.com-api-and-the-search-for-en-passant-checkmate/</link>
+      <link>https://read.jdysmcl.xyz/posts/chess.com-api-and-the-search-for-en-passant-checkmate/</link>
       <pubDate>Wed, 26 Oct 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/chess.com-api-and-the-search-for-en-passant-checkmate/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/chess.com-api-and-the-search-for-en-passant-checkmate/</guid>
       <description>The chess.com API gives you access to a crazy amount of data on games played on the site. Armed with the knowledge that this data was at my fingertips, I set out to do what any sane person would do: find en passant checkmates. For those not in the know, en passant check mate is kind of the king of moves in chess meme circles. So some sort of python script that identified en passant check mates that occured on the site would be of great value to me.</description>
     </item>
     
     <item>
       <title>declarative firefox config with home-manager on nixos</title>
-      <link>https://jdysmcl.xyz/posts/declarative-firefox-config-with-home-manager-on-nixos/</link>
+      <link>https://read.jdysmcl.xyz/posts/declarative-firefox-config-with-home-manager-on-nixos/</link>
       <pubDate>Sun, 02 Oct 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/declarative-firefox-config-with-home-manager-on-nixos/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/declarative-firefox-config-with-home-manager-on-nixos/</guid>
       <description>As a man who finds himself reinstalling his OS more than is probably sensible, any opportunity to minimise the post install admin of sorting out all your settings is an attractive one. With that in mind lets take a look at some of the firefox (my current browser of choice) configuration options avilable to you through home-manager. This assumes you have some sort of home-manager setup working. If you do not I found this friendly githubber&amp;rsquo;s templates to be very helpful.</description>
     </item>
     
     <item>
       <title>upgrade your qtile setup with a cute dropdown terminal</title>
-      <link>https://jdysmcl.xyz/posts/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/</link>
+      <link>https://read.jdysmcl.xyz/posts/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/</link>
       <pubDate>Fri, 23 Sep 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/</guid>
       <description>I didn&amp;rsquo;t know you could do this until recently, very fun and playful little feature. How you want to do it will depend slightly on how you have your groups set up but I start with importing the relevant libraries and defining an empty list.
 from libqtile.config import Dropdown, Scratchpad groups = [] I&amp;rsquo;m then able to append all the groups I want to this list. For the dropdown terminal you need the ScratchPad group which to quote the qtile docs is a &amp;ldquo;special - by default invisible - group which acts as a container for DropDown configurations&amp;rdquo;.</description>
     </item>
     
     <item>
       <title>rudimentary local scrobbling with bash</title>
-      <link>https://jdysmcl.xyz/posts/rudimentary-local-scrobbling-with-bash/</link>
+      <link>https://read.jdysmcl.xyz/posts/rudimentary-local-scrobbling-with-bash/</link>
       <pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://jdysmcl.xyz/posts/rudimentary-local-scrobbling-with-bash/</guid>
+      <guid>https://read.jdysmcl.xyz/posts/rudimentary-local-scrobbling-with-bash/</guid>
       <description>There are lots of music players on linux. I have used lots of them, I quite like some of them. But for some reason I decided I wanted more. With this in mind, over the past few months I have been constructing a sprawling ecosystem of bash scripts all geared towards delivering a customised listening experience tailored perfectly to my every need. In short, the setup uses a simple dmenu file manager to browse my local files and mpv to play them.</description>
     </item>
     
