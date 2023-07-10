@@ -2,19 +2,19 @@ function toggleTheme() {
 
   var stylesheet = document.getElementById('stylesheet');
 
-  if (stylesheet.getAttribute('href') === '/dark.css') {
+  if (stylesheet.getAttribute('href') === '/css/dark.css') {
 
     // update stylesheet
-    stylesheet.setAttribute('href', '/light.css');
+    stylesheet.setAttribute('href', '/css/light.css');
     // store theme
-    localStorage.setItem('stylesheet', '/light.css');
+    localStorage.setItem('stylesheet', '/css/light.css');
 
   } else {
 
     // update stylesheet
-    stylesheet.setAttribute('href', '/dark.css');
+    stylesheet.setAttribute('href', '/css/dark.css');
     // store theme
-    localStorage.setItem('stylesheet', '/dark.css');
+    localStorage.setItem('stylesheet', '/css/dark.css');
 
   }
 }
