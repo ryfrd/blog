@@ -1,6 +1,7 @@
 /* global */
 
 body {
+  font-family: monospace;
   background-color: var(--bg1);
   color: var(--fg1);
 }
@@ -107,4 +108,12 @@ a:hover {
 footer {
   text-align: center;
   padding: 10px;
+}
+
+/* list item */
+
+.list-item {
+  /* display: inline; */
+  /* margin: 10px; */
+  /* padding: 10px; */
 }
