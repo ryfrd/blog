@@ -7,30 +7,15 @@
     
     <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
     
-    <link href="/css/dark.css" rel="stylesheet" id="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet" id="stylesheet">
     <title>james mclaren</title>
   </head>
   <body>
-  <script src="https://kit.fontawesome.com/460d3298b2.js" crossorigin="anonymous"></script>
-  <script src="/js/toggle.js"></script>
-
-  <div class="nav left-right">
-    <div class="left">
-      <a href="/" class="title nav-left-item squishy">james mclaren</a>
-      <button id="themeButton" class="toggle-button nav-left-item squishy" onclick="toggleTheme()">
-<i class="fa-solid fa-circle-half-stroke"></i>
-      </button>
-    </div>
-    <div class="right">
-      
-        <a class="nav-right-item squishy" href="/posts/">all posts</a>
-      
-        <a class="nav-right-item squishy" href="/tags/">topics</a>
-      
-    </div>
-  </div>
+  
   
   <div class="body-container">
+
+  
 
 
 <div class="body-container">
@@ -39,60 +24,76 @@
 <p>I&rsquo;m going to go through a bit of the nixos config I&rsquo;ve got for my vps.</p>
 <h3 id="ssh">SSH</h3>
 <p>Having a way to to get into your server is useful. Managing ssh on nix is very simple; this enables the ssh daemon, tells it what port to run on, disables plain text passwords, and disables root login.</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>services<span style="color:#fe8019">.</span>openssh = {
-</span></span><span style="display:flex;"><span>  enable <span style="color:#fe8019">=</span> <span style="color:#d3869b">true</span>;
-</span></span><span style="display:flex;"><span>  ports <span style="color:#fe8019">=</span> [ <span style="color:#d3869b">69</span> ];
-</span></span><span style="display:flex;"><span>  settings <span style="color:#fe8019">=</span> {
-</span></span><span style="display:flex;"><span>    passwordAuthentication <span style="color:#fe8019">=</span> <span style="color:#d3869b">false</span>;
-</span></span><span style="display:flex;"><span>    permitRootLogin <span style="color:#fe8019">=</span> <span style="color:#b8bb26">&#34;no&#34;</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>services<span style="color:#666">.</span>openssh <span style="">=</span> {
+</span></span><span style="display:flex;"><span>  enable <span style="color:#666">=</span> <span style="color:#800">true</span>;
+</span></span><span style="display:flex;"><span>  ports <span style="color:#666">=</span> [ <span style="color:#666">69</span> ];
+</span></span><span style="display:flex;"><span>  settings <span style="color:#666">=</span> {
+</span></span><span style="display:flex;"><span>    passwordAuthentication <span style="color:#666">=</span> <span style="color:#800">false</span>;
+</span></span><span style="display:flex;"><span>    permitRootLogin <span style="color:#666">=</span> <span style="color:#b44">&#34;no&#34;</span>;
 </span></span><span style="display:flex;"><span>  };
 </span></span><span style="display:flex;"><span>};
 </span></span></code></pre></div><h3 id="adding-a-user">ADDING A USER</h3>
 <p>Generally, it&rsquo;s nice to have a user so you&rsquo;re not just rawdogging everything as root. This adds a user called ronald, sets their default shell, and adds them to some useful groups. You can even add your public ssh keys here for ultimate convenience.</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>users<span style="color:#fe8019">.</span>users = {
-</span></span><span style="display:flex;"><span>  ronald <span style="color:#fe8019">=</span> {
-</span></span><span style="display:flex;"><span>    isNormalUser <span style="color:#fe8019">=</span> <span style="color:#d3869b">true</span>;
-</span></span><span style="display:flex;"><span>    shell <span style="color:#fe8019">=</span> pkgs<span style="color:#fe8019">.</span>fish;
-</span></span><span style="display:flex;"><span>    extraGroups <span style="color:#fe8019">=</span> [ <span style="color:#b8bb26">&#34;wheel&#34;</span> <span style="color:#b8bb26">&#34;nginx&#34;</span> ];
-</span></span><span style="display:flex;"><span>	openssh<span style="color:#fe8019">.</span>authorizedKeys<span style="color:#fe8019">.</span>keyFiles <span style="color:#fe8019">=</span> [ <span style="color:#b8bb26">&#34;/path/to/public/key/file&#34;</span> ]
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>users<span style="color:#666">.</span>users <span style="">=</span> {
+</span></span><span style="display:flex;"><span>  ronald <span style="color:#666">=</span> {
+</span></span><span style="display:flex;"><span>    isNormalUser <span style="color:#666">=</span> <span style="color:#800">true</span>;
+</span></span><span style="display:flex;"><span>    shell <span style="color:#666">=</span> pkgs<span style="color:#666">.</span>fish;
+</span></span><span style="display:flex;"><span>    extraGroups <span style="color:#666">=</span> [ <span style="color:#b44">&#34;wheel&#34;</span> <span style="color:#b44">&#34;nginx&#34;</span> ];
+</span></span><span style="display:flex;"><span>	openssh<span style="color:#666">.</span>authorizedKeys<span style="color:#666">.</span>keyFiles <span style="color:#666">=</span> [ <span style="color:#b44">&#34;/path/to/public/key/file&#34;</span> ]
 </span></span><span style="display:flex;"><span>  };
 </span></span><span style="display:flex;"><span>};
 </span></span></code></pre></div><h3 id="nginx">NGINX</h3>
 <p>I use nginx to serve my sites. Compared to the nginx config I used to mess around with, the equivalent nix config is very clean. This chunk tells nginx to serve the contents of <code>/var/www/example-site</code> at <code>example-site.here</code>. It also opens the ports for http and https in the firewall.</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>services<span style="color:#fe8019">.</span>nginx = {
-</span></span><span style="display:flex;"><span> enable <span style="color:#fe8019">=</span> <span style="color:#d3869b">true</span>;
-</span></span><span style="display:flex;"><span> virtualHosts<span style="color:#fe8019">.</span><span style="color:#b8bb26">&#34;example-site.here&#34;</span> <span style="color:#fe8019">=</span> {
-</span></span><span style="display:flex;"><span>   enableACME <span style="color:#fe8019">=</span> <span style="color:#d3869b">true</span>;
-</span></span><span style="display:flex;"><span>   forceSSL <span style="color:#fe8019">=</span> <span style="color:#d3869b">true</span>;
-</span></span><span style="display:flex;"><span>   root <span style="color:#fe8019">=</span> <span style="color:#b8bb26">&#34;/var/www/example-site/&#34;</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>services<span style="color:#666">.</span>nginx <span style="">=</span> {
+</span></span><span style="display:flex;"><span> enable <span style="color:#666">=</span> <span style="color:#800">true</span>;
+</span></span><span style="display:flex;"><span> virtualHosts<span style="color:#666">.</span><span style="color:#b44">&#34;example-site.here&#34;</span> <span style="color:#666">=</span> {
+</span></span><span style="display:flex;"><span>   enableACME <span style="color:#666">=</span> <span style="color:#800">true</span>;
+</span></span><span style="display:flex;"><span>   forceSSL <span style="color:#666">=</span> <span style="color:#800">true</span>;
+</span></span><span style="display:flex;"><span>   root <span style="color:#666">=</span> <span style="color:#b44">&#34;/var/www/example-site/&#34;</span>;
 </span></span><span style="display:flex;"><span> };
 </span></span><span style="display:flex;"><span>};
-</span></span><span style="display:flex;"><span>networking<span style="color:#fe8019">.</span>firewall<span style="color:#fe8019">.</span>allowedTCPPorts = [ <span style="color:#d3869b">80</span> <span style="color:#d3869b">443</span> ];
+</span></span><span style="display:flex;"><span>networking<span style="color:#666">.</span>firewall<span style="color:#666">.</span>allowedTCPPorts <span style="">=</span> [ <span style="color:#666">80</span> <span style="color:#666">443</span> ];
 </span></span></code></pre></div><h3 id="https">HTTPS</h3>
 <p>You can also make nix deal with all the let&rsquo;s encrypt certbot stuff. It looks like this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>security<span style="color:#fe8019">.</span>acme = {
-</span></span><span style="display:flex;"><span>  acceptTerms <span style="color:#fe8019">=</span> <span style="color:#d3869b">true</span>;
-</span></span><span style="display:flex;"><span>  defaults<span style="color:#fe8019">.</span>email <span style="color:#fe8019">=</span> <span style="color:#b8bb26">&#34;ronald@email.yes&#34;</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>security<span style="color:#666">.</span>acme <span style="">=</span> {
+</span></span><span style="display:flex;"><span>  acceptTerms <span style="color:#666">=</span> <span style="color:#800">true</span>;
+</span></span><span style="display:flex;"><span>  defaults<span style="color:#666">.</span>email <span style="color:#666">=</span> <span style="color:#b44">&#34;ronald@email.yes&#34;</span>;
 </span></span><span style="display:flex;"><span>};
 </span></span></code></pre></div><p>This will set up certificates for any sites you set the <code>enableAMCE</code> to true option for.</p>
 <h3 id="cron">CRON</h3>
 <p>This is one final little tidbit I set up the other day. I had got bored of having to ssh into my server to manually copy my updated site to the website root. The problem was I would need root privileges on the server to rsync the files to the website root. This seemed like a whole minefield I didn&rsquo;t want to mess with. Instead I set up a little cron job which copies a directory from my home to the website root every hour.</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>services<span style="color:#fe8019">.</span>cron = {
-</span></span><span style="display:flex;"><span>  enable <span style="color:#fe8019">=</span> <span style="color:#d3869b">true</span>;
-</span></span><span style="display:flex;"><span>  systemCronJobs <span style="color:#fe8019">=</span> [
-</span></span><span style="display:flex;"><span>    <span style="color:#b8bb26">&#34;@hourly      root    cp -r /home/ronald/example-site /var/www/&#34;</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>services<span style="color:#666">.</span>cron <span style="">=</span> {
+</span></span><span style="display:flex;"><span>  enable <span style="color:#666">=</span> <span style="color:#800">true</span>;
+</span></span><span style="display:flex;"><span>  systemCronJobs <span style="color:#666">=</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;@hourly      root    cp -r /home/ronald/example-site /var/www/&#34;</span>
 </span></span><span style="display:flex;"><span>  ];
 </span></span><span style="display:flex;"><span>};
 </span></span></code></pre></div><p>This means I can just rsync the updated site from my laptop to the server and it&rsquo;ll be updated within the hour. Good enough for me.</p>
 
 </div>
 
-<footer>
-  <small>
-    <div class="foot-message">made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a></div>
-  </small>
-</footer>
 </div> 
+<footer>
+<small>
+  <div class="foot-item">
+    
+      <a href="/posts/">all posts</a>
+    
+      <a href="/tags/">topics</a>
+    
+  </div>
+  <div class="foot-item">
+    
+      <a href="/index.xml">rss</a>
+    
+      <a href="https://github.com/ryfrd">github</a>
+    
+  </div>
+  <div class="foot-item">
+    made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
+  </div>
+</small>
+</footer>
 </body>
 </html>
 

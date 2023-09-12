@@ -7,30 +7,15 @@
     
     <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
     
-    <link href="/css/dark.css" rel="stylesheet" id="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet" id="stylesheet">
     <title>james mclaren</title>
   </head>
   <body>
-  <script src="https://kit.fontawesome.com/460d3298b2.js" crossorigin="anonymous"></script>
-  <script src="/js/toggle.js"></script>
-
-  <div class="nav left-right">
-    <div class="left">
-      <a href="/" class="title nav-left-item squishy">james mclaren</a>
-      <button id="themeButton" class="toggle-button nav-left-item squishy" onclick="toggleTheme()">
-<i class="fa-solid fa-circle-half-stroke"></i>
-      </button>
-    </div>
-    <div class="right">
-      
-        <a class="nav-right-item squishy" href="/posts/">all posts</a>
-      
-        <a class="nav-right-item squishy" href="/tags/">topics</a>
-      
-    </div>
-  </div>
+  
   
   <div class="body-container">
+
+  
 
 
 <div class="body-container">
@@ -38,85 +23,101 @@
   <p>About a month ago I was a little bored and thought I&rsquo;d give emacs a go. There&rsquo;s something fun about trying out these mythical pieces of software that have been around forever; kind of like watching The Godfather for the first time. Like many extensible, super configurable programs, emacs seems kind of impenetrable at first glance. I tried doing the tutorial but kind of glazed over after a while with the endless stream of C-a C-b C-c. There&rsquo;s also the quite jarring default theme which wasn&rsquo;t vibing with the lovely screenshots I had seen on the internet. Anyway, after quite a bit of fiddling I&rsquo;ve landed on a simple little setup that I&rsquo;ve been quite enjoying. Here are a few little pointers to hopefully ease you in.</p>
 <h3 id="aesthetic-niceties">AESTHETIC NICETIES</h3>
 <p>First things first, assuming you&rsquo;re on linux emacs is configured with a file at <code>~/.emacs.d/init.el</code>. As a terrible aesthete, the first thing I was worried about was changing the theme. This can be achieved with <code>M-x load-theme</code>; if you want the setting to persist though you can add this to you init.el:</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(load-theme <span style="color:#83a598">&#39;misterioso</span> <span style="color:#d3869b">t</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#b8860b">load-theme</span> <span style="color:#b8860b">&#39;misterioso</span> <span style="color:#800">t</span>)
 </span></span></code></pre></div><p>There are a few themes out of the box but if you&rsquo;re looking for some more I would recomment the doom-themes package. Speaking of packages, emacs has a built in package-manager that installs packages from the Emacs Lisp Package Archive (GNU ELPA); I unfortunately know very little about this as I&rsquo;ve been using nix to manage my emacs packages.</p>
 <p>Anyway we&rsquo;ve got a theme, how about a custom startup message for our initial buffer:</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#fe8019">setq</span> inhibit-startup-message <span style="color:#d3869b">t</span>
-</span></span><span style="display:flex;"><span>      inhibit-startup-echo-area-message <span style="color:#d3869b">t</span>
-</span></span><span style="display:flex;"><span>      initial-scratch-message
-</span></span><span style="display:flex;"><span>      <span style="color:#b8bb26">&#34;;;oh how i adore to edit text with emacs!&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#a2f;font-weight:bold">setq</span> <span style="color:#b8860b">inhibit-startup-message</span> <span style="color:#800">t</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#b8860b">inhibit-startup-echo-area-message</span> <span style="color:#800">t</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#b8860b">initial-scratch-message</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#b44">&#34;;;oh how i adore to edit text with emacs!&#34;</span>)
 </span></span></code></pre></div><p>Maybe you dont want those big old cumbersome toolbars cluttering up your screen:</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(scroll-bar-mode <span style="color:#d3869b">-1</span>)
-</span></span><span style="display:flex;"><span>(tool-bar-mode <span style="color:#d3869b">-1</span>)
-</span></span><span style="display:flex;"><span>(menu-bar-mode <span style="color:#d3869b">-1</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#b8860b">scroll-bar-mode</span> <span style="color:#666">-1</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">tool-bar-mode</span> <span style="color:#666">-1</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">menu-bar-mode</span> <span style="color:#666">-1</span>)
 </span></span></code></pre></div><p>Perhaps some line highlighting and numbering:</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;;line numbering</span>
-</span></span><span style="display:flex;"><span>(global-display-line-numbers-mode)
-</span></span><span style="display:flex;"><span>(<span style="color:#fe8019">setq</span> display-line-numbers-type <span style="color:#83a598">&#39;relative</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span><span style="color:#080;font-style:italic">;;line numbering</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">global-display-line-numbers-mode</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f;font-weight:bold">setq</span> <span style="color:#b8860b">display-line-numbers-type</span> <span style="color:#b8860b">&#39;relative</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;;line higlight</span>
-</span></span><span style="display:flex;"><span>(global-hl-line-mode <span style="color:#d3869b">t</span>)
+</span></span><span style="display:flex;"><span><span style="color:#080;font-style:italic">;;line higlight</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">global-hl-line-mode</span> <span style="color:#800">t</span>)
 </span></span></code></pre></div><p>Custom font?</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#fe8019">setq</span> default-frame-alist <span style="color:#fe8019">&#39;</span>((font <span style="color:#fe8019">.</span> <span style="color:#b8bb26">&#34;agave Nerd Font 14&#34;</span>)))
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#a2f;font-weight:bold">setq</span> <span style="color:#b8860b">default-frame-alist</span> <span style="color:#666">&#39;</span>((<span style="color:#b8860b">font</span> <span style="color:#666">.</span> <span style="color:#b44">&#34;agave Nerd Font 14&#34;</span>)))
 </span></span></code></pre></div><h3 id="custom-keybindings-and-evil">CUSTOM KEYBINDINGS AND EVIL</h3>
 <p>I don&rsquo;t know if it&rsquo;s just sunk cost fallacy or what but having gone to the trouble of learning to some extent how vim works, I kind of feel incomplete without vim keybindings now. Fortunately, emacs has evil mode which effectively emulates vim modal editing in emacs. To configure evil in our init.el we&rsquo;ll use use-package. This is a macro which - to my understanding - talks to your package manager allowing you to configure installed packages in a nice neat efficient manner. To enable it, add this to your init.el:</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(eval-when-compile
-</span></span><span style="display:flex;"><span>  (<span style="color:#fabd2f">require</span> <span style="color:#83a598">&#39;use-package</span>))
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#b8860b">eval-when-compile</span>
+</span></span><span style="display:flex;"><span>  (<span style="color:#00a000">require</span> <span style="color:#b8860b">&#39;use-package</span>))
 </span></span></code></pre></div><p>These are the keybindings that I currently have going; nothing too crazy just a few simple things:</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#fabd2f">use-package</span> evil
-</span></span><span style="display:flex;"><span>  <span style="color:#83a598">:config</span>
-</span></span><span style="display:flex;"><span>  (evil-mode <span style="color:#d3869b">1</span>)
-</span></span><span style="display:flex;"><span>  (evil-select-search-module <span style="color:#83a598">&#39;evil-search-module</span> <span style="color:#83a598">&#39;evil-search</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#00a000">use-package</span> <span style="color:#b8860b">evil</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8860b">:config</span>
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">evil-mode</span> <span style="color:#666">1</span>)
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">evil-select-search-module</span> <span style="color:#b8860b">&#39;evil-search-module</span> <span style="color:#b8860b">&#39;evil-search</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic">;;manage panes</span>
-</span></span><span style="display:flex;"><span>  (define-key evil-normal-state-map (kbd <span style="color:#b8bb26">&#34;M-s&#34;</span>) <span style="color:#83a598">&#39;evil-window-split</span>)
-</span></span><span style="display:flex;"><span>  (define-key evil-normal-state-map (kbd <span style="color:#b8bb26">&#34;M-v&#34;</span>) <span style="color:#83a598">&#39;evil-window-vsplit</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic">;;manage panes</span>
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">define-key</span> <span style="color:#b8860b">evil-normal-state-map</span> (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;M-s&#34;</span>) <span style="color:#b8860b">&#39;evil-window-split</span>)
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">define-key</span> <span style="color:#b8860b">evil-normal-state-map</span> (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;M-v&#34;</span>) <span style="color:#b8860b">&#39;evil-window-vsplit</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  (define-key evil-normal-state-map (kbd <span style="color:#b8bb26">&#34;M-h&#34;</span>) <span style="color:#83a598">&#39;evil-window-left</span>)
-</span></span><span style="display:flex;"><span>  (define-key evil-normal-state-map (kbd <span style="color:#b8bb26">&#34;M-j&#34;</span>) <span style="color:#83a598">&#39;evil-window-down</span>)
-</span></span><span style="display:flex;"><span>  (define-key evil-normal-state-map (kbd <span style="color:#b8bb26">&#34;M-k&#34;</span>) <span style="color:#83a598">&#39;evil-window-up</span>)
-</span></span><span style="display:flex;"><span>  (define-key evil-normal-state-map (kbd <span style="color:#b8bb26">&#34;M-l&#34;</span>) <span style="color:#83a598">&#39;evil-window-right</span>)
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">define-key</span> <span style="color:#b8860b">evil-normal-state-map</span> (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;M-h&#34;</span>) <span style="color:#b8860b">&#39;evil-window-left</span>)
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">define-key</span> <span style="color:#b8860b">evil-normal-state-map</span> (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;M-j&#34;</span>) <span style="color:#b8860b">&#39;evil-window-down</span>)
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">define-key</span> <span style="color:#b8860b">evil-normal-state-map</span> (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;M-k&#34;</span>) <span style="color:#b8860b">&#39;evil-window-up</span>)
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">define-key</span> <span style="color:#b8860b">evil-normal-state-map</span> (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;M-l&#34;</span>) <span style="color:#b8860b">&#39;evil-window-right</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic">;;get files open quick</span>
-</span></span><span style="display:flex;"><span>  (define-key evil-normal-state-map (kbd <span style="color:#b8bb26">&#34;M-f&#34;</span>) <span style="color:#83a598">&#39;find-file</span>)
-</span></span><span style="display:flex;"><span>  (define-key evil-normal-state-map (kbd <span style="color:#b8bb26">&#34;M-b&#34;</span>) <span style="color:#83a598">&#39;dired-jump</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic">;;get files open quick</span>
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">define-key</span> <span style="color:#b8860b">evil-normal-state-map</span> (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;M-f&#34;</span>) <span style="color:#b8860b">&#39;find-file</span>)
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">define-key</span> <span style="color:#b8860b">evil-normal-state-map</span> (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;M-b&#34;</span>) <span style="color:#b8860b">&#39;dired-jump</span>)
 </span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic">;;terminal</span>
-</span></span><span style="display:flex;"><span>  (define-key evil-normal-state-map (kbd <span style="color:#b8bb26">&#34;M-t&#34;</span>) <span style="color:#83a598">&#39;ansi-term</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic">;;terminal</span>
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">define-key</span> <span style="color:#b8860b">evil-normal-state-map</span> (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;M-t&#34;</span>) <span style="color:#b8860b">&#39;ansi-term</span>)
 </span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic">;;nav buffers</span>
-</span></span><span style="display:flex;"><span>  (define-key evil-normal-state-map (kbd <span style="color:#b8bb26">&#34;M-,&#34;</span>) (kbd <span style="color:#b8bb26">&#34;C-x &lt;left&gt;&#34;</span>))
-</span></span><span style="display:flex;"><span>  (define-key evil-normal-state-map (kbd <span style="color:#b8bb26">&#34;M-.&#34;</span>) (kbd <span style="color:#b8bb26">&#34;C-x &lt;right&gt;&#34;</span>))
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic">;;nav buffers</span>
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">define-key</span> <span style="color:#b8860b">evil-normal-state-map</span> (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;M-,&#34;</span>) (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;C-x &lt;left&gt;&#34;</span>))
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">define-key</span> <span style="color:#b8860b">evil-normal-state-map</span> (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;M-.&#34;</span>) (<span style="color:#b8860b">kbd</span> <span style="color:#b44">&#34;C-x &lt;right&gt;&#34;</span>))
 </span></span><span style="display:flex;"><span>  )
 </span></span></code></pre></div><h3 id="some-friednly-ide-features-you-may-like">SOME FRIEDNLY IDE FEATURES YOU MAY LIKE</h3>
 <p>I don&rsquo;t know about you but having used vscode here and there I&rsquo;ve become accustomed to a lot of these little IDE crutches (completion, autopair and the like) and now when I don&rsquo;t have thme I feel a little sad. Emacs has it covered though as long as you&rsquo;re happy with installing some additional stuff. Auto-completion? Try company:</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;; enable company in all buffers</span>
-</span></span><span style="display:flex;"><span>(add-hook <span style="color:#83a598">&#39;after-init-hook</span> <span style="color:#83a598">&#39;global-company-mode</span>)
-</span></span><span style="display:flex;"><span>(<span style="color:#fabd2f">use-package</span> company			
-</span></span><span style="display:flex;"><span>  <span style="color:#83a598">:commands</span> company-tng-configure-default
-</span></span><span style="display:flex;"><span>  <span style="color:#83a598">:custom</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic">;; delay to start completion</span>
-</span></span><span style="display:flex;"><span>  (company-idle-delay <span style="color:#d3869b">0</span>)
-</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic">;; nb of chars before triggering completion</span>
-</span></span><span style="display:flex;"><span>  (company-minimum-prefix-length <span style="color:#d3869b">1</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span><span style="color:#080;font-style:italic">;; enable company in all buffers</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">add-hook</span> <span style="color:#b8860b">&#39;after-init-hook</span> <span style="color:#b8860b">&#39;global-company-mode</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#00a000">use-package</span> <span style="color:#b8860b">company</span>			
+</span></span><span style="display:flex;"><span>  <span style="color:#b8860b">:commands</span> <span style="color:#b8860b">company-tng-configure-default</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8860b">:custom</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic">;; delay to start completion</span>
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">company-idle-delay</span> <span style="color:#666">0</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic">;; nb of chars before triggering completion</span>
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">company-minimum-prefix-length</span> <span style="color:#666">1</span>)
 </span></span></code></pre></div><p>You want the nice little autopair brackets?</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#fabd2f">use-package</span> flex-autopair
-</span></span><span style="display:flex;"><span>  <span style="color:#83a598">:config</span>
-</span></span><span style="display:flex;"><span>  (flex-autopair-mode <span style="color:#d3869b">1</span>))
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#00a000">use-package</span> <span style="color:#b8860b">flex-autopair</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8860b">:config</span>
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">flex-autopair-mode</span> <span style="color:#666">1</span>))
 </span></span></code></pre></div><p>Clever commenting?</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#fabd2f">use-package</span> smart-comment
-</span></span><span style="display:flex;"><span>  <span style="color:#83a598">:bind</span> (<span style="color:#b8bb26">&#34;M-c&#34;</span> <span style="color:#fe8019">.</span> smart-comment))
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#00a000">use-package</span> <span style="color:#b8860b">smart-comment</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8860b">:bind</span> (<span style="color:#b44">&#34;M-c&#34;</span> <span style="color:#666">.</span> <span style="color:#b8860b">smart-comment</span>))
 </span></span></code></pre></div><p>Here&rsquo;s a little pic of the current setup :)</p>
 <p><img src="/image/emacs.png" alt="emacs"></p>
 
 </div>
 
-<footer>
-  <small>
-    <div class="foot-message">made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a></div>
-  </small>
-</footer>
 </div> 
+<footer>
+<small>
+  <div class="foot-item">
+    
+      <a href="/posts/">all posts</a>
+    
+      <a href="/tags/">topics</a>
+    
+  </div>
+  <div class="foot-item">
+    
+      <a href="/index.xml">rss</a>
+    
+      <a href="https://github.com/ryfrd">github</a>
+    
+  </div>
+  <div class="foot-item">
+    made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
+  </div>
+</small>
+</footer>
 </body>
 </html>
 

@@ -2,28 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://read.jdysmcl.xyz/tags/home-manager/</loc>
+    <lastmod>2023-08-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://read.jdysmcl.xyz/</loc>
+    <lastmod>2023-08-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://read.jdysmcl.xyz/posts/making-nix-colors-talk-to-neovim/</loc>
+    <lastmod>2023-08-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://read.jdysmcl.xyz/tags/neovim/</loc>
+    <lastmod>2023-08-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://read.jdysmcl.xyz/tags/nix-colors/</loc>
+    <lastmod>2023-08-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://read.jdysmcl.xyz/tags/nixos/</loc>
+    <lastmod>2023-08-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://read.jdysmcl.xyz/posts/</loc>
+    <lastmod>2023-08-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://read.jdysmcl.xyz/tags/</loc>
+    <lastmod>2023-08-18T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://read.jdysmcl.xyz/tags/css/</loc>
     <lastmod>2023-06-26T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://read.jdysmcl.xyz/</loc>
-    <lastmod>2023-06-26T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://read.jdysmcl.xyz/tags/javascript/</loc>
-    <lastmod>2023-06-26T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://read.jdysmcl.xyz/posts/</loc>
-    <lastmod>2023-06-26T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://read.jdysmcl.xyz/tags/</loc>
     <lastmod>2023-06-26T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://read.jdysmcl.xyz/posts/vanilla-javascript-theme-toggle-for-simpletons/</loc>
     <lastmod>2023-06-26T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://read.jdysmcl.xyz/tags/caddy/</loc>
-    <lastmod>2023-05-16T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://read.jdysmcl.xyz/tags/nixos/</loc>
     <lastmod>2023-05-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://read.jdysmcl.xyz/tags/self-hosting/</loc>
@@ -43,12 +55,6 @@
   </url><url>
     <loc>https://read.jdysmcl.xyz/tags/qtile/</loc>
     <lastmod>2023-04-03T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://read.jdysmcl.xyz/tags/home-manager/</loc>
-    <lastmod>2023-03-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://read.jdysmcl.xyz/tags/nix-colors/</loc>
-    <lastmod>2023-03-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://read.jdysmcl.xyz/posts/nix-colors/</loc>
     <lastmod>2023-03-13T00:00:00+00:00</lastmod>

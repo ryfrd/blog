@@ -7,30 +7,15 @@
     
     <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
     
-    <link href="/css/dark.css" rel="stylesheet" id="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet" id="stylesheet">
     <title>james mclaren</title>
   </head>
   <body>
-  <script src="https://kit.fontawesome.com/460d3298b2.js" crossorigin="anonymous"></script>
-  <script src="/js/toggle.js"></script>
-
-  <div class="nav left-right">
-    <div class="left">
-      <a href="/" class="title nav-left-item squishy">james mclaren</a>
-      <button id="themeButton" class="toggle-button nav-left-item squishy" onclick="toggleTheme()">
-<i class="fa-solid fa-circle-half-stroke"></i>
-      </button>
-    </div>
-    <div class="right">
-      
-        <a class="nav-right-item squishy" href="/posts/">all posts</a>
-      
-        <a class="nav-right-item squishy" href="/tags/">topics</a>
-      
-    </div>
-  </div>
+  
   
   <div class="body-container">
+
+  
 
 
 <div class="body-container">
@@ -45,86 +30,102 @@
 <p>For the python script I used the lovely <a href="https://feedparser.readthedocs.io/en/latest/introduction.html">feedparser</a> module for easy talking to my rss feeds.</p>
 <h3 id="where-the-podcasts-go">WHERE THE PODCASTS GO</h3>
 <p>First thing I would want my script to do is create a subdirectory of my main podcast directory for each individual podcast. After plopping all my feeds in a list like this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>rss_urls <span style="color:#fe8019">=</span> [
-</span></span><span style="display:flex;"><span>    <span style="color:#b8bb26">&#39;https://anchor.fm/s/1311c8b8/podcast/rss&#39;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#b8bb26">&#39;https://feeds.acast.com/public/shows/5e7b777ba085cbe7192b0607&#39;</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>rss_urls <span style="color:#666">=</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#39;https://anchor.fm/s/1311c8b8/podcast/rss&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#39;https://feeds.acast.com/public/shows/5e7b777ba085cbe7192b0607&#39;</span>
 </span></span><span style="display:flex;"><span>]
 </span></span></code></pre></div><p>I wrote a little function that would parse each of these feeds get its name, and make a directory if one does not already exist.</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#fe8019">def</span> <span style="color:#fabd2f">create_dirs</span>():
-</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">for</span> url <span style="color:#fe8019">in</span> rss_urls:
-</span></span><span style="display:flex;"><span>        f <span style="color:#fe8019">=</span> feedparser<span style="color:#fe8019">.</span>parse(url)
-</span></span><span style="display:flex;"><span>        feed_name <span style="color:#fe8019">=</span> f[<span style="color:#b8bb26">&#39;feed&#39;</span>][<span style="color:#b8bb26">&#39;title&#39;</span>]
-</span></span><span style="display:flex;"><span>        current_feeds <span style="color:#fe8019">=</span> os<span style="color:#fe8019">.</span>listdir(pod_dir)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">def</span> <span style="color:#00a000">create_dirs</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#a2f;font-weight:bold">for</span> url <span style="color:#a2f;font-weight:bold">in</span> rss_urls:
+</span></span><span style="display:flex;"><span>        f <span style="color:#666">=</span> feedparser<span style="color:#666">.</span>parse(url)
+</span></span><span style="display:flex;"><span>        feed_name <span style="color:#666">=</span> f[<span style="color:#b44">&#39;feed&#39;</span>][<span style="color:#b44">&#39;title&#39;</span>]
+</span></span><span style="display:flex;"><span>        current_feeds <span style="color:#666">=</span> os<span style="color:#666">.</span>listdir(pod_dir)
 </span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>        <span style="color:#fe8019">if</span> feed_name <span style="color:#fe8019">not</span> <span style="color:#fe8019">in</span> current_feeds:
-</span></span><span style="display:flex;"><span>            os<span style="color:#fe8019">.</span>makedirs(pod_dir <span style="color:#fe8019">+</span> feed_name)
+</span></span><span style="display:flex;"><span>        <span style="color:#a2f;font-weight:bold">if</span> feed_name <span style="color:#a2f;font-weight:bold">not</span> <span style="color:#a2f;font-weight:bold">in</span> current_feeds:
+</span></span><span style="display:flex;"><span>            os<span style="color:#666">.</span>makedirs(pod_dir <span style="color:#666">+</span> feed_name)
 </span></span></code></pre></div><h3 id="downloading">DOWNLOADING</h3>
 <p>With this sorted I now turned to the actual downloading of podcasts. This function parses each rss feed, filters it for entries from the last week, then grabs a title and a url for the audio file. These are stuck together into a list of lists with each list representing a separate entry.</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#fe8019">def</span> <span style="color:#fabd2f">get_pods</span>():
-</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">global</span> feed_info
-</span></span><span style="display:flex;"><span>    feed_info <span style="color:#fe8019">=</span> []
-</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">for</span> url <span style="color:#fe8019">in</span> rss_urls:
-</span></span><span style="display:flex;"><span>        f <span style="color:#fe8019">=</span> feedparser<span style="color:#fe8019">.</span>parse(url)
-</span></span><span style="display:flex;"><span>        <span style="color:#fe8019">for</span> pod <span style="color:#fe8019">in</span> f<span style="color:#fe8019">.</span>entries:
-</span></span><span style="display:flex;"><span>            <span style="color:#fe8019">if</span> time<span style="color:#fe8019">.</span>time() <span style="color:#fe8019">-</span> time<span style="color:#fe8019">.</span>mktime(pod<span style="color:#fe8019">.</span>published_parsed) <span style="color:#fe8019">&lt;</span> (<span style="color:#d3869b">86400</span><span style="color:#fe8019">*</span><span style="color:#d3869b">7</span>):
-</span></span><span style="display:flex;"><span>                feed_name <span style="color:#fe8019">=</span> f<span style="color:#fe8019">.</span>feed<span style="color:#fe8019">.</span>title
-</span></span><span style="display:flex;"><span>                pod_name <span style="color:#fe8019">=</span> pod<span style="color:#fe8019">.</span>title
-</span></span><span style="display:flex;"><span>                pod_dl <span style="color:#fe8019">=</span> pod<span style="color:#fe8019">.</span>enclosures[<span style="color:#d3869b">0</span>]<span style="color:#fe8019">.</span>href
-</span></span><span style="display:flex;"><span>                pod_info <span style="color:#fe8019">=</span> [
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">def</span> <span style="color:#00a000">get_pods</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#a2f;font-weight:bold">global</span> feed_info
+</span></span><span style="display:flex;"><span>    feed_info <span style="color:#666">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#a2f;font-weight:bold">for</span> url <span style="color:#a2f;font-weight:bold">in</span> rss_urls:
+</span></span><span style="display:flex;"><span>        f <span style="color:#666">=</span> feedparser<span style="color:#666">.</span>parse(url)
+</span></span><span style="display:flex;"><span>        <span style="color:#a2f;font-weight:bold">for</span> pod <span style="color:#a2f;font-weight:bold">in</span> f<span style="color:#666">.</span>entries:
+</span></span><span style="display:flex;"><span>            <span style="color:#a2f;font-weight:bold">if</span> time<span style="color:#666">.</span>time() <span style="color:#666">-</span> time<span style="color:#666">.</span>mktime(pod<span style="color:#666">.</span>published_parsed) <span style="color:#666">&lt;</span> (<span style="color:#666">86400</span><span style="color:#666">*</span><span style="color:#666">7</span>):
+</span></span><span style="display:flex;"><span>                feed_name <span style="color:#666">=</span> f<span style="color:#666">.</span>feed<span style="color:#666">.</span>title
+</span></span><span style="display:flex;"><span>                pod_name <span style="color:#666">=</span> pod<span style="color:#666">.</span>title
+</span></span><span style="display:flex;"><span>                pod_dl <span style="color:#666">=</span> pod<span style="color:#666">.</span>enclosures[<span style="color:#666">0</span>]<span style="color:#666">.</span>href
+</span></span><span style="display:flex;"><span>                pod_info <span style="color:#666">=</span> [
 </span></span><span style="display:flex;"><span>					feed_name,
 </span></span><span style="display:flex;"><span>					pod_name,
 </span></span><span style="display:flex;"><span>					pod_dl
 </span></span><span style="display:flex;"><span>				]
-</span></span><span style="display:flex;"><span>                feed_info<span style="color:#fe8019">.</span>append(pod_info)
-</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">return</span> feed_info
+</span></span><span style="display:flex;"><span>                feed_info<span style="color:#666">.</span>append(pod_info)
+</span></span><span style="display:flex;"><span>    <span style="color:#a2f;font-weight:bold">return</span> feed_info
 </span></span></code></pre></div><p>This next function looks at all the podcast subdirectories and returns a list of all the podcasts I already have downloaded. This can be used when downloading to only get new podcasts.</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#fe8019">def</span> <span style="color:#fabd2f">get_downloads</span>():
-</span></span><span style="display:flex;"><span>    downloads <span style="color:#fe8019">=</span> []
-</span></span><span style="display:flex;"><span>    pods <span style="color:#fe8019">=</span> os<span style="color:#fe8019">.</span>listdir(pod_dir)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">def</span> <span style="color:#00a000">get_downloads</span>():
+</span></span><span style="display:flex;"><span>    downloads <span style="color:#666">=</span> []
+</span></span><span style="display:flex;"><span>    pods <span style="color:#666">=</span> os<span style="color:#666">.</span>listdir(pod_dir)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">for</span> <span style="color:#fabd2f">dir</span> <span style="color:#fe8019">in</span> pods:
-</span></span><span style="display:flex;"><span>        <span style="color:#fe8019">if</span> os<span style="color:#fe8019">.</span>path<span style="color:#fe8019">.</span>isdir(pod_dir <span style="color:#fe8019">+</span> <span style="color:#fabd2f">dir</span>):
-</span></span><span style="display:flex;"><span>            <span style="color:#fe8019">for</span> file <span style="color:#fe8019">in</span> os<span style="color:#fe8019">.</span>listdir(pod_dir <span style="color:#fe8019">+</span> <span style="color:#fabd2f">dir</span>):
-</span></span><span style="display:flex;"><span>                downloads<span style="color:#fe8019">.</span>append(file)
-</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">return</span> downloads
+</span></span><span style="display:flex;"><span>    <span style="color:#a2f;font-weight:bold">for</span> <span style="color:#a2f">dir</span> <span style="color:#a2f;font-weight:bold">in</span> pods:
+</span></span><span style="display:flex;"><span>        <span style="color:#a2f;font-weight:bold">if</span> os<span style="color:#666">.</span>path<span style="color:#666">.</span>isdir(pod_dir <span style="color:#666">+</span> <span style="color:#a2f">dir</span>):
+</span></span><span style="display:flex;"><span>            <span style="color:#a2f;font-weight:bold">for</span> file <span style="color:#a2f;font-weight:bold">in</span> os<span style="color:#666">.</span>listdir(pod_dir <span style="color:#666">+</span> <span style="color:#a2f">dir</span>):
+</span></span><span style="display:flex;"><span>                downloads<span style="color:#666">.</span>append(file)
+</span></span><span style="display:flex;"><span>    <span style="color:#a2f;font-weight:bold">return</span> downloads
 </span></span></code></pre></div><p>Now for the actual getting of the audio files. Here we use requests to make a request to the audio file url and write the content to the relevant directory. I also append a .mp3 to the filenames so they play nice with media players.</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#fe8019">def</span> <span style="color:#fabd2f">download</span>():
-</span></span><span style="display:flex;"><span>    a <span style="color:#fe8019">=</span> get_pods()
-</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">for</span> pod <span style="color:#fe8019">in</span> a:
-</span></span><span style="display:flex;"><span>        b <span style="color:#fe8019">=</span> get_downloads() 
-</span></span><span style="display:flex;"><span>        <span style="color:#fe8019">if</span> pod[<span style="color:#d3869b">1</span>]<span style="color:#fe8019">+</span><span style="color:#b8bb26">&#39;.mp3&#39;</span> <span style="color:#fe8019">not</span> <span style="color:#fe8019">in</span> b:
-</span></span><span style="display:flex;"><span>            <span style="color:#fe8019">try</span>:
-</span></span><span style="display:flex;"><span>                dl <span style="color:#fe8019">=</span> requests<span style="color:#fe8019">.</span>get(pod[<span style="color:#d3869b">2</span>])
-</span></span><span style="display:flex;"><span>            <span style="color:#fe8019">except</span>:
-</span></span><span style="display:flex;"><span>                <span style="color:#fabd2f">print</span>(<span style="color:#b8bb26">&#39;Download Error&#39;</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">def</span> <span style="color:#00a000">download</span>():
+</span></span><span style="display:flex;"><span>    a <span style="color:#666">=</span> get_pods()
+</span></span><span style="display:flex;"><span>    <span style="color:#a2f;font-weight:bold">for</span> pod <span style="color:#a2f;font-weight:bold">in</span> a:
+</span></span><span style="display:flex;"><span>        b <span style="color:#666">=</span> get_downloads() 
+</span></span><span style="display:flex;"><span>        <span style="color:#a2f;font-weight:bold">if</span> pod[<span style="color:#666">1</span>]<span style="color:#666">+</span><span style="color:#b44">&#39;.mp3&#39;</span> <span style="color:#a2f;font-weight:bold">not</span> <span style="color:#a2f;font-weight:bold">in</span> b:
+</span></span><span style="display:flex;"><span>            <span style="color:#a2f;font-weight:bold">try</span>:
+</span></span><span style="display:flex;"><span>                dl <span style="color:#666">=</span> requests<span style="color:#666">.</span>get(pod[<span style="color:#666">2</span>])
+</span></span><span style="display:flex;"><span>            <span style="color:#a2f;font-weight:bold">except</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#a2f">print</span>(<span style="color:#b44">&#39;Download Error&#39;</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#fe8019">with</span> <span style="color:#fabd2f">open</span>(pod_dir <span style="color:#fe8019">+</span> pod[<span style="color:#d3869b">0</span>] <span style="color:#fe8019">+</span> <span style="color:#b8bb26">&#39;/&#39;</span> <span style="color:#fe8019">+</span> pod[<span style="color:#d3869b">1</span>] <span style="color:#fe8019">+</span> <span style="color:#b8bb26">&#39;.mp3&#39;</span>, <span style="color:#b8bb26">&#39;wb&#39;</span>) <span style="color:#fe8019">as</span> file:
-</span></span><span style="display:flex;"><span>                file<span style="color:#fe8019">.</span>write(dl<span style="color:#fe8019">.</span>content)
+</span></span><span style="display:flex;"><span>            <span style="color:#a2f;font-weight:bold">with</span> <span style="color:#a2f">open</span>(pod_dir <span style="color:#666">+</span> pod[<span style="color:#666">0</span>] <span style="color:#666">+</span> <span style="color:#b44">&#39;/&#39;</span> <span style="color:#666">+</span> pod[<span style="color:#666">1</span>] <span style="color:#666">+</span> <span style="color:#b44">&#39;.mp3&#39;</span>, <span style="color:#b44">&#39;wb&#39;</span>) <span style="color:#a2f;font-weight:bold">as</span> file:
+</span></span><span style="display:flex;"><span>                file<span style="color:#666">.</span>write(dl<span style="color:#666">.</span>content)
 </span></span></code></pre></div><h3 id="pruning">PRUNING</h3>
 <p>As it stands, the script does downloading great. The only thing we need is some kind of automatic deletion so my phone doesnt get clogged up with old podcasts. This function checks for files which were created over a week ago and deletes the offenders.</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#fe8019">def</span> <span style="color:#fabd2f">trim</span>():
-</span></span><span style="display:flex;"><span>    <span style="color:#fe8019">for</span> <span style="color:#fabd2f">dir</span> <span style="color:#fe8019">in</span> os<span style="color:#fe8019">.</span>listdir(pod_dir):
-</span></span><span style="display:flex;"><span>        <span style="color:#fe8019">if</span> os<span style="color:#fe8019">.</span>path<span style="color:#fe8019">.</span>isdir(pod_dir <span style="color:#fe8019">+</span> <span style="color:#fabd2f">dir</span>):
-</span></span><span style="display:flex;"><span>            pods <span style="color:#fe8019">=</span> os<span style="color:#fe8019">.</span>listdir(pod_dir <span style="color:#fe8019">+</span> <span style="color:#fabd2f">dir</span>)
-</span></span><span style="display:flex;"><span>            <span style="color:#fe8019">for</span> pod <span style="color:#fe8019">in</span> pods:
-</span></span><span style="display:flex;"><span>                st <span style="color:#fe8019">=</span> os<span style="color:#fe8019">.</span>stat(pod_dir <span style="color:#fe8019">+</span> <span style="color:#fabd2f">dir</span> <span style="color:#fe8019">+</span> <span style="color:#b8bb26">&#39;/&#39;</span> <span style="color:#fe8019">+</span> pod)
-</span></span><span style="display:flex;"><span>                mtime<span style="color:#fe8019">=</span>st<span style="color:#fe8019">.</span>st_mtime
-</span></span><span style="display:flex;"><span>                <span style="color:#fe8019">if</span> time<span style="color:#fe8019">.</span>time() <span style="color:#fe8019">-</span> mtime <span style="color:#fe8019">&gt;</span> (<span style="color:#d3869b">86400</span><span style="color:#fe8019">*</span>trim_age):
-</span></span><span style="display:flex;"><span>                    os<span style="color:#fe8019">.</span>remove(pod_dir <span style="color:#fe8019">+</span> <span style="color:#fabd2f">dir</span> <span style="color:#fe8019">+</span> <span style="color:#b8bb26">&#39;/&#39;</span> <span style="color:#fe8019">+</span> pod)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">def</span> <span style="color:#00a000">trim</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#a2f;font-weight:bold">for</span> <span style="color:#a2f">dir</span> <span style="color:#a2f;font-weight:bold">in</span> os<span style="color:#666">.</span>listdir(pod_dir):
+</span></span><span style="display:flex;"><span>        <span style="color:#a2f;font-weight:bold">if</span> os<span style="color:#666">.</span>path<span style="color:#666">.</span>isdir(pod_dir <span style="color:#666">+</span> <span style="color:#a2f">dir</span>):
+</span></span><span style="display:flex;"><span>            pods <span style="color:#666">=</span> os<span style="color:#666">.</span>listdir(pod_dir <span style="color:#666">+</span> <span style="color:#a2f">dir</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#a2f;font-weight:bold">for</span> pod <span style="color:#a2f;font-weight:bold">in</span> pods:
+</span></span><span style="display:flex;"><span>                st <span style="color:#666">=</span> os<span style="color:#666">.</span>stat(pod_dir <span style="color:#666">+</span> <span style="color:#a2f">dir</span> <span style="color:#666">+</span> <span style="color:#b44">&#39;/&#39;</span> <span style="color:#666">+</span> pod)
+</span></span><span style="display:flex;"><span>                mtime<span style="color:#666">=</span>st<span style="color:#666">.</span>st_mtime
+</span></span><span style="display:flex;"><span>                <span style="color:#a2f;font-weight:bold">if</span> time<span style="color:#666">.</span>time() <span style="color:#666">-</span> mtime <span style="color:#666">&gt;</span> (<span style="color:#666">86400</span><span style="color:#666">*</span>trim_age):
+</span></span><span style="display:flex;"><span>                    os<span style="color:#666">.</span>remove(pod_dir <span style="color:#666">+</span> <span style="color:#a2f">dir</span> <span style="color:#666">+</span> <span style="color:#b44">&#39;/&#39;</span> <span style="color:#666">+</span> pod)
 </span></span></code></pre></div><p>The last thing is to call the functions:</p>
-<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>create_dirs()
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>create_dirs()
 </span></span><span style="display:flex;"><span>download()
 </span></span><span style="display:flex;"><span>trim()
 </span></span></code></pre></div><p>Of course this slightly ramshackle approach is certainly not for everyone lol but as it stands it&rsquo;s working quite nicely for me. Lots of love and happy listening :)</p>
 
 </div>
 
-<footer>
-  <small>
-    <div class="foot-message">made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a></div>
-  </small>
-</footer>
 </div> 
+<footer>
+<small>
+  <div class="foot-item">
+    
+      <a href="/posts/">all posts</a>
+    
+      <a href="/tags/">topics</a>
+    
+  </div>
+  <div class="foot-item">
+    
+      <a href="/index.xml">rss</a>
+    
+      <a href="https://github.com/ryfrd">github</a>
+    
+  </div>
+  <div class="foot-item">
+    made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
+  </div>
+</small>
+</footer>
 </body>
 </html>
 

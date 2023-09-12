@@ -6,7 +6,43 @@
     <description>Recent content in Tags on james mclaren</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 26 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://read.jdysmcl.xyz/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 18 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://read.jdysmcl.xyz/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>home-manager</title>
+      <link>https://read.jdysmcl.xyz/tags/home-manager/</link>
+      <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://read.jdysmcl.xyz/tags/home-manager/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>neovim</title>
+      <link>https://read.jdysmcl.xyz/tags/neovim/</link>
+      <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://read.jdysmcl.xyz/tags/neovim/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nix-colors</title>
+      <link>https://read.jdysmcl.xyz/tags/nix-colors/</link>
+      <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://read.jdysmcl.xyz/tags/nix-colors/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nixos</title>
+      <link>https://read.jdysmcl.xyz/tags/nixos/</link>
+      <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://read.jdysmcl.xyz/tags/nixos/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>css</title>
       <link>https://read.jdysmcl.xyz/tags/css/</link>
@@ -31,15 +67,6 @@
       <pubDate>Tue, 16 May 2023 00:00:00 +0000</pubDate>
       
       <guid>https://read.jdysmcl.xyz/tags/caddy/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>nixos</title>
-      <link>https://read.jdysmcl.xyz/tags/nixos/</link>
-      <pubDate>Tue, 16 May 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://read.jdysmcl.xyz/tags/nixos/</guid>
       <description></description>
     </item>
     
@@ -76,24 +103,6 @@
       <pubDate>Mon, 03 Apr 2023 00:00:00 +0000</pubDate>
       
       <guid>https://read.jdysmcl.xyz/tags/qtile/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>home-manager</title>
-      <link>https://read.jdysmcl.xyz/tags/home-manager/</link>
-      <pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://read.jdysmcl.xyz/tags/home-manager/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>nix-colors</title>
-      <link>https://read.jdysmcl.xyz/tags/nix-colors/</link>
-      <pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://read.jdysmcl.xyz/tags/nix-colors/</guid>
       <description></description>
     </item>
     

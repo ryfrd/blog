@@ -1,25 +1,12 @@
 /* global */
 
-body {
+* {
   font-family: monospace;
-  background-color: var(--bg1);
-  color: var(--fg1);
 }
 
-a {
-  color: var(--fg1);
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--ac);
-  text-decoration: underline;
-}
-
-.squishy {
-  background-color: var(--bg2);
-  border-radius: 10px;
-  padding: 10px;
+a:link {
+    text-decoration: underline;
+    color: hotpink;
 }
 
 .left-right {
@@ -34,7 +21,6 @@ a:hover {
 .right {
   display: flex;
 }
-
 
 /* nav */
 
@@ -53,25 +39,10 @@ a:hover {
   margin-left: 10px;
 }
 
-.toggle-button {
-  color: var(--fg1);
-  border: none;
-}
-
-.toggle-button:hover {
-  background-color: var(--fg1);
-  color: var(--bg1);
-}
-
 /* bio */
 
 .bio-container {
   margin: 80px;
-}
-
-.bio-pic {
-  height: 100px;
-  border-radius: 10px;
 }
 
 /* body */
@@ -87,7 +58,6 @@ a:hover {
   display: block;
   width: 90%;
   padding: 5px;
-  border-radius: 10px;
 }
 
 .body-container pre {
@@ -95,7 +65,6 @@ a:hover {
   display: block;
   width: 90%;
   padding: 5px;
-  border-radius: 10px;
 }
 
 .post-div {
@@ -105,15 +74,6 @@ a:hover {
 
 /* footer */
 
-footer {
+.foot-item {
   text-align: center;
-  padding: 10px;
-}
-
-/* list item */
-
-.list-item {
-  /* display: inline; */
-  /* margin: 10px; */
-  /* padding: 10px; */
 }

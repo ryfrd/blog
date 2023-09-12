@@ -1,82 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-	<meta name="generator" content="Hugo 0.117.0">
+	<meta name="generator" content="Hugo 0.118.2">
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
     <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
     
-    <link href="/css/dark.css" rel="stylesheet" id="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet" id="stylesheet">
     <title>james mclaren</title>
   </head>
   <body>
-  <script src="https://kit.fontawesome.com/460d3298b2.js" crossorigin="anonymous"></script>
-  <script src="/js/toggle.js"></script>
-
-  <div class="nav left-right">
-    <div class="left">
-      <a href="/" class="title nav-left-item squishy">james mclaren</a>
-      <button id="themeButton" class="toggle-button nav-left-item squishy" onclick="toggleTheme()">
-<i class="fa-solid fa-circle-half-stroke"></i>
-      </button>
-    </div>
-    <div class="right">
-      
-        <a class="nav-right-item squishy" href="/posts/">all posts</a>
-      
-        <a class="nav-right-item squishy" href="/tags/">topics</a>
-      
-    </div>
-  </div>
+  
   
   <div class="body-container">
 
-
-<div class="bio-container">
   
-  <p class="bio-content">This is a place for me to document bits and bobs I'm up to that interest me. Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe.</p>
-  
-    <a href="/index.xml">
-      <i class="fa-solid fa-rss" style="padding:5px;"></i>
-    </a>
-  
-    <a href="https://github.com/ryfrd">
-      <i class="fa-brands fa-github" style="padding:5px;"></i>
-    </a>
-  
-</div>
 
 
-  <h4>Recent posts</h4>
-
-  <div class="post-div squishy">
-  <h4><a href="/posts/vanilla-javascript-theme-toggle-for-simpletons/">vanilla javascript theme toggle for simpletons</a></h4>
-  <date>26 Jun 2023</date>
-  <p>Sometimes when I&rsquo;m trawling the internet and happen upon a particularly nice looking website, I develop css and javascript FOMO. The thing I&rsquo;ve been lusting after above all else is one of those fancy little dark theme toggle buttons. As you can probably tell from the website you&rsquo;re looking at my web dev skills are limited. As a result of this I had assumed such niceties were out of reach.</p>
+  <div class="post-div">
+    <h3><a href="/posts/making-nix-colors-talk-to-neovim/">making nix-colors talk to neovim</a></h3>
+    <date>18 Aug 2023</date>
+    <p>I recently started fiddling around with home-managerifying my neovim config. After moving across most of my stuff I came across the problem of how to hook things up with with nix-colors so that my neovim theme would follow color changes in home-manager.
+Luckily, I came across this handy little plugin from the lovely mini.nvim suite of plugins which lets you create your own theme with your custom colors.
+Beneath is a little snippet of how you could make it all happen.</p>
   </div>
 
-  <div class="post-div squishy">
-  <h4><a href="/posts/tailscale-caddy-nixos-containers/">tailscale, caddy, and nixos containers - a match made in heaven</a></h4>
-  <date>16 May 2023</date>
-  <p>For a little while now I&rsquo;ve been running some services (jellyfin etc.) on an old laptop in my house. I&rsquo;m not trying to sound like a podcast ad but as a networking novice, the simplicity tailscale brings to accessing these services remotely is very nice. Until recently though, I had been accessing my services like a heathen with http and port numbers (eg http://tailscale-ip:service-port). This works and is perfectly secure thanks to tailscale though it lacks a certain finesse.</p>
+  <div class="post-div">
+    <h3><a href="/posts/vanilla-javascript-theme-toggle-for-simpletons/">vanilla javascript theme toggle for simpletons</a></h3>
+    <date>26 Jun 2023</date>
+    <p>Sometimes when I&rsquo;m trawling the internet and happen upon a particularly nice looking website, I develop css and javascript FOMO. The thing I&rsquo;ve been lusting after above all else is one of those fancy little dark theme toggle buttons. As you can probably tell from the website you&rsquo;re looking at my web dev skills are limited. As a result of this I had assumed such niceties were out of reach.</p>
   </div>
 
-  <div class="post-div squishy">
-  <h4><a href="/posts/writing-a-qtile-widget/">learning about qtile widgets via the medium of cricket</a></h4>
-  <date>3 Apr 2023</date>
-  <p>I&rsquo;m a person who has spent an unreasonable amount of time making minute changes to the appearance of my bar in qtile. Despite the very nice selection of widgets availabe by default with qtile, it was only a matter of time before I decided I wanted to experiment with making my own custom widget. Fortunately, if you can do a bit of python this is quite an approachable undertaking.
+  <div class="post-div">
+    <h3><a href="/posts/tailscale-caddy-nixos-containers/">tailscale, caddy, and nixos containers - a match made in heaven</a></h3>
+    <date>16 May 2023</date>
+    <p>For a little while now I&rsquo;ve been running some services (jellyfin etc.) on an old laptop in my house. I&rsquo;m not trying to sound like a podcast ad but as a networking novice, the simplicity tailscale brings to accessing these services remotely is very nice. Until recently though, I had been accessing my services like a heathen with http and port numbers (eg http://tailscale-ip:service-port). This works and is perfectly secure thanks to tailscale though it lacks a certain finesse.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/writing-a-qtile-widget/">learning about qtile widgets via the medium of cricket</a></h3>
+    <date>3 Apr 2023</date>
+    <p>I&rsquo;m a person who has spent an unreasonable amount of time making minute changes to the appearance of my bar in qtile. Despite the very nice selection of widgets availabe by default with qtile, it was only a matter of time before I decided I wanted to experiment with making my own custom widget. Fortunately, if you can do a bit of python this is quite an approachable undertaking.
 The dream widget I was lacking was a little live crikcet score ticker type thing; something which would scroll along on my bar showing me the score in live cricket matches.</p>
   </div>
 
+  <div class="post-div">
+    <h3><a href="/posts/nix-colors/">theming nirvana</a></h3>
+    <date>13 Mar 2023</date>
+    <p>As I fall deeper and deeper down the nixos rabbit hole, I find myself becoming more and more obsessed with controlling every little thing on my computers declaratively. It starts with: &lsquo;oh this is cool I can specify which desktop environment to use in my configuration.nix&rsquo;. Next thing you know you&rsquo;ve discovered home-manager and every program on every linux system you use needs to be controlled in your nix-config. Of course this slightly insane approach has its downsides; it also opens some doors though.</p>
+  </div>
 
-<footer>
-  <small>
-    <div class="foot-message">made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a></div>
-  </small>
-</footer>
+  <div class="post-div">
+    <h3><a href="/posts/docker-on-nixos/">translating docker to nix?!</a></h3>
+    <date>28 Feb 2023</date>
+    <p>In my opinion, there are moments when the convenience of docker and its surrounding ecosystem can&rsquo;t be beat. I&rsquo;ve been dabbling in the self hosting world and oftentimes the best maintained packaging option is a docker image. As a result of this I&rsquo;ve been playing around with the nixos approach to managing docker containers.
+nix -&gt; docker compose -&gt; docker run To illustrate how to translate a simple example from the world of docker to nix let&rsquo;s have a look at the config for my searxng instance.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/simple-nixos-config-for-static-site-on-vps/">simple nixos config for vps static site</a></h3>
+    <date>29 Jan 2023</date>
+    <p>Setting up a little static site is something I&rsquo;ve done a few different times on a few different operating systems. It&rsquo;s a slightly fiddly task with a few disparate jobs that all need looking after: ssh, let&rsquo;s encrypt, nginx. In my opinion, it is one of the moments where consolidating all the little bits and bobs you need to setup into one common configuration is very useful.
+I&rsquo;m going to go through a bit of the nixos config I&rsquo;ve got for my vps.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/">podcast setup for broke boys whose trash phone cant hack modern apps</a></h3>
+    <date>24 Jan 2023</date>
+    <p>I have an old sad android phone with 2GB of ram which nowadays seems to struggle with anything but the most lightweight apps. As a result of this I have been &lsquo;podcast-player-hopping&rsquo; without success for the last couple of months trying to find something which doesn&rsquo;t nuke my phone whenever I use it. In a moment of desperation it occured to me that a creative solution might be required. The gameplan was this:</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/elite-dough-philosophy/">elite bread dough for lazy boys</a></h3>
+    <date>22 Jan 2023</date>
+    <p>INGREDIENTI flour (ideally bread flour but if you don&rsquo;t have it, it&rsquo;s not the end of the world) water salt yeast (i use the little dried packet stuff) RATIOS To start measure the weight of flour; this is what we&rsquo;ll work from. You can now work out how much of the other ingredients you need using these ratios:
+65% water 2% salt 0.5% yeast (this amount doesn&rsquo;t particularly matter, as long as it&rsquo;s in this ballpark) So if we used 1kg of flour for example, the recipe would look like this:</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/multi-user-qtile-fiddling/">multi user qtile fiddling</a></h3>
+    <date>20 Dec 2022</date>
+    <p>This post is going to detail how I solved a very particular problem I had created for myself. First, a quick description of the problem. I use home-manager on nixos to declaratively configure what happens on my computer. In the cases where home-manager does not expose sufficient configuration options for my liking (qtile for example), I instead link a configuration file from my nixos config to where it belongs in my home using xdg.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/teeny-tiny-bash-fetch-script/">teeny tiny bash fetch script</a></h3>
+    <date>10 Dec 2022</date>
+    <p>This is my attempt at a neofetch, pfetch, whateverfetch style system info utility. My main concern was making something which looked nice, was easily configurable, and as portable as possible (I didn&rsquo;t really try that hard with the portability). I didn&rsquo;t think much about performance; I&rsquo;m personally not a man who stresses too much when a command takes a quarter of a second instead of a tenth. The basic gameplan was to get an array of bash commands which would fetch various bits and bobs, then loop through this array formatting the text with ANSI escape codes.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/">get the thoughts out of your head and into a digital format with this python journal script</a></h3>
+    <date>1 Dec 2022</date>
+    <p>Since getting going with emacs I&rsquo;ve gone down the org-mode rabbit hole a little bit. In particular the very nice org-journal package. It basically does what it says on the tin: maintains a journal with a selection of org files. This has been very nice for me. I have often thought about journalling but never really got up a head of steam. Somehow having an entry a keybinding away while I&rsquo;m doing something with my text editor makes it a lot more palletable.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/lowkey-emacs-setup/">lowkey emacs setup</a></h3>
+    <date>18 Nov 2022</date>
+    <p>About a month ago I was a little bored and thought I&rsquo;d give emacs a go. There&rsquo;s something fun about trying out these mythical pieces of software that have been around forever; kind of like watching The Godfather for the first time. Like many extensible, super configurable programs, emacs seems kind of impenetrable at first glance. I tried doing the tutorial but kind of glazed over after a while with the endless stream of C-a C-b C-c.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/setting-up-a-lean-mean-hugo-blogging-theme/">setting up a lean mean hugo blogging theme</a></h3>
+    <date>10 Nov 2022</date>
+    <p>When I first started messing around with hugo, I found the whole thing slihtly mystifying. I downloaded a theme like they asked me, edited the config file to try and customise things a little and quickly broke everything. To be fair, this was mainly due to my tinkering instinct to fly to close to the sun. But anyway, the point at which I started to really appreciate the power of hugo was when I tried to make my own - admittedly less feautureful - theme.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/">chess.com api and the continuing search for en passant checkmate</a></h3>
+    <date>8 Nov 2022</date>
+    <p>Last time we worked out how to get info for all the games played by titled players in a particular month. Today, we have three objectives:
+Parse this info for the pgn (portable game notation) of each game. Write these to a file so we dont have to spend forever downloading them everytime we run the script. Devise a way to convert this pgn to a more convenient pythonic format so we can analyse it later.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/chess.com-api-and-the-search-for-en-passant-checkmate/">chess.com api and the search for en passant checkmate</a></h3>
+    <date>26 Oct 2022</date>
+    <p>The chess.com API gives you access to a crazy amount of data on games played on the site. Armed with the knowledge that this data was at my fingertips, I set out to do what any sane person would do: find en passant checkmates. For those not in the know, en passant check mate is kind of the king of moves in chess meme circles. So some sort of python script that identified en passant check mates that occured on the site would be of great value to me.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/declarative-firefox-config-with-home-manager-on-nixos/">declarative firefox config with home-manager on nixos</a></h3>
+    <date>2 Oct 2022</date>
+    <p>As a man who finds himself reinstalling his OS more than is probably sensible, any opportunity to minimise the post install admin of sorting out all your settings is an attractive one. With that in mind lets take a look at some of the firefox (my current browser of choice) configuration options avilable to you through home-manager. This assumes you have some sort of home-manager setup working. If you do not I found this friendly githubber&rsquo;s templates to be very helpful.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/">upgrade your qtile setup with a cute dropdown terminal</a></h3>
+    <date>23 Sep 2022</date>
+    <p>I didn&rsquo;t know you could do this until recently, very fun and playful little feature. How you want to do it will depend slightly on how you have your groups set up but I start with importing the relevant libraries and defining an empty list.
+from libqtile.config import Dropdown, Scratchpad groups = [] I&rsquo;m then able to append all the groups I want to this list. For the dropdown terminal you need the ScratchPad group which to quote the qtile docs is a &ldquo;special - by default invisible - group which acts as a container for DropDown configurations&rdquo;.</p>
+  </div>
+
+  <div class="post-div">
+    <h3><a href="/posts/rudimentary-local-scrobbling-with-bash/">rudimentary local scrobbling with bash</a></h3>
+    <date>13 Sep 2022</date>
+    <p>There are lots of music players on linux. I have used lots of them, I quite like some of them. But for some reason I decided I wanted more. With this in mind, over the past few months I have been constructing a sprawling ecosystem of bash scripts all geared towards delivering a customised listening experience tailored perfectly to my every need. In short, the setup uses a simple dmenu file manager to browse my local files and mpv to play them.</p>
+  </div>
+
+
 </div> 
+<footer>
+<small>
+  <div class="foot-item">
+    
+      <a href="/posts/">all posts</a>
+    
+      <a href="/tags/">topics</a>
+    
+  </div>
+  <div class="foot-item">
+    
+      <a href="/index.xml">rss</a>
+    
+      <a href="https://github.com/ryfrd">github</a>
+    
+  </div>
+  <div class="foot-item">
+    made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
+  </div>
+</small>
+</footer>
 </body>
 </html>
 
