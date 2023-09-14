@@ -1,0 +1,92 @@
+html, body {
+    font-family: monospace;
+    font-size: 12pt;
+    background-color: var(--bg1);
+    color: var(--fg1);
+}
+
+a {
+    text-decoration: none;
+    background-color: var(--bg2);
+    color: var(--fg2);
+}
+
+a:hover {
+    background-color: var(--fg2);
+    color: var(--bg2);
+}
+
+.lr {
+    display: flex;
+    justify-content: space-between;
+}
+
+.l {
+
+}
+
+.r {
+
+}
+
+.main-container {
+    margin: auto;
+    width: 1000px;
+}
+
+.main-container .highlight {
+    /* margin: auto; */
+    /* width: 90%; */
+}
+
+.main-container img {
+    /* margin: auto; */
+    width: 100%;
+}
+
+.main-container code {
+    /* color: var(--fg2); */
+}
+
+.nav-container {
+    margin: auto;
+    width: 1000px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+
+.theme-button {
+    background-color: var(--bg2);
+    color: var(--fg2);
+    margin-left: 10px;
+    outline: none;
+}
+
+.theme-button:hover {
+    background-color: var(--fg2);
+    color: var(--bg2);
+}
+
+.home-title {
+    padding-bottom: 10px;
+}
+
+.home-date {
+    padding-bottom: 10px;
+}
+
+.home-summary {
+    padding-bottom: 10px;
+}
+
+.list-item {
+    text-align: center;
+}
+
+.foot-container {
+    text-align: center;
+}
+
+.foot-item {
+    padding: 10px;
+}

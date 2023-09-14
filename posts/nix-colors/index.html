@@ -1,138 +1,253 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
     <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
     
-    <link href="/css/styles.css" rel="stylesheet" id="stylesheet">
-    <title>james mclaren</title>
+    <link href="/css/dark.css" rel="stylesheet" id="stylesheet">
+    <title>dymc.win</title>
   </head>
   <body>
   
-  
+    <div class="lr nav-container">
+    <div class="l">
+      <a class="nav-title" href="/">
+          dymc.win
+      </a>
+      <button id="themeButton" onclick="toggleTheme()" class="theme-button">
+          toggle theme
+      </button>
+    </div>
+    <div class="r">
+        
+          <a class="nav-link" href="/posts/">posts</a>
+        
+          <a class="nav-link" href="/tags/">topics</a>
+        
+    </div>
+  </div>
+
   <div class="body-container">
 
   
 
 
-<div class="body-container">
-  <h3>theming nirvana</h3>
+<div class="main-container">
+  theming nirvana
   <p>As I fall deeper and deeper down the nixos rabbit hole, I find myself becoming more and more obsessed with controlling every little thing on my computers declaratively. It starts with: &lsquo;oh this is cool I can specify which desktop environment to use in my configuration.nix&rsquo;. Next thing you know you&rsquo;ve discovered <a href="https://github.com/nix-community/home-manager">home-manager</a> and every program on every linux system you use needs to be controlled in your nix-config. Of course this slightly insane approach has its downsides; it also opens some doors though.</p>
 <p><a href="https://sr.ht/~misterio/nix-colors/">Nix-colors</a> lets you dyanmically change the theming of programs controlled in your nix config. So when you want to change the color of everything and have it match and all be pretty lol, you are able to do so with one word as opposed to poring over everything changing each individual color. For a certain type of person, this is very nice!</p>
 <h3 id="how-to-make-it-work">how to make it work</h3>
 <p>This will be a quick rundown of how I&rsquo;ve got things set up; this is basically just a rehash of <a href="https://sr.ht/~misterio/nix-colors/#setup">this</a>.</p>
 <p>First of all, you need to add nix-colors to your flake inputs and then point home-manager in its direction. The relevant parts of my <code>flake.nix</code> look something like this.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  inputs <span style="color:#666">=</span> {
-</span></span><span style="display:flex;"><span>    nix-colors<span style="color:#666">.</span>url <span style="color:#666">=</span> <span style="color:#b44">&#34;github:misterio77/nix-colors&#34;</span>;
-</span></span><span style="display:flex;"><span>  };
-</span></span><span style="display:flex;"><span>  homeConfigurations <span style="color:#666">=</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;randy@computer&#34;</span> <span style="color:#666">=</span> home-manager<span style="color:#666">.</span>lib<span style="color:#666">.</span>homeManagerConfiguration {
-</span></span><span style="display:flex;"><span>      extraSpecialArgs <span style="color:#666">=</span> { <span style="color:#a2f;font-weight:bold">inherit</span> nix-colors; };
-</span></span><span style="display:flex;"><span>  };
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Then you can import the module into your home-manager config, specify a scheme (<a href="https://github.com/tinted-theming/base16-schemes">available schemes here</a>), and get to theming.</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span><span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>  inputs <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>    nix-colors<span style="color:#81a1c1">.</span>url <span style="color:#81a1c1">=</span> <span style="color:#a3be8c">&#34;github:misterio77/nix-colors&#34;</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span>  homeConfigurations <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;randy@computer&#34;</span> <span style="color:#81a1c1">=</span> home-manager<span style="color:#81a1c1">.</span>lib<span style="color:#81a1c1">.</span>homeManagerConfiguration <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>      extraSpecialArgs <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span> <span style="color:#81a1c1;font-weight:bold">inherit</span> nix-colors<span style="color:#eceff4">;</span> <span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span><span style="color:#eceff4">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Then you can import the module into your home-manager config, specify a scheme (<a href="https://github.com/tinted-theming/base16-schemes">available schemes here</a>), and get to theming.</p>
 <p>Here&rsquo;s a simple example where I make my dunst notifications follow the everforest theme.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>{ pkgs<span style="color:#666">,</span> config<span style="color:#666">,</span> nix-colors<span style="color:#666">,</span> <span style="color:#666">...</span> }: {
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">16
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span><span style="color:#eceff4">{</span> pkgs<span style="color:#81a1c1">,</span> config<span style="color:#81a1c1">,</span> nix-colors<span style="color:#81a1c1">,</span> <span style="color:#81a1c1">...</span> <span style="color:#eceff4">}:</span> <span style="color:#eceff4">{</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  imports <span style="color:#666">=</span> [
-</span></span><span style="display:flex;"><span>    nix-colors<span style="color:#666">.</span>homeManagerModule
-</span></span><span style="display:flex;"><span>  ];
+</span></span><span style="display:flex;"><span>  imports <span style="color:#81a1c1">=</span> <span style="color:#eceff4">[</span>
+</span></span><span style="display:flex;"><span>    nix-colors<span style="color:#81a1c1">.</span>homeManagerModule
+</span></span><span style="display:flex;"><span>  <span style="color:#eceff4">];</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  colorScheme <span style="color:#666">=</span> nix-colors<span style="color:#666">.</span>colorSchemes<span style="color:#666">.</span>everforest;
+</span></span><span style="display:flex;"><span>  colorScheme <span style="color:#81a1c1">=</span> nix-colors<span style="color:#81a1c1">.</span>colorSchemes<span style="color:#81a1c1">.</span>everforest<span style="color:#eceff4">;</span>
 </span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span>  services<span style="color:#666">.</span>dunst <span style="color:#666">=</span> {
-</span></span><span style="display:flex;"><span>    enable <span style="color:#666">=</span> <span style="color:#800">true</span>;
-</span></span><span style="display:flex;"><span>	urgency_normal <span style="color:#666">=</span> {
-</span></span><span style="display:flex;"><span>	  background <span style="color:#666">=</span> <span style="color:#b44">&#34;#</span><span style="color:#b68;font-weight:bold">${</span>config<span style="color:#666">.</span>colorScheme<span style="color:#666">.</span>colors<span style="color:#666">.</span>base01<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;</span>;
-</span></span><span style="display:flex;"><span>	  foreground <span style="color:#666">=</span> <span style="color:#b44">&#34;#</span><span style="color:#b68;font-weight:bold">${</span>config<span style="color:#666">.</span>colorScheme<span style="color:#666">.</span>colors<span style="color:#666">.</span>base05<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;</span>;
-</span></span><span style="display:flex;"><span>	};
-</span></span><span style="display:flex;"><span>  };
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="a-couple-of-additional-tips-and-tricks">a couple of additional tips and tricks</h3>
+</span></span><span style="display:flex;"><span>  services<span style="color:#81a1c1">.</span>dunst <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>    enable <span style="color:#81a1c1">=</span> <span style="color:#8fbcbb">true</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>	urgency_normal <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>	  background <span style="color:#81a1c1">=</span> <span style="color:#a3be8c">&#34;#</span><span style="color:#a3be8c">${</span>config<span style="color:#81a1c1">.</span>colorScheme<span style="color:#81a1c1">.</span>colors<span style="color:#81a1c1">.</span>base01<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>	  foreground <span style="color:#81a1c1">=</span> <span style="color:#a3be8c">&#34;#</span><span style="color:#a3be8c">${</span>config<span style="color:#81a1c1">.</span>colorScheme<span style="color:#81a1c1">.</span>colors<span style="color:#81a1c1">.</span>base05<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span><span style="color:#eceff4">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="a-couple-of-additional-tips-and-tricks">a couple of additional tips and tricks</h3>
 <p>First tip and trick: generate and dynamically alter gtk themes depending on current nix-colors theme.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>{ config<span style="color:#666">,</span> pkgs<span style="color:#666">,</span> inputs<span style="color:#666">,</span> <span style="color:#666">...</span> }:
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">21
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span><span style="color:#eceff4">{</span> config<span style="color:#81a1c1">,</span> pkgs<span style="color:#81a1c1">,</span> inputs<span style="color:#81a1c1">,</span> <span style="color:#81a1c1">...</span> <span style="color:#eceff4">}:</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">let</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a2f;font-weight:bold">inherit</span> (inputs<span style="color:#666">.</span>nix-colors<span style="color:#666">.</span>lib-contrib { <span style="color:#a2f;font-weight:bold">inherit</span> pkgs; }) gtkThemeFromScheme;
-</span></span><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">in</span> <span style="color:#a2f;font-weight:bold">rec</span> {
-</span></span><span style="display:flex;"><span>  gtk <span style="color:#666">=</span> {
-</span></span><span style="display:flex;"><span>    enable <span style="color:#666">=</span> <span style="color:#800">true</span>;
-</span></span><span style="display:flex;"><span>    theme <span style="color:#666">=</span> {
-</span></span><span style="display:flex;"><span>      name <span style="color:#666">=</span> <span style="color:#b44">&#34;</span><span style="color:#b68;font-weight:bold">${</span>config<span style="color:#666">.</span>colorScheme<span style="color:#666">.</span>slug<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;</span>;
-</span></span><span style="display:flex;"><span>      package <span style="color:#666">=</span> gtkThemeFromScheme { scheme <span style="color:#666">=</span> config<span style="color:#666">.</span>colorScheme; };
-</span></span><span style="display:flex;"><span>    };
-</span></span><span style="display:flex;"><span>  };
+</span></span><span style="display:flex;"><span><span style="color:#81a1c1;font-weight:bold">let</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#81a1c1;font-weight:bold">inherit</span> <span style="color:#eceff4">(</span>inputs<span style="color:#81a1c1">.</span>nix-colors<span style="color:#81a1c1">.</span>lib-contrib <span style="color:#eceff4">{</span> <span style="color:#81a1c1;font-weight:bold">inherit</span> pkgs<span style="color:#eceff4">;</span> <span style="color:#eceff4">})</span> gtkThemeFromScheme<span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#81a1c1;font-weight:bold">in</span> <span style="color:#81a1c1;font-weight:bold">rec</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>  gtk <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>    enable <span style="color:#81a1c1">=</span> <span style="color:#8fbcbb">true</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>    theme <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>      name <span style="color:#81a1c1">=</span> <span style="color:#a3be8c">&#34;</span><span style="color:#a3be8c">${</span>config<span style="color:#81a1c1">.</span>colorScheme<span style="color:#81a1c1">.</span>slug<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>      package <span style="color:#81a1c1">=</span> gtkThemeFromScheme <span style="color:#eceff4">{</span> scheme <span style="color:#81a1c1">=</span> config<span style="color:#81a1c1">.</span>colorScheme<span style="color:#eceff4">;</span> <span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#eceff4">};</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  services<span style="color:#666">.</span>xsettingsd <span style="color:#666">=</span> {
-</span></span><span style="display:flex;"><span>    enable <span style="color:#666">=</span> <span style="color:#800">true</span>;
-</span></span><span style="display:flex;"><span>    settings <span style="color:#666">=</span> {
-</span></span><span style="display:flex;"><span>      <span style="color:#b44">&#34;Net/ThemeName&#34;</span> <span style="color:#666">=</span> <span style="color:#b44">&#34;</span><span style="color:#b68;font-weight:bold">${</span>gtk<span style="color:#666">.</span>theme<span style="color:#666">.</span>name<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;</span>;
-</span></span><span style="display:flex;"><span>      <span style="color:#b44">&#34;Net/IconThemeName&#34;</span> <span style="color:#666">=</span> <span style="color:#b44">&#34;</span><span style="color:#b68;font-weight:bold">${</span>gtk<span style="color:#666">.</span>iconTheme<span style="color:#666">.</span>name<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;</span>;
-</span></span><span style="display:flex;"><span>    };
-</span></span><span style="display:flex;"><span>  };
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Second tip and trick: if you&rsquo;re not using nix to configure everything you can still pass your colors across in the relevant format with <code>home.file</code>. I do this for qtile.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>{config<span style="color:#666">,</span> pkgs<span style="color:#666">,</span> <span style="color:#666">...</span> }:
-</span></span><span style="display:flex;"><span>  <span style="color:#a2f;font-weight:bold">let</span>
-</span></span><span style="display:flex;"><span>    c <span style="color:#666">=</span> config<span style="color:#666">.</span>colorScheme<span style="color:#666">.</span>colors;
-</span></span><span style="display:flex;"><span>  <span style="color:#a2f;font-weight:bold">in</span>
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  home<span style="color:#666">.</span>file <span style="color:#666">=</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;.config/qtile/colors.py&#34;</span> <span style="color:#666">=</span> {
-</span></span><span style="display:flex;"><span>	  text <span style="color:#666">=</span> <span style="color:#b44">&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">        scheme = {
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">          &#39;yellow&#39;: &#34;#</span><span style="color:#b68;font-weight:bold">${</span>c<span style="color:#666">.</span>base0A<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;,
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">          &#39;orange&#39;: &#34;#</span><span style="color:#b68;font-weight:bold">${</span>c<span style="color:#666">.</span>base09<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;,	
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">          &#39;red&#39;: &#34;#</span><span style="color:#b68;font-weight:bold">${</span>c<span style="color:#666">.</span>base0F<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;,	
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">          &#39;magenta&#39;: &#34;#</span><span style="color:#b68;font-weight:bold">${</span>c<span style="color:#666">.</span>base08<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;,	
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">          &#39;violet&#39;: &#34;#</span><span style="color:#b68;font-weight:bold">${</span>c<span style="color:#666">.</span>base0E<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;,
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">          &#39;blue&#39;: &#34;#</span><span style="color:#b68;font-weight:bold">${</span>c<span style="color:#666">.</span>base0D<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;,
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">          &#39;cyan&#39;: &#34;#</span><span style="color:#b68;font-weight:bold">${</span>c<span style="color:#666">.</span>base0C<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;,	
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">          &#39;green&#39;: &#34;#</span><span style="color:#b68;font-weight:bold">${</span>c<span style="color:#666">.</span>base0B<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;,
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">        }
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">      &#39;&#39;</span>;
-</span></span><span style="display:flex;"><span>	};
-</span></span><span style="display:flex;"><span>  };
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>You can then import the colors into your <code>config.py</code> and use them as you see fit.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">from</span> <span style="color:#00f;font-weight:bold">colors</span> <span style="color:#a2f;font-weight:bold">import</span> scheme
+</span></span><span style="display:flex;"><span>  services<span style="color:#81a1c1">.</span>xsettingsd <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>    enable <span style="color:#81a1c1">=</span> <span style="color:#8fbcbb">true</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>    settings <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a3be8c">&#34;Net/ThemeName&#34;</span> <span style="color:#81a1c1">=</span> <span style="color:#a3be8c">&#34;</span><span style="color:#a3be8c">${</span>gtk<span style="color:#81a1c1">.</span>theme<span style="color:#81a1c1">.</span>name<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a3be8c">&#34;Net/IconThemeName&#34;</span> <span style="color:#81a1c1">=</span> <span style="color:#a3be8c">&#34;</span><span style="color:#a3be8c">${</span>gtk<span style="color:#81a1c1">.</span>iconTheme<span style="color:#81a1c1">.</span>name<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span><span style="color:#eceff4">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Second tip and trick: if you&rsquo;re not using nix to configure everything you can still pass your colors across in the relevant format with <code>home.file</code>. I do this for qtile.</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span><span style="color:#eceff4">{</span>config<span style="color:#81a1c1">,</span> pkgs<span style="color:#81a1c1">,</span> <span style="color:#81a1c1">...</span> <span style="color:#eceff4">}:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#81a1c1;font-weight:bold">let</span>
+</span></span><span style="display:flex;"><span>    c <span style="color:#81a1c1">=</span> config<span style="color:#81a1c1">.</span>colorScheme<span style="color:#81a1c1">.</span>colors<span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#81a1c1;font-weight:bold">in</span>
+</span></span><span style="display:flex;"><span><span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>  home<span style="color:#81a1c1">.</span>file <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;.config/qtile/colors.py&#34;</span> <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>	  text <span style="color:#81a1c1">=</span> <span style="color:#a3be8c">&#39;&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">        scheme = {
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">          &#39;yellow&#39;: &#34;#</span><span style="color:#a3be8c">${</span>c<span style="color:#81a1c1">.</span>base0A<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">          &#39;orange&#39;: &#34;#</span><span style="color:#a3be8c">${</span>c<span style="color:#81a1c1">.</span>base09<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;,	
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">          &#39;red&#39;: &#34;#</span><span style="color:#a3be8c">${</span>c<span style="color:#81a1c1">.</span>base0F<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;,	
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">          &#39;magenta&#39;: &#34;#</span><span style="color:#a3be8c">${</span>c<span style="color:#81a1c1">.</span>base08<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;,	
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">          &#39;violet&#39;: &#34;#</span><span style="color:#a3be8c">${</span>c<span style="color:#81a1c1">.</span>base0E<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">          &#39;blue&#39;: &#34;#</span><span style="color:#a3be8c">${</span>c<span style="color:#81a1c1">.</span>base0D<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">          &#39;cyan&#39;: &#34;#</span><span style="color:#a3be8c">${</span>c<span style="color:#81a1c1">.</span>base0C<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;,	
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">          &#39;green&#39;: &#34;#</span><span style="color:#a3be8c">${</span>c<span style="color:#81a1c1">.</span>base0B<span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">      &#39;&#39;</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span><span style="color:#eceff4">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>You can then import the colors into your <code>config.py</code> and use them as you see fit.</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#81a1c1;font-weight:bold">from</span> <span style="color:#8fbcbb">colors</span> <span style="color:#81a1c1;font-weight:bold">import</span> scheme
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>layouts <span style="color:#666">=</span> [
-</span></span><span style="display:flex;"><span>    layout<span style="color:#666">.</span>MonadTall(
-</span></span><span style="display:flex;"><span>	    border_normal <span style="color:#666">=</span> scheme[<span style="color:#b44">&#39;yellow&#39;</span>],
-</span></span><span style="display:flex;"><span>	    border_focus <span style="color:#666">=</span> scheme[<span style="color:#b44">&#39;green&#39;</span>],
-</span></span><span style="display:flex;"><span>	),
-</span></span><span style="display:flex;"><span>]
-</span></span></code></pre></div><p>That&rsquo;s it for today. Thank you to the <a href="https://github.com/Misterio77">hero</a> that made this.</p>
+</span></span><span style="display:flex;"><span>layouts <span style="color:#81a1c1">=</span> <span style="color:#eceff4">[</span>
+</span></span><span style="display:flex;"><span>    layout<span style="color:#81a1c1">.</span>MonadTall<span style="color:#eceff4">(</span>
+</span></span><span style="display:flex;"><span>	    border_normal <span style="color:#81a1c1">=</span> scheme<span style="color:#eceff4">[</span><span style="color:#a3be8c">&#39;yellow&#39;</span><span style="color:#eceff4">],</span>
+</span></span><span style="display:flex;"><span>	    border_focus <span style="color:#81a1c1">=</span> scheme<span style="color:#eceff4">[</span><span style="color:#a3be8c">&#39;green&#39;</span><span style="color:#eceff4">],</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#eceff4">),</span>
+</span></span><span style="display:flex;"><span><span style="color:#eceff4">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>That&rsquo;s it for today. Thank you to the <a href="https://github.com/Misterio77">hero</a> that made this.</p>
 
 </div>
 
 </div> 
-<footer>
-<small>
-  <div class="foot-item">
-    
-      <a href="/posts/">all posts</a>
-    
-      <a href="/tags/">topics</a>
-    
-  </div>
-  <div class="foot-item">
+<div class="foot-container">
+    <div class="foot-item">
     
       <a href="/index.xml">rss</a>
     
       <a href="https://github.com/ryfrd">github</a>
     
+    </div>
+    <div class="foot-item">
+    made with <a href="https://gohugo.io">hugo</a> and my wonky theme <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
+    </div>
   </div>
-  <div class="foot-item">
-    made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
-  </div>
-</small>
-</footer>
+
+  <script src="/js/toggle.js"></script>
 </body>
 </html>
 

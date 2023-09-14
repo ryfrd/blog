@@ -1,33 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
     <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
     
-    <link href="/css/styles.css" rel="stylesheet" id="stylesheet">
-    <title>james mclaren</title>
+    <link href="/css/dark.css" rel="stylesheet" id="stylesheet">
+    <title>dymc.win</title>
   </head>
   <body>
   
-  
+    <div class="lr nav-container">
+    <div class="l">
+      <a class="nav-title" href="/">
+          dymc.win
+      </a>
+      <button id="themeButton" onclick="toggleTheme()" class="theme-button">
+          toggle theme
+      </button>
+    </div>
+    <div class="r">
+        
+          <a class="nav-link" href="/posts/">posts</a>
+        
+          <a class="nav-link" href="/tags/">topics</a>
+        
+    </div>
+  </div>
+
   <div class="body-container">
 
   
 
 
-<div class="body-container">
-  <h3>multi user qtile fiddling</h3>
+<div class="main-container">
+  multi user qtile fiddling
   <p>This post is going to detail how I solved a very particular problem I had created for myself. First, a quick description of the problem. I use home-manager on nixos to declaratively configure what happens on my computer. In the cases where home-manager does not expose sufficient configuration options for my liking (qtile for example), I instead link a configuration file from my nixos config to where it belongs in my home using <code>xdg.configFile</code>. This is what I do with my qtile <code>config.py</code>. I use qtile on my desktop and laptop but I dont want an identical setup on the two machines. I have jumped through many different slightly silly hoops in my nixos config sort of solving this problem until the other day it occured to me this could all be achieved with my python in my qtile config.</p>
 <h3 id="the-nub-of-the-problem">THE NUB OF THE PROBLEM</h3>
 <p>I basically just want the config to work out which computer it&rsquo;&rsquo;s on and then change some things accordingly. This can be achieved by getting the hostname with the socket module:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">if</span> socket<span style="color:#666">.</span>gethostname() <span style="color:#666">==</span> <span style="color:#b44">&#39;baron&#39;</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-style:italic"># some stuff i want to happen on my desktop</span>
-</span></span><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">elif</span> socket<span style="color:#666">.</span>gethostname() <span style="color:#666">==</span> <span style="color:#b44">&#39;countess&#39;</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-style:italic"># some stuff i want to happen on my laptop </span>
-</span></span></code></pre></div><p>There are three main things that I like to differ between my two computers:</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#81a1c1;font-weight:bold">if</span> socket<span style="color:#81a1c1">.</span>gethostname<span style="color:#eceff4">()</span> <span style="color:#81a1c1">==</span> <span style="color:#a3be8c">&#39;baron&#39;</span><span style="color:#eceff4">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#616e87;font-style:italic"># some stuff i want to happen on my desktop</span>
+</span></span><span style="display:flex;"><span><span style="color:#81a1c1;font-weight:bold">elif</span> socket<span style="color:#81a1c1">.</span>gethostname<span style="color:#eceff4">()</span> <span style="color:#81a1c1">==</span> <span style="color:#a3be8c">&#39;countess&#39;</span><span style="color:#eceff4">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#616e87;font-style:italic"># some stuff i want to happen on my laptop </span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>There are three main things that I like to differ between my two computers:</p>
 <ul>
 <li>widgets on my bar (I don&rsquo;t need brightness and battery on my desktop)</li>
 <li>keybindings</li>
@@ -35,85 +61,150 @@
 </ul>
 <h3 id="widgets">WIDGETS</h3>
 <p>My current solution for this is to define to separate lists of widgets and then point to each one when I make my bar for each computer. This isn&rsquo;t perfect; it would be nice to have a list of all common widgets and then add to that with the unique ones. I haven&rsquo;t worked out a way to add the additional widgets without just plopping them all at the end of the bar which isn&rsquo;t necessarily where I want them (thinking about this now I think I might be able to use the insert method with a little for loop).</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>countess_widgets <span style="color:#666">=</span> [
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-style:italic"># all the great widgets i want on my laptop</span>
-</span></span><span style="display:flex;"><span>]
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>countess_widgets <span style="color:#81a1c1">=</span> <span style="color:#eceff4">[</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#616e87;font-style:italic"># all the great widgets i want on my laptop</span>
+</span></span><span style="display:flex;"><span><span style="color:#eceff4">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>screens <span style="color:#666">=</span> [
-</span></span><span style="display:flex;"><span>    Screen(
-</span></span><span style="display:flex;"><span>	    top <span style="color:#666">=</span> bar<span style="color:#666">.</span>Bar(
-</span></span><span style="display:flex;"><span>		    widgets <span style="color:#666">=</span> countess_widgets
-</span></span><span style="display:flex;"><span>		),
-</span></span><span style="display:flex;"><span>	),
-</span></span><span style="display:flex;"><span>]
-</span></span></code></pre></div><h3 id="keybindings">KEYBINDINGS</h3>
+</span></span><span style="display:flex;"><span>screens <span style="color:#81a1c1">=</span> <span style="color:#eceff4">[</span>
+</span></span><span style="display:flex;"><span>    Screen<span style="color:#eceff4">(</span>
+</span></span><span style="display:flex;"><span>	    top <span style="color:#81a1c1">=</span> bar<span style="color:#81a1c1">.</span>Bar<span style="color:#eceff4">(</span>
+</span></span><span style="display:flex;"><span>		    widgets <span style="color:#81a1c1">=</span> countess_widgets
+</span></span><span style="display:flex;"><span>		<span style="color:#eceff4">),</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#eceff4">),</span>
+</span></span><span style="display:flex;"><span><span style="color:#eceff4">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="keybindings">KEYBINDINGS</h3>
 <p>For keybindings I use extend to add some additional bindings to my global ones. This is mainly useful for the ones I use to change brightness on my laptop.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>countess_keys <span style="color:#666">=</span> [
-</span></span><span style="display:flex;"><span>    Key([m], <span style="color:#b44">&#39;Up&#39;</span>,
-</span></span><span style="display:flex;"><span>        lazy<span style="color:#666">.</span>spawn(<span style="color:#b44">&#39;light -A 5&#39;</span>),
-</span></span><span style="display:flex;"><span>        desc<span style="color:#666">=</span><span style="color:#b44">&#39;backlight up&#39;</span>
-</span></span><span style="display:flex;"><span>        ),
-</span></span><span style="display:flex;"><span>    Key([m], <span style="color:#b44">&#39;Down&#39;</span>,
-</span></span><span style="display:flex;"><span>        lazy<span style="color:#666">.</span>spawn(<span style="color:#b44">&#39;light -U 5&#39;</span>),
-</span></span><span style="display:flex;"><span>        desc<span style="color:#666">=</span><span style="color:#b44">&#39;backlight down&#39;</span>
-</span></span><span style="display:flex;"><span>        ),
-</span></span><span style="display:flex;"><span>    ]
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>countess_keys <span style="color:#81a1c1">=</span> <span style="color:#eceff4">[</span>
+</span></span><span style="display:flex;"><span>    Key<span style="color:#eceff4">([</span>m<span style="color:#eceff4">],</span> <span style="color:#a3be8c">&#39;Up&#39;</span><span style="color:#eceff4">,</span>
+</span></span><span style="display:flex;"><span>        lazy<span style="color:#81a1c1">.</span>spawn<span style="color:#eceff4">(</span><span style="color:#a3be8c">&#39;light -A 5&#39;</span><span style="color:#eceff4">),</span>
+</span></span><span style="display:flex;"><span>        desc<span style="color:#81a1c1">=</span><span style="color:#a3be8c">&#39;backlight up&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#eceff4">),</span>
+</span></span><span style="display:flex;"><span>    Key<span style="color:#eceff4">([</span>m<span style="color:#eceff4">],</span> <span style="color:#a3be8c">&#39;Down&#39;</span><span style="color:#eceff4">,</span>
+</span></span><span style="display:flex;"><span>        lazy<span style="color:#81a1c1">.</span>spawn<span style="color:#eceff4">(</span><span style="color:#a3be8c">&#39;light -U 5&#39;</span><span style="color:#eceff4">),</span>
+</span></span><span style="display:flex;"><span>        desc<span style="color:#81a1c1">=</span><span style="color:#a3be8c">&#39;backlight down&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#eceff4">),</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#eceff4">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>keys<span style="color:#666">.</span>extend(countess_keys)
-</span></span></code></pre></div><p>You could even change a specific global binding on one computer if you knew its index in the list:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>keys[<span style="color:#666">420</span>] <span style="color:#666">=</span> Key([m], <span style="color:#b44">&#39;d&#39;</span>,
-</span></span><span style="display:flex;"><span>                lazy<span style="color:#666">.</span>spawn(<span style="color:#b44">&#39;dmenu_run&#39;</span>),
-</span></span><span style="display:flex;"><span>                desc <span style="color:#666">=</span> <span style="color:#b44">&#39;dmenu&#39;</span>
-</span></span><span style="display:flex;"><span>            )
-</span></span></code></pre></div><h3 id="autostart">AUTOSTART</h3>
+</span></span><span style="display:flex;"><span>keys<span style="color:#81a1c1">.</span>extend<span style="color:#eceff4">(</span>countess_keys<span style="color:#eceff4">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>You could even change a specific global binding on one computer if you knew its index in the list:</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>keys<span style="color:#eceff4">[</span><span style="color:#b48ead">420</span><span style="color:#eceff4">]</span> <span style="color:#81a1c1">=</span> Key<span style="color:#eceff4">([</span>m<span style="color:#eceff4">],</span> <span style="color:#a3be8c">&#39;d&#39;</span><span style="color:#eceff4">,</span>
+</span></span><span style="display:flex;"><span>                lazy<span style="color:#81a1c1">.</span>spawn<span style="color:#eceff4">(</span><span style="color:#a3be8c">&#39;dmenu_run&#39;</span><span style="color:#eceff4">),</span>
+</span></span><span style="display:flex;"><span>                desc <span style="color:#81a1c1">=</span> <span style="color:#a3be8c">&#39;dmenu&#39;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#eceff4">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="autostart">AUTOSTART</h3>
 <p>Finally, I use this to autostart different programs which I want to change on each computer. For example  I use an xrandr command to make sure my desktop monitor is at 144hz. It looks like this:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a2f">@hook.subscribe.startup_once</span>
-</span></span><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">def</span> <span style="color:#00a000">autostart</span>():
-</span></span><span style="display:flex;"><span>    processes <span style="color:#666">=</span> [
-</span></span><span style="display:flex;"><span>        [
-</span></span><span style="display:flex;"><span>        <span style="color:#b44">&#39;feh&#39;</span>, 
-</span></span><span style="display:flex;"><span>        <span style="color:#b44">&#39;--bg-scale&#39;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#b44">&#39;/home/james/pics/wallpapers/beaut.jpg&#39;</span>
-</span></span><span style="display:flex;"><span>        ],
-</span></span><span style="display:flex;"><span>        [
-</span></span><span style="display:flex;"><span>        <span style="color:#b44">&#39;xrandr&#39;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#b44">&#39;--output&#39;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#b44">&#39;DisplayPort2&#39;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#b44">&#39;--primary&#39;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#b44">&#39;--mode&#39;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#b44">&#39;1920x1080&#39;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#b44">&#39;--rate&#39;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#b44">&#39;143.85&#39;</span>
-</span></span><span style="display:flex;"><span>        ]
-</span></span><span style="display:flex;"><span>    ]
-</span></span><span style="display:flex;"><span>    <span style="color:#a2f;font-weight:bold">for</span> p <span style="color:#a2f;font-weight:bold">in</span> processes:
-</span></span><span style="display:flex;"><span>        subprocess<span style="color:#666">.</span>Popen(p)
-</span></span></code></pre></div><p>Of course, there are many ways that this could all be achievd but I think it&rsquo;s quite neat having it all in my one qtile config. That&rsquo;s about it for today. lots of love x</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">21
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#d08770">@hook.subscribe.startup_once</span>
+</span></span><span style="display:flex;"><span><span style="color:#81a1c1;font-weight:bold">def</span> <span style="color:#88c0d0">autostart</span><span style="color:#eceff4">():</span>
+</span></span><span style="display:flex;"><span>    processes <span style="color:#81a1c1">=</span> <span style="color:#eceff4">[</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#eceff4">[</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a3be8c">&#39;feh&#39;</span><span style="color:#eceff4">,</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#a3be8c">&#39;--bg-scale&#39;</span><span style="color:#eceff4">,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a3be8c">&#39;/home/james/pics/wallpapers/beaut.jpg&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#eceff4">],</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#eceff4">[</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a3be8c">&#39;xrandr&#39;</span><span style="color:#eceff4">,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a3be8c">&#39;--output&#39;</span><span style="color:#eceff4">,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a3be8c">&#39;DisplayPort2&#39;</span><span style="color:#eceff4">,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a3be8c">&#39;--primary&#39;</span><span style="color:#eceff4">,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a3be8c">&#39;--mode&#39;</span><span style="color:#eceff4">,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a3be8c">&#39;1920x1080&#39;</span><span style="color:#eceff4">,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a3be8c">&#39;--rate&#39;</span><span style="color:#eceff4">,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a3be8c">&#39;143.85&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#eceff4">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#eceff4">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1;font-weight:bold">for</span> p <span style="color:#81a1c1;font-weight:bold">in</span> processes<span style="color:#eceff4">:</span>
+</span></span><span style="display:flex;"><span>        subprocess<span style="color:#81a1c1">.</span>Popen<span style="color:#eceff4">(</span>p<span style="color:#eceff4">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Of course, there are many ways that this could all be achievd but I think it&rsquo;s quite neat having it all in my one qtile config. That&rsquo;s about it for today. lots of love x</p>
 
 </div>
 
 </div> 
-<footer>
-<small>
-  <div class="foot-item">
-    
-      <a href="/posts/">all posts</a>
-    
-      <a href="/tags/">topics</a>
-    
-  </div>
-  <div class="foot-item">
+<div class="foot-container">
+    <div class="foot-item">
     
       <a href="/index.xml">rss</a>
     
       <a href="https://github.com/ryfrd">github</a>
     
+    </div>
+    <div class="foot-item">
+    made with <a href="https://gohugo.io">hugo</a> and my wonky theme <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
+    </div>
   </div>
-  <div class="foot-item">
-    made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
-  </div>
-</small>
-</footer>
+
+  <script src="/js/toggle.js"></script>
 </body>
 </html>
 

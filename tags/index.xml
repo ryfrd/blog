@@ -1,180 +1,180 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on james mclaren</title>
-    <link>https://read.jdysmcl.xyz/tags/</link>
-    <description>Recent content in Tags on james mclaren</description>
+    <title>Tags on dymc.win</title>
+    <link>https://dymc.win/tags/</link>
+    <description>Recent content in Tags on dymc.win</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Fri, 18 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://read.jdysmcl.xyz/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 18 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://dymc.win/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>home-manager</title>
-      <link>https://read.jdysmcl.xyz/tags/home-manager/</link>
+      <link>https://dymc.win/tags/home-manager/</link>
       <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/home-manager/</guid>
+      <guid>https://dymc.win/tags/home-manager/</guid>
       <description></description>
     </item>
     
     <item>
       <title>neovim</title>
-      <link>https://read.jdysmcl.xyz/tags/neovim/</link>
+      <link>https://dymc.win/tags/neovim/</link>
       <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/neovim/</guid>
+      <guid>https://dymc.win/tags/neovim/</guid>
       <description></description>
     </item>
     
     <item>
       <title>nix-colors</title>
-      <link>https://read.jdysmcl.xyz/tags/nix-colors/</link>
+      <link>https://dymc.win/tags/nix-colors/</link>
       <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/nix-colors/</guid>
+      <guid>https://dymc.win/tags/nix-colors/</guid>
       <description></description>
     </item>
     
     <item>
       <title>nixos</title>
-      <link>https://read.jdysmcl.xyz/tags/nixos/</link>
+      <link>https://dymc.win/tags/nixos/</link>
       <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/nixos/</guid>
+      <guid>https://dymc.win/tags/nixos/</guid>
       <description></description>
     </item>
     
     <item>
       <title>css</title>
-      <link>https://read.jdysmcl.xyz/tags/css/</link>
+      <link>https://dymc.win/tags/css/</link>
       <pubDate>Mon, 26 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/css/</guid>
+      <guid>https://dymc.win/tags/css/</guid>
       <description></description>
     </item>
     
     <item>
       <title>javascript</title>
-      <link>https://read.jdysmcl.xyz/tags/javascript/</link>
+      <link>https://dymc.win/tags/javascript/</link>
       <pubDate>Mon, 26 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/javascript/</guid>
+      <guid>https://dymc.win/tags/javascript/</guid>
       <description></description>
     </item>
     
     <item>
       <title>caddy</title>
-      <link>https://read.jdysmcl.xyz/tags/caddy/</link>
+      <link>https://dymc.win/tags/caddy/</link>
       <pubDate>Tue, 16 May 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/caddy/</guid>
+      <guid>https://dymc.win/tags/caddy/</guid>
       <description></description>
     </item>
     
     <item>
       <title>self-hosting</title>
-      <link>https://read.jdysmcl.xyz/tags/self-hosting/</link>
+      <link>https://dymc.win/tags/self-hosting/</link>
       <pubDate>Tue, 16 May 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/self-hosting/</guid>
+      <guid>https://dymc.win/tags/self-hosting/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tailscale</title>
-      <link>https://read.jdysmcl.xyz/tags/tailscale/</link>
+      <link>https://dymc.win/tags/tailscale/</link>
       <pubDate>Tue, 16 May 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/tailscale/</guid>
+      <guid>https://dymc.win/tags/tailscale/</guid>
       <description></description>
     </item>
     
     <item>
       <title>python</title>
-      <link>https://read.jdysmcl.xyz/tags/python/</link>
+      <link>https://dymc.win/tags/python/</link>
       <pubDate>Mon, 03 Apr 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/python/</guid>
+      <guid>https://dymc.win/tags/python/</guid>
       <description></description>
     </item>
     
     <item>
       <title>qtile</title>
-      <link>https://read.jdysmcl.xyz/tags/qtile/</link>
+      <link>https://dymc.win/tags/qtile/</link>
       <pubDate>Mon, 03 Apr 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/qtile/</guid>
+      <guid>https://dymc.win/tags/qtile/</guid>
       <description></description>
     </item>
     
     <item>
       <title>docker</title>
-      <link>https://read.jdysmcl.xyz/tags/docker/</link>
+      <link>https://dymc.win/tags/docker/</link>
       <pubDate>Tue, 28 Feb 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/docker/</guid>
+      <guid>https://dymc.win/tags/docker/</guid>
       <description></description>
     </item>
     
     <item>
       <title>podman</title>
-      <link>https://read.jdysmcl.xyz/tags/podman/</link>
+      <link>https://dymc.win/tags/podman/</link>
       <pubDate>Tue, 28 Feb 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/podman/</guid>
+      <guid>https://dymc.win/tags/podman/</guid>
       <description></description>
     </item>
     
     <item>
       <title>cooking</title>
-      <link>https://read.jdysmcl.xyz/tags/cooking/</link>
+      <link>https://dymc.win/tags/cooking/</link>
       <pubDate>Sun, 22 Jan 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/cooking/</guid>
+      <guid>https://dymc.win/tags/cooking/</guid>
       <description></description>
     </item>
     
     <item>
       <title>bash</title>
-      <link>https://read.jdysmcl.xyz/tags/bash/</link>
+      <link>https://dymc.win/tags/bash/</link>
       <pubDate>Sat, 10 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/bash/</guid>
+      <guid>https://dymc.win/tags/bash/</guid>
       <description></description>
     </item>
     
     <item>
       <title>emacs</title>
-      <link>https://read.jdysmcl.xyz/tags/emacs/</link>
+      <link>https://dymc.win/tags/emacs/</link>
       <pubDate>Fri, 18 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/emacs/</guid>
+      <guid>https://dymc.win/tags/emacs/</guid>
       <description></description>
     </item>
     
     <item>
       <title>hugo</title>
-      <link>https://read.jdysmcl.xyz/tags/hugo/</link>
+      <link>https://dymc.win/tags/hugo/</link>
       <pubDate>Thu, 10 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/hugo/</guid>
+      <guid>https://dymc.win/tags/hugo/</guid>
       <description></description>
     </item>
     
     <item>
       <title>chess</title>
-      <link>https://read.jdysmcl.xyz/tags/chess/</link>
+      <link>https://dymc.win/tags/chess/</link>
       <pubDate>Tue, 08 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/chess/</guid>
+      <guid>https://dymc.win/tags/chess/</guid>
       <description></description>
     </item>
     
     <item>
       <title>music</title>
-      <link>https://read.jdysmcl.xyz/tags/music/</link>
+      <link>https://dymc.win/tags/music/</link>
       <pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/tags/music/</guid>
+      <guid>https://dymc.win/tags/music/</guid>
       <description></description>
     </item>
     

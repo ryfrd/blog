@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>nix-colors on james mclaren</title>
-    <link>https://read.jdysmcl.xyz/tags/nix-colors/</link>
-    <description>Recent content in nix-colors on james mclaren</description>
+    <title>nix-colors on dymc.win</title>
+    <link>https://dymc.win/tags/nix-colors/</link>
+    <description>Recent content in nix-colors on dymc.win</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Fri, 18 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://read.jdysmcl.xyz/tags/nix-colors/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 18 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://dymc.win/tags/nix-colors/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>making nix-colors talk to neovim</title>
-      <link>https://read.jdysmcl.xyz/posts/making-nix-colors-talk-to-neovim/</link>
+      <link>https://dymc.win/posts/making-nix-colors-talk-to-neovim/</link>
       <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/posts/making-nix-colors-talk-to-neovim/</guid>
+      <guid>https://dymc.win/posts/making-nix-colors-talk-to-neovim/</guid>
       <description>I recently started fiddling around with home-managerifying my neovim config. After moving across most of my stuff I came across the problem of how to hook things up with with nix-colors so that my neovim theme would follow color changes in home-manager.
 Luckily, I came across this handy little plugin from the lovely mini.nvim suite of plugins which lets you create your own theme with your custom colors.
 Beneath is a little snippet of how you could make it all happen.</description>
@@ -20,10 +20,10 @@ Beneath is a little snippet of how you could make it all happen.</description>
     
     <item>
       <title>theming nirvana</title>
-      <link>https://read.jdysmcl.xyz/posts/nix-colors/</link>
+      <link>https://dymc.win/posts/nix-colors/</link>
       <pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/posts/nix-colors/</guid>
+      <guid>https://dymc.win/posts/nix-colors/</guid>
       <description>As I fall deeper and deeper down the nixos rabbit hole, I find myself becoming more and more obsessed with controlling every little thing on my computers declaratively. It starts with: &amp;lsquo;oh this is cool I can specify which desktop environment to use in my configuration.nix&amp;rsquo;. Next thing you know you&amp;rsquo;ve discovered home-manager and every program on every linux system you use needs to be controlled in your nix-config. Of course this slightly insane approach has its downsides; it also opens some doors though.</description>
     </item>
     

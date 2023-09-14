@@ -1,93 +1,160 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
     <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
     
-    <link href="/css/styles.css" rel="stylesheet" id="stylesheet">
-    <title>james mclaren</title>
+    <link href="/css/dark.css" rel="stylesheet" id="stylesheet">
+    <title>dymc.win</title>
   </head>
   <body>
   
-  
+    <div class="lr nav-container">
+    <div class="l">
+      <a class="nav-title" href="/">
+          dymc.win
+      </a>
+      <button id="themeButton" onclick="toggleTheme()" class="theme-button">
+          toggle theme
+      </button>
+    </div>
+    <div class="r">
+        
+          <a class="nav-link" href="/posts/">posts</a>
+        
+          <a class="nav-link" href="/tags/">topics</a>
+        
+    </div>
+  </div>
+
   <div class="body-container">
 
   
 
 
-<div class="body-container">
-  <h3>translating docker to nix?!</h3>
+<div class="main-container">
+  translating docker to nix?!
   <p>In my opinion, there are moments when the convenience of docker and its surrounding ecosystem can&rsquo;t be beat. I&rsquo;ve been dabbling in the self hosting world and oftentimes the best maintained packaging option is a docker image. As a result of this I&rsquo;ve been playing around with the nixos approach to managing docker containers.</p>
 <h3 id="nix---docker-compose---docker-run">nix -&gt; docker compose -&gt; docker run</h3>
 <p>To illustrate how to translate a simple example from the world of docker to nix let&rsquo;s have a look at the config for my <a href="https://docs.searxng.org/">searxng</a> instance.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>virtualisation<span style="color:#666">.</span>oci-containers<span style="color:#666">.</span>containers<span style="color:#666">.</span><span style="color:#b44">&#34;searxng&#34;</span> <span style="">=</span> {
-</span></span><span style="display:flex;"><span>  autoStart <span style="color:#666">=</span> <span style="color:#800">true</span>;
-</span></span><span style="display:flex;"><span>  image <span style="color:#666">=</span> <span style="color:#b44">&#34;searxng/searxng&#34;</span>;
-</span></span><span style="display:flex;"><span>  volumes <span style="color:#666">=</span> [
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;/srv/searx:/etc/searxng&#34;</span>
-</span></span><span style="display:flex;"><span>  ];
-</span></span><span style="display:flex;"><span>  environment <span style="color:#666">=</span> {
-</span></span><span style="display:flex;"><span>    BASE_URL <span style="color:#666">=</span> <span style="color:#b44">&#34;https://searx.jdysmcl.xyz/&#34;</span>;
-</span></span><span style="display:flex;"><span>    INSTANCE_NAME <span style="color:#666">=</span> <span style="color:#b44">&#34;go on big boy dont be shy&#34;</span>;
-</span></span><span style="display:flex;"><span>  };
-</span></span><span style="display:flex;"><span>  ports <span style="color:#666">=</span> [ <span style="color:#b44">&#34;8080:8080&#34;</span> ];
-</span></span><span style="display:flex;"><span>};
-</span></span></code></pre></div><p>Here is the same thing written in a <code>docker-compose.yml</code> style format.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#008000;font-weight:bold">services</span>:<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">searxng</span>:<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">image</span>:<span style="color:#bbb"> </span>searxng/searxng<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">volumes</span>:<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span>- /srv/searxng:/etc/searxng<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">environment</span>:<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span>- BASE_URL=https://searx.jdysmcl.xyz/;<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	  </span>- INSTANCE_NAME=go on big boy dont be shy;<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">ports</span>:<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span>- <span style="color:#b44">&#34;8080:8080&#34;</span><span style="color:#bbb">
-</span></span></span></code></pre></div><p>Also, this is what it would look like as a simple old <code>docker run</code>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ docker pull searxng/searxng
-</span></span><span style="display:flex;"><span>$ docker run --rm <span style="color:#b62;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             -d -p 8080:8080 <span style="color:#b62;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             -v <span style="color:#b44">&#34;/srv/searxng:/etc/searxng&#34;</span> <span style="color:#b62;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             -e <span style="color:#b44">&#34;BASE_URL=http://searx.jdysmcl.xyz/&#34;</span> <span style="color:#b62;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             -e <span style="color:#b44">&#34;INSTANCE_NAME=go on big boy dont be shy&#34;</span> <span style="color:#b62;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             searxng/searxng
-</span></span></code></pre></div><h3 id="bits-and-bobs">bits and bobs</h3>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>virtualisation<span style="color:#81a1c1">.</span>oci-containers<span style="color:#81a1c1">.</span>containers<span style="color:#81a1c1">.</span><span style="color:#a3be8c">&#34;searxng&#34;</span> <span style="color:#bf616a">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>  autoStart <span style="color:#81a1c1">=</span> <span style="color:#8fbcbb">true</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>  image <span style="color:#81a1c1">=</span> <span style="color:#a3be8c">&#34;searxng/searxng&#34;</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>  volumes <span style="color:#81a1c1">=</span> <span style="color:#eceff4">[</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;/srv/searx:/etc/searxng&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#eceff4">];</span>
+</span></span><span style="display:flex;"><span>  environment <span style="color:#81a1c1">=</span> <span style="color:#eceff4">{</span>
+</span></span><span style="display:flex;"><span>    BASE_URL <span style="color:#81a1c1">=</span> <span style="color:#a3be8c">&#34;https://searx.jdysmcl.xyz/&#34;</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>    INSTANCE_NAME <span style="color:#81a1c1">=</span> <span style="color:#a3be8c">&#34;go on big boy dont be shy&#34;</span><span style="color:#eceff4">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#eceff4">};</span>
+</span></span><span style="display:flex;"><span>  ports <span style="color:#81a1c1">=</span> <span style="color:#eceff4">[</span> <span style="color:#a3be8c">&#34;8080:8080&#34;</span> <span style="color:#eceff4">];</span>
+</span></span><span style="display:flex;"><span><span style="color:#eceff4">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Here is the same thing written in a <code>docker-compose.yml</code> style format.</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#81a1c1">services</span><span style="color:#eceff4">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#81a1c1">searxng</span><span style="color:#eceff4">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">image</span><span style="color:#eceff4">:</span> searxng/searxng
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">volumes</span><span style="color:#eceff4">:</span>
+</span></span><span style="display:flex;"><span>      - /srv/searxng:/etc/searxng
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">environment</span><span style="color:#eceff4">:</span>
+</span></span><span style="display:flex;"><span>      - BASE_URL=https://searx.jdysmcl.xyz/;
+</span></span><span style="display:flex;"><span>	  - INSTANCE_NAME=go on big boy dont be shy;
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">ports</span><span style="color:#eceff4">:</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#a3be8c">&#34;8080:8080&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Also, this is what it would look like as a simple old <code>docker run</code>.</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ docker pull searxng/searxng
+</span></span><span style="display:flex;"><span>$ docker run --rm <span style="color:#ebcb8b">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ebcb8b"></span>             -d -p 8080:8080 <span style="color:#ebcb8b">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ebcb8b"></span>             -v <span style="color:#a3be8c">&#34;/srv/searxng:/etc/searxng&#34;</span> <span style="color:#ebcb8b">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ebcb8b"></span>             -e <span style="color:#a3be8c">&#34;BASE_URL=http://searx.jdysmcl.xyz/&#34;</span> <span style="color:#ebcb8b">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ebcb8b"></span>             -e <span style="color:#a3be8c">&#34;INSTANCE_NAME=go on big boy dont be shy&#34;</span> <span style="color:#ebcb8b">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ebcb8b"></span>             searxng/searxng
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="bits-and-bobs">bits and bobs</h3>
 <p>As you can see, nix very kindly provides you with convenient options for the most essential tasks: mounting volumes, exposing ports, passing environment variables etc. But what about some more niche configurations that aren&rsquo;t exposed in <a href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/oci-containers.nix">oci-containers.nix</a>. As far as I can tell, your best bet in these scenarios is <code>virtualisation.oci-containers.containers.&lt;name&gt;.extraOptions</code>; this lets you pass a list of command line arguments to your docker run command. For example, I had this in my config for a vpn container.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>virtualisation<span style="color:#666">.</span>oci-containers<span style="color:#666">.</span>containers<span style="color:#666">.</span><span style="color:#b44">&#34;vpn&#34;</span><span style="color:#666">.</span>extraOptions <span style="">=</span> [
-</span></span><span style="display:flex;"><span>  <span style="color:#b44">&#34;--cap-add=net_admin&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#b44">&#34;--device=/dev/net/tun&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#b44">&#34;--network=bridge&#34;</span>
-</span></span><span style="display:flex;"><span>];
-</span></span></code></pre></div><p>With a mishmash of these different bits and bobs I was able to do everything that I needed to. It doesn&rsquo;t really open any more doors than docker compose but it&rsquo;s nice to have the option when you&rsquo;re already invested in the nix ecosystem.</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nix" data-lang="nix"><span style="display:flex;"><span>virtualisation<span style="color:#81a1c1">.</span>oci-containers<span style="color:#81a1c1">.</span>containers<span style="color:#81a1c1">.</span><span style="color:#a3be8c">&#34;vpn&#34;</span><span style="color:#81a1c1">.</span>extraOptions <span style="color:#bf616a">=</span> <span style="color:#eceff4">[</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a3be8c">&#34;--cap-add=net_admin&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a3be8c">&#34;--device=/dev/net/tun&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a3be8c">&#34;--network=bridge&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#eceff4">];</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>With a mishmash of these different bits and bobs I was able to do everything that I needed to. It doesn&rsquo;t really open any more doors than docker compose but it&rsquo;s nice to have the option when you&rsquo;re already invested in the nix ecosystem.</p>
 <p>One final note: nix provides the option to choose between docker and podman with <code>virtualisation.oci-containers.containers.backend</code>. This defaults to podman.</p>
 
 </div>
 
 </div> 
-<footer>
-<small>
-  <div class="foot-item">
-    
-      <a href="/posts/">all posts</a>
-    
-      <a href="/tags/">topics</a>
-    
-  </div>
-  <div class="foot-item">
+<div class="foot-container">
+    <div class="foot-item">
     
       <a href="/index.xml">rss</a>
     
       <a href="https://github.com/ryfrd">github</a>
     
+    </div>
+    <div class="foot-item">
+    made with <a href="https://gohugo.io">hugo</a> and my wonky theme <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
+    </div>
   </div>
-  <div class="foot-item">
-    made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
-  </div>
-</small>
-</footer>
+
+  <script src="/js/toggle.js"></script>
 </body>
 </html>
 

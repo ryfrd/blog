@@ -1,76 +1,76 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>python on james mclaren</title>
-    <link>https://read.jdysmcl.xyz/tags/python/</link>
-    <description>Recent content in python on james mclaren</description>
+    <title>python on dymc.win</title>
+    <link>https://dymc.win/tags/python/</link>
+    <description>Recent content in python on dymc.win</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 03 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://read.jdysmcl.xyz/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 03 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://dymc.win/tags/python/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>learning about qtile widgets via the medium of cricket</title>
-      <link>https://read.jdysmcl.xyz/posts/writing-a-qtile-widget/</link>
+      <link>https://dymc.win/posts/writing-a-qtile-widget/</link>
       <pubDate>Mon, 03 Apr 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/posts/writing-a-qtile-widget/</guid>
+      <guid>https://dymc.win/posts/writing-a-qtile-widget/</guid>
       <description>I&amp;rsquo;m a person who has spent an unreasonable amount of time making minute changes to the appearance of my bar in qtile. Despite the very nice selection of widgets availabe by default with qtile, it was only a matter of time before I decided I wanted to experiment with making my own custom widget. Fortunately, if you can do a bit of python this is quite an approachable undertaking.
 The dream widget I was lacking was a little live crikcet score ticker type thing; something which would scroll along on my bar showing me the score in live cricket matches.</description>
     </item>
     
     <item>
       <title>podcast setup for broke boys whose trash phone cant hack modern apps</title>
-      <link>https://read.jdysmcl.xyz/posts/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/</link>
+      <link>https://dymc.win/posts/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/</link>
       <pubDate>Tue, 24 Jan 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/posts/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/</guid>
+      <guid>https://dymc.win/posts/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/</guid>
       <description>I have an old sad android phone with 2GB of ram which nowadays seems to struggle with anything but the most lightweight apps. As a result of this I have been &amp;lsquo;podcast-player-hopping&amp;rsquo; without success for the last couple of months trying to find something which doesn&amp;rsquo;t nuke my phone whenever I use it. In a moment of desperation it occured to me that a creative solution might be required. The gameplan was this:</description>
     </item>
     
     <item>
       <title>multi user qtile fiddling</title>
-      <link>https://read.jdysmcl.xyz/posts/multi-user-qtile-fiddling/</link>
+      <link>https://dymc.win/posts/multi-user-qtile-fiddling/</link>
       <pubDate>Tue, 20 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/posts/multi-user-qtile-fiddling/</guid>
+      <guid>https://dymc.win/posts/multi-user-qtile-fiddling/</guid>
       <description>This post is going to detail how I solved a very particular problem I had created for myself. First, a quick description of the problem. I use home-manager on nixos to declaratively configure what happens on my computer. In the cases where home-manager does not expose sufficient configuration options for my liking (qtile for example), I instead link a configuration file from my nixos config to where it belongs in my home using xdg.</description>
     </item>
     
     <item>
       <title>get the thoughts out of your head and into a digital format with this python journal script</title>
-      <link>https://read.jdysmcl.xyz/posts/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/</link>
+      <link>https://dymc.win/posts/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/</link>
       <pubDate>Thu, 01 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/posts/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/</guid>
+      <guid>https://dymc.win/posts/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/</guid>
       <description>Since getting going with emacs I&amp;rsquo;ve gone down the org-mode rabbit hole a little bit. In particular the very nice org-journal package. It basically does what it says on the tin: maintains a journal with a selection of org files. This has been very nice for me. I have often thought about journalling but never really got up a head of steam. Somehow having an entry a keybinding away while I&amp;rsquo;m doing something with my text editor makes it a lot more palletable.</description>
     </item>
     
     <item>
       <title>chess.com api and the continuing search for en passant checkmate</title>
-      <link>https://read.jdysmcl.xyz/posts/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/</link>
+      <link>https://dymc.win/posts/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/</link>
       <pubDate>Tue, 08 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/posts/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/</guid>
+      <guid>https://dymc.win/posts/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/</guid>
       <description>Last time we worked out how to get info for all the games played by titled players in a particular month. Today, we have three objectives:
 Parse this info for the pgn (portable game notation) of each game. Write these to a file so we dont have to spend forever downloading them everytime we run the script. Devise a way to convert this pgn to a more convenient pythonic format so we can analyse it later.</description>
     </item>
     
     <item>
       <title>chess.com api and the search for en passant checkmate</title>
-      <link>https://read.jdysmcl.xyz/posts/chess.com-api-and-the-search-for-en-passant-checkmate/</link>
+      <link>https://dymc.win/posts/chess.com-api-and-the-search-for-en-passant-checkmate/</link>
       <pubDate>Wed, 26 Oct 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/posts/chess.com-api-and-the-search-for-en-passant-checkmate/</guid>
+      <guid>https://dymc.win/posts/chess.com-api-and-the-search-for-en-passant-checkmate/</guid>
       <description>The chess.com API gives you access to a crazy amount of data on games played on the site. Armed with the knowledge that this data was at my fingertips, I set out to do what any sane person would do: find en passant checkmates. For those not in the know, en passant check mate is kind of the king of moves in chess meme circles. So some sort of python script that identified en passant check mates that occured on the site would be of great value to me.</description>
     </item>
     
     <item>
       <title>upgrade your qtile setup with a cute dropdown terminal</title>
-      <link>https://read.jdysmcl.xyz/posts/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/</link>
+      <link>https://dymc.win/posts/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/</link>
       <pubDate>Fri, 23 Sep 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://read.jdysmcl.xyz/posts/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/</guid>
+      <guid>https://dymc.win/posts/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/</guid>
       <description>I didn&amp;rsquo;t know you could do this until recently, very fun and playful little feature. How you want to do it will depend slightly on how you have your groups set up but I start with importing the relevant libraries and defining an empty list.
-from libqtile.config import Dropdown, Scratchpad groups = [] I&amp;rsquo;m then able to append all the groups I want to this list. For the dropdown terminal you need the ScratchPad group which to quote the qtile docs is a &amp;ldquo;special - by default invisible - group which acts as a container for DropDown configurations&amp;rdquo;.</description>
+1 2 3 from libqtile.config import Dropdown, Scratchpad groups = [] I&amp;rsquo;m then able to append all the groups I want to this list. For the dropdown terminal you need the ScratchPad group which to quote the qtile docs is a &amp;ldquo;special - by default invisible - group which acts as a container for DropDown configurations&amp;rdquo;.</description>
     </item>
     
   </channel>

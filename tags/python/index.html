@@ -1,77 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
     <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
     
-    <link href="/css/styles.css" rel="stylesheet" id="stylesheet">
-    <title>james mclaren</title>
+    <link href="/css/dark.css" rel="stylesheet" id="stylesheet">
+    <title>dymc.win</title>
   </head>
   <body>
   
-  
+    <div class="lr nav-container">
+    <div class="l">
+      <a class="nav-title" href="/">
+          dymc.win
+      </a>
+      <button id="themeButton" onclick="toggleTheme()" class="theme-button">
+          toggle theme
+      </button>
+    </div>
+    <div class="r">
+        
+          <a class="nav-link" href="/posts/">posts</a>
+        
+          <a class="nav-link" href="/tags/">topics</a>
+        
+    </div>
+  </div>
+
   <div class="body-container">
 
   
 
 
-<div class="container">
+<div class="main-container">
   
-    <p class="list-item squishy" align="center">
-      <a href="/posts/writing-a-qtile-widget/">learning about qtile widgets via the medium of cricket</a> | 3 Apr 2023
+    <p class="list-item">
+      <a href="/posts/writing-a-qtile-widget/">learning about qtile widgets via the medium of cricket</a> 3 Apr 2023
     </p>
   
-    <p class="list-item squishy" align="center">
-      <a href="/posts/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/">podcast setup for broke boys whose trash phone cant hack modern apps</a> | 24 Jan 2023
+    <p class="list-item">
+      <a href="/posts/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/">podcast setup for broke boys whose trash phone cant hack modern apps</a> 24 Jan 2023
     </p>
   
-    <p class="list-item squishy" align="center">
-      <a href="/posts/multi-user-qtile-fiddling/">multi user qtile fiddling</a> | 20 Dec 2022
+    <p class="list-item">
+      <a href="/posts/multi-user-qtile-fiddling/">multi user qtile fiddling</a> 20 Dec 2022
     </p>
   
-    <p class="list-item squishy" align="center">
-      <a href="/posts/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/">get the thoughts out of your head and into a digital format with this python journal script</a> | 1 Dec 2022
+    <p class="list-item">
+      <a href="/posts/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/">get the thoughts out of your head and into a digital format with this python journal script</a> 1 Dec 2022
     </p>
   
-    <p class="list-item squishy" align="center">
-      <a href="/posts/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/">chess.com api and the continuing search for en passant checkmate</a> | 8 Nov 2022
+    <p class="list-item">
+      <a href="/posts/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/">chess.com api and the continuing search for en passant checkmate</a> 8 Nov 2022
     </p>
   
-    <p class="list-item squishy" align="center">
-      <a href="/posts/chess.com-api-and-the-search-for-en-passant-checkmate/">chess.com api and the search for en passant checkmate</a> | 26 Oct 2022
+    <p class="list-item">
+      <a href="/posts/chess.com-api-and-the-search-for-en-passant-checkmate/">chess.com api and the search for en passant checkmate</a> 26 Oct 2022
     </p>
   
-    <p class="list-item squishy" align="center">
-      <a href="/posts/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/">upgrade your qtile setup with a cute dropdown terminal</a> | 23 Sep 2022
+    <p class="list-item">
+      <a href="/posts/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/">upgrade your qtile setup with a cute dropdown terminal</a> 23 Sep 2022
     </p>
   
 </div>
 
 </div> 
-<footer>
-<small>
-  <div class="foot-item">
-    
-      <a href="/posts/">all posts</a>
-    
-      <a href="/tags/">topics</a>
-    
-  </div>
-  <div class="foot-item">
+<div class="foot-container">
+    <div class="foot-item">
     
       <a href="/index.xml">rss</a>
     
       <a href="https://github.com/ryfrd">github</a>
     
+    </div>
+    <div class="foot-item">
+    made with <a href="https://gohugo.io">hugo</a> and my wonky theme <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
+    </div>
   </div>
-  <div class="foot-item">
-    made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
-  </div>
-</small>
-</footer>
+
+  <script src="/js/toggle.js"></script>
 </body>
 </html>
 

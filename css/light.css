@@ -1,0 +1,10 @@
+/* import common css */
+@import url("base.css");
+
+/* define colors */
+:root {
+  --bg2: #85bcbb;
+  --bg1: #e5e9f0;
+  --fg2: #434c5e;
+  --fg1: #2e3440;
+}

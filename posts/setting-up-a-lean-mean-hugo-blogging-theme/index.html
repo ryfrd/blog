@@ -1,27 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
     <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
     
-    <link href="/css/styles.css" rel="stylesheet" id="stylesheet">
-    <title>james mclaren</title>
+    <link href="/css/dark.css" rel="stylesheet" id="stylesheet">
+    <title>dymc.win</title>
   </head>
   <body>
   
-  
+    <div class="lr nav-container">
+    <div class="l">
+      <a class="nav-title" href="/">
+          dymc.win
+      </a>
+      <button id="themeButton" onclick="toggleTheme()" class="theme-button">
+          toggle theme
+      </button>
+    </div>
+    <div class="r">
+        
+          <a class="nav-link" href="/posts/">posts</a>
+        
+          <a class="nav-link" href="/tags/">topics</a>
+        
+    </div>
+  </div>
+
   <div class="body-container">
 
   
 
 
-<div class="body-container">
-  <h3>setting up a lean mean hugo blogging theme</h3>
+<div class="main-container">
+  setting up a lean mean hugo blogging theme
   <p>When I first started messing around with hugo, I found the whole thing slihtly mystifying. I downloaded a theme like they asked me, edited the config file to try and customise things a little and quickly broke everything. To be fair, this was mainly due to my tinkering instinct to fly to close to the sun. But anyway, the point at which I started to really appreciate the power of hugo was when I tried to make my own - admittedly less feautureful - theme. This selection of tips and tricks will assume that you&rsquo;ve just run something like <code>hugo new site lovely-new-website</code>, entered the new directory with <code>cd lovely-new-website</code> and you&rsquo;ve got a selection of mostly empty directories looking something like this.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>.
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>.
 </span></span><span style="display:flex;"><span>├── archetypes
 </span></span><span style="display:flex;"><span>│   └── default.md
 </span></span><span style="display:flex;"><span>├── config.toml
@@ -31,10 +61,41 @@
 </span></span><span style="display:flex;"><span>├── public
 </span></span><span style="display:flex;"><span>├── static
 </span></span><span style="display:flex;"><span>└── themes
-</span></span></code></pre></div><p>Our first concern will be getting a barebones theme template that can be customised to our liking. I would recommend <a href="https://github.com/ericmurphyxyz/hugo-starter-theme">this</a> guy which I used to get up and running. You could also check out <a href="https://gitlab.com/robbygozzarder/mcl">my theme</a> which I&rsquo;m using on this site that is also very simple (as you can probably see from the website lol). Once you&rsquo;ve got a theme with (I&rsquo;m using mine as an example) <code>git clone https://gitlab.com/robbygozzarder/mcl</code> and placed it in the themes directory you&rsquo;ll need to adjust your config.toml file to point it to this theme.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span>theme=<span style="color:#b44">&#34;mcl&#34;</span>
-</span></span></code></pre></div><p>The directory structure of your new theme will look something like this:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Our first concern will be getting a barebones theme template that can be customised to our liking. I would recommend <a href="https://github.com/ericmurphyxyz/hugo-starter-theme">this</a> guy which I used to get up and running. You could also check out <a href="https://gitlab.com/robbygozzarder/mcl">my theme</a> which I&rsquo;m using on this site that is also very simple (as you can probably see from the website lol). Once you&rsquo;ve got a theme with (I&rsquo;m using mine as an example) <code>git clone https://gitlab.com/robbygozzarder/mcl</code> and placed it in the themes directory you&rsquo;ll need to adjust your config.toml file to point it to this theme.</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span>theme<span style="color:#eceff4">=</span><span style="color:#a3be8c">&#34;mcl&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>The directory structure of your new theme will look something like this:</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">18
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>.
 </span></span><span style="display:flex;"><span>└── mcl
 </span></span><span style="display:flex;"><span>    ├── archetypes
 </span></span><span style="display:flex;"><span>    │   └── default.md
@@ -52,7 +113,9 @@
 </span></span><span style="display:flex;"><span>    └── static
 </span></span><span style="display:flex;"><span>        └── css
 </span></span><span style="display:flex;"><span>            └── style.css
-</span></span></code></pre></div><p>This is where most of the magic happens:</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This is where most of the magic happens:</p>
 <ul>
 <li>The default.md file in the archetypes directory dictates what template to follow when adding new post files.</li>
 <li>The layouts directory is where most of the meat is:
@@ -71,55 +134,77 @@
 <li>Static is where assets which you want to use with your site are kept. I basically just use it for images which I can then reference from my posts.</li>
 </ul>
 <p>Now we&rsquo;ve got the directory what&rsquo;s happening where admin out the way let&rsquo;s have a look at what some of the html files in the themes directory look like; this is the index.html for my site for example:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>{{ partial &#34;header.html&#34; . }}
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">23
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>{{ partial &#34;header.html&#34; . }}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#008000;font-weight:bold">p</span>&gt;This is mainly a place for me to document various
+</span></span><span style="display:flex;"><span><span style="color:#eceff4">&lt;</span><span style="color:#81a1c1">p</span><span style="color:#eceff4">&gt;</span>This is mainly a place for me to document various
 </span></span><span style="display:flex;"><span>bits and bobs I&#39;ve been doing on my computers.
 </span></span><span style="display:flex;"><span>I am a noob in most things so take anything written
-</span></span><span style="display:flex;"><span>here with a pinch of salt. Lots of love :)&lt;/<span style="color:#008000;font-weight:bold">p</span>&gt;
+</span></span><span style="display:flex;"><span>here with a pinch of salt. Lots of love :)<span style="color:#eceff4">&lt;/</span><span style="color:#81a1c1">p</span><span style="color:#eceff4">&gt;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>{{ .Content }}
 </span></span><span style="display:flex;"><span>{{ range .Site.RegularPages | first 5 }}
-</span></span><span style="display:flex;"><span>  &lt;<span style="color:#008000;font-weight:bold">h3</span>&gt; &lt;<span style="color:#008000;font-weight:bold">a</span> <span style="color:#b44">href</span><span style="color:#666">=</span><span style="color:#b44">&#34;{{ .RelPermalink }}&#34;</span>&gt;{{ .Title }}&lt;/<span style="color:#008000;font-weight:bold">a</span>&gt;&lt;/<span style="color:#008000;font-weight:bold">h3</span>&gt;
+</span></span><span style="display:flex;"><span>  <span style="color:#eceff4">&lt;</span><span style="color:#81a1c1">h3</span><span style="color:#eceff4">&gt;</span> <span style="color:#eceff4">&lt;</span><span style="color:#81a1c1">a</span> <span style="color:#8fbcbb">href</span><span style="color:#81a1c1">=</span><span style="color:#a3be8c">&#34;{{ .RelPermalink }}&#34;</span><span style="color:#eceff4">&gt;</span>{{ .Title }}<span style="color:#eceff4">&lt;/</span><span style="color:#81a1c1">a</span><span style="color:#eceff4">&gt;&lt;/</span><span style="color:#81a1c1">h3</span><span style="color:#eceff4">&gt;</span>
 </span></span><span style="display:flex;"><span>  {{ .Summary }}
-</span></span><span style="display:flex;"><span>  &lt;<span style="color:#008000;font-weight:bold">br</span>&gt;&lt;<span style="color:#008000;font-weight:bold">br</span>&gt;
+</span></span><span style="display:flex;"><span>  <span style="color:#eceff4">&lt;</span><span style="color:#81a1c1">br</span><span style="color:#eceff4">&gt;&lt;</span><span style="color:#81a1c1">br</span><span style="color:#eceff4">&gt;</span>
 </span></span><span style="display:flex;"><span>  {{ .Date.Format &#34;06 Jan, 2006&#34; }} |
 </span></span><span style="display:flex;"><span>  {{ .WordCount }} words |
 </span></span><span style="display:flex;"><span>  {{ .ReadingTime }} mins |
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  {{ range (.GetTerms &#34;tags&#34;) }}
-</span></span><span style="display:flex;"><span>    &lt;<span style="color:#008000;font-weight:bold">a</span> <span style="color:#b44">href</span><span style="color:#666">=</span><span style="color:#b44">&#39;{{ .Permalink }}&#39;</span>&gt;{{ .LinkTitle }}&lt;/<span style="color:#008000;font-weight:bold">a</span>&gt;
+</span></span><span style="display:flex;"><span>    <span style="color:#eceff4">&lt;</span><span style="color:#81a1c1">a</span> <span style="color:#8fbcbb">href</span><span style="color:#81a1c1">=</span><span style="color:#a3be8c">&#39;{{ .Permalink }}&#39;</span><span style="color:#eceff4">&gt;</span>{{ .LinkTitle }}<span style="color:#eceff4">&lt;/</span><span style="color:#81a1c1">a</span><span style="color:#eceff4">&gt;</span>
 </span></span><span style="display:flex;"><span>  {{ end }}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>{{ end }}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>{{ partial &#34;footer.html&#34; . }}
-</span></span></code></pre></div><p>In short, this plops the header and footer partials at the top and bottom of the page respectively, includes a short warning not to listen to me, and then displays my five most recent posts along with a snippet of the post and some accompanyning info: date, word count, reading time, and tags. The keen eyed among you will have noticed that this is a mish mash of normal html tags and strange stuff enclosed in double curly brackets. I&rsquo;m going to end on this cliffhanger but if you want to know more about the curly brackets check out the hugo docs <a href="https://gohugo.io/templates/introduction">here</a>.</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>In short, this plops the header and footer partials at the top and bottom of the page respectively, includes a short warning not to listen to me, and then displays my five most recent posts along with a snippet of the post and some accompanyning info: date, word count, reading time, and tags. The keen eyed among you will have noticed that this is a mish mash of normal html tags and strange stuff enclosed in double curly brackets. I&rsquo;m going to end on this cliffhanger but if you want to know more about the curly brackets check out the hugo docs <a href="https://gohugo.io/templates/introduction">here</a>.</p>
 
 </div>
 
 </div> 
-<footer>
-<small>
-  <div class="foot-item">
-    
-      <a href="/posts/">all posts</a>
-    
-      <a href="/tags/">topics</a>
-    
-  </div>
-  <div class="foot-item">
+<div class="foot-container">
+    <div class="foot-item">
     
       <a href="/index.xml">rss</a>
     
       <a href="https://github.com/ryfrd">github</a>
     
+    </div>
+    <div class="foot-item">
+    made with <a href="https://gohugo.io">hugo</a> and my wonky theme <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
+    </div>
   </div>
-  <div class="foot-item">
-    made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
-  </div>
-</small>
-</footer>
+
+  <script src="/js/toggle.js"></script>
 </body>
 </html>
 

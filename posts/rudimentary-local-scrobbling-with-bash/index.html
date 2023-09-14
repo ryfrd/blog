@@ -1,73 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
     <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
     
-    <link href="/css/styles.css" rel="stylesheet" id="stylesheet">
-    <title>james mclaren</title>
+    <link href="/css/dark.css" rel="stylesheet" id="stylesheet">
+    <title>dymc.win</title>
   </head>
   <body>
   
-  
+    <div class="lr nav-container">
+    <div class="l">
+      <a class="nav-title" href="/">
+          dymc.win
+      </a>
+      <button id="themeButton" onclick="toggleTheme()" class="theme-button">
+          toggle theme
+      </button>
+    </div>
+    <div class="r">
+        
+          <a class="nav-link" href="/posts/">posts</a>
+        
+          <a class="nav-link" href="/tags/">topics</a>
+        
+    </div>
+  </div>
+
   <div class="body-container">
 
   
 
 
-<div class="body-container">
-  <h3>rudimentary local scrobbling with bash</h3>
+<div class="main-container">
+  rudimentary local scrobbling with bash
   <p>There are lots of music players on linux. I have used lots of them, I quite like some of them. But for some reason I decided I wanted more. With this in mind, over the past few months I have been constructing a sprawling ecosystem of bash scripts all geared towards delivering a customised listening experience tailored perfectly to my every need. In short, the setup uses a simple dmenu file manager to browse my local files and mpv to play them. Today I&rsquo;ll be talking specifically about my setup for recording the albums I&rsquo;ve been listening to.</p>
 <h3 id="lets-get-down-to-business">LET&rsquo;S GET DOWN TO BUSINESS</h3>
 <p>Whenever I select a file to be played with my script I am effectively selecting a path to a file or a path to a directory with files in it which is then fed to mpv. For example, if I&rsquo;m playing the classic album Lemonade by Beyonce it would look like this:</p>
 <p><code>/home/randy/music/Beyonce/Lemonade/</code></p>
 <p>To append this path to a file called scrobble while removing the first three directories (or the first 18 characters) rather inelegantly:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#a2f">printf</span> <span style="color:#b44">&#34;%s&#34;</span> <span style="color:#b44">&#34;</span><span style="color:#b8860b">$selected_path</span><span style="color:#b44">&#34;</span> | cut -c 18- &gt;&gt; scrobble
-</span></span></code></pre></div><p>As new paths are appended to the file, this will will result in a scrobble file made up of three columns: the first for artists, the second for albums, and the third for songs.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Abdullah Ibrahim/South Africa
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#81a1c1">printf</span> <span style="color:#a3be8c">&#34;%s&#34;</span> <span style="color:#a3be8c">&#34;</span>$selected_path<span style="color:#a3be8c">&#34;</span> <span style="color:#eceff4">|</span> cut -c 18- &gt;&gt; scrobble
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>As new paths are appended to the file, this will will result in a scrobble file made up of three columns: the first for artists, the second for albums, and the third for songs.</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Abdullah Ibrahim/South Africa
 </span></span><span style="display:flex;"><span>Darkside/Psychic
-</span></span><span style="display:flex;"><span>SOPHIE/OIL OF EVERY PEARL<span style="">&#39;</span>S UN-INSIDES
+</span></span><span style="display:flex;"><span>SOPHIE/OIL OF EVERY PEARL<span style="color:#bf616a">&#39;</span>S UN-INSIDES
 </span></span><span style="display:flex;"><span>Nicolas Jaar/Space Is Only Noise/2 Colomb.flac
 </span></span><span style="display:flex;"><span>Townes Van Zandt
-</span></span></code></pre></div><p>As you can see here, unless you only play music song by song, not all columns will always be populated. Now we have a file that contains this information we can do stuff to it. For example, to show our listening history and display it in columns with some pretty labels:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tac scrobble | column -t -s <span style="color:#b44">&#34;/&#34;</span> -N <span style="color:#b44">&#34; ,artist,album,track&#34;</span>
-</span></span></code></pre></div><p>Maybe you only want the last ten things you listened to:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tail -n <span style="color:#666">10</span> scrobble | column -t -s <span style="color:#b44">&#34;/&#34;</span> -N <span style="color:#b44">&#34; ,artist,album,song&#34;</span>
-</span></span></code></pre></div><p>To find our most played atrists it&rsquo;s a little more complicated. We can use awk to extract the artist column and remove all duplicate entries with sort -u to get a list of all played artists to iterate over. Then for each unique artist we grep for instances of them in the artist column and append that number of instances and the artist to a temporary file. This can then displayed as you see fit:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">for</span> album in <span style="color:#a2f;font-weight:bold">$(</span>awk -F/ <span style="color:#b44">&#39;{ print $2 }&#39;</span> scrobble | sort -u<span style="color:#a2f;font-weight:bold">)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a2f;font-weight:bold">do</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a2f">echo</span> <span style="color:#b44">&#34;&#39;</span><span style="color:#b8860b">$album</span><span style="color:#b44">&#39;/&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>awk -F/ <span style="color:#b44">&#39;{ print $2 }&#39;</span> <span style="color:#b44">&#34;</span><span style="color:#b8860b">$scrob_file</span><span style="color:#b44">&#34;</span> | grep <span style="color:#b8860b">$album</span> | wc -l<span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;&#34;</span> &gt;&gt; temp
-</span></span><span style="display:flex;"><span>	<span style="color:#a2f;font-weight:bold">done</span>
-</span></span></code></pre></div><p>So these are just a few examples; the real point is once you have that file of three columns the world is your oyster. You could probably even use something a little less cumbersome such as python.</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>As you can see here, unless you only play music song by song, not all columns will always be populated. Now we have a file that contains this information we can do stuff to it. For example, to show our listening history and display it in columns with some pretty labels:</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tac scrobble <span style="color:#eceff4">|</span> column -t -s <span style="color:#a3be8c">&#34;/&#34;</span> -N <span style="color:#a3be8c">&#34; ,artist,album,track&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Maybe you only want the last ten things you listened to:</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tail -n <span style="color:#b48ead">10</span> scrobble <span style="color:#eceff4">|</span> column -t -s <span style="color:#a3be8c">&#34;/&#34;</span> -N <span style="color:#a3be8c">&#34; ,artist,album,song&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>To find our most played atrists it&rsquo;s a little more complicated. We can use awk to extract the artist column and remove all duplicate entries with sort -u to get a list of all played artists to iterate over. Then for each unique artist we grep for instances of them in the artist column and append that number of instances and the artist to a temporary file. This can then displayed as you see fit:</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#81a1c1;font-weight:bold">for</span> album in <span style="color:#81a1c1;font-weight:bold">$(</span>awk -F/ <span style="color:#a3be8c">&#39;{ print $2 }&#39;</span> scrobble <span style="color:#eceff4">|</span> sort -u<span style="color:#81a1c1;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#81a1c1;font-weight:bold">do</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#81a1c1">echo</span> <span style="color:#a3be8c">&#34;&#39;</span>$album<span style="color:#a3be8c">&#39;/&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>awk -F/ <span style="color:#a3be8c">&#39;{ print $2 }&#39;</span> <span style="color:#a3be8c">&#34;</span>$scrob_file<span style="color:#a3be8c">&#34;</span> <span style="color:#eceff4">|</span> grep $album <span style="color:#eceff4">|</span> wc -l<span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;&#34;</span> &gt;&gt; temp
+</span></span><span style="display:flex;"><span>	<span style="color:#81a1c1;font-weight:bold">done</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>So these are just a few examples; the real point is once you have that file of three columns the world is your oyster. You could probably even use something a little less cumbersome such as python.</p>
 <p>Finally, disclaimer: I am a bash amateur so I hope nothing you&rsquo;ve seen here was too upsetting. Lots of love x</p>
 
 </div>
 
 </div> 
-<footer>
-<small>
-  <div class="foot-item">
-    
-      <a href="/posts/">all posts</a>
-    
-      <a href="/tags/">topics</a>
-    
-  </div>
-  <div class="foot-item">
+<div class="foot-container">
+    <div class="foot-item">
     
       <a href="/index.xml">rss</a>
     
       <a href="https://github.com/ryfrd">github</a>
     
+    </div>
+    <div class="foot-item">
+    made with <a href="https://gohugo.io">hugo</a> and my wonky theme <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
+    </div>
   </div>
-  <div class="foot-item">
-    made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
-  </div>
-</small>
-</footer>
+
+  <script src="/js/toggle.js"></script>
 </body>
 </html>
 

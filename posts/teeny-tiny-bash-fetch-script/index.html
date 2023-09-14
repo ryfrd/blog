@@ -1,119 +1,214 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
     <link rel="icon" href="/image/icon.webp" type="image/icon type" -->
     
-    <link href="/css/styles.css" rel="stylesheet" id="stylesheet">
-    <title>james mclaren</title>
+    <link href="/css/dark.css" rel="stylesheet" id="stylesheet">
+    <title>dymc.win</title>
   </head>
   <body>
   
-  
+    <div class="lr nav-container">
+    <div class="l">
+      <a class="nav-title" href="/">
+          dymc.win
+      </a>
+      <button id="themeButton" onclick="toggleTheme()" class="theme-button">
+          toggle theme
+      </button>
+    </div>
+    <div class="r">
+        
+          <a class="nav-link" href="/posts/">posts</a>
+        
+          <a class="nav-link" href="/tags/">topics</a>
+        
+    </div>
+  </div>
+
   <div class="body-container">
 
   
 
 
-<div class="body-container">
-  <h3>teeny tiny bash fetch script</h3>
+<div class="main-container">
+  teeny tiny bash fetch script
   <p>This is my attempt at a neofetch, pfetch, whateverfetch style system info utility. My main concern was making something which looked nice, was easily configurable, and as portable as possible (I didn&rsquo;t really try that hard with the portability). I didn&rsquo;t think much about performance; I&rsquo;m personally not a man who stresses too much when a command takes a quarter of a second instead of a tenth. The basic gameplan was to get an array of bash commands which would fetch various bits and bobs, then loop through this array formatting the text with ANSI escape codes. First things first, this was the associative array I came up with:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#a2f">declare</span> -A <span style="color:#b8860b">fetch</span><span style="color:#666">=(</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>user<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#b8860b">$USER</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>host<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>cat /etc/hostname<span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>uptime<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>uptime | awk <span style="color:#b44">&#39;{print $3}&#39;</span> | sed <span style="color:#b44">&#39;s/:/h / ; s/,/m/&#39;</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>kernel<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>awk <span style="color:#b44">&#39;{print $3}&#39;</span> /proc/version<span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>distro<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>sed -n <span style="color:#b44">&#39;s/^PRETTY_NAME=&#34;//p&#39;</span> /etc/os-release | sed <span style="color:#b44">&#39;s/&#34;//&#39;</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>shell<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>basename <span style="color:#b8860b">$SHELL</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>de<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#b8860b">$XDG_CURRENT_DESKTOP</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>terminal<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#b8860b">$TERM</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>editor<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#b8860b">$EDITOR</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>root<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>df -Th / | tail -n <span style="color:#666">1</span> | awk <span style="color:#b44">&#39;{print $6}&#39;</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">,
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">            </span><span style="color:#a2f;font-weight:bold">$(</span>df -Th / | tail -n <span style="color:#666">1</span> | awk <span style="color:#b44">&#39;{print $2}&#39;</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>ip<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>host myip.opendns.com resolver1.opendns.com |
-</span></span><span style="display:flex;"><span>          tail -n <span style="color:#666">1</span> | awk <span style="color:#b44">&#39;{print $4}&#39;</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>battery<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>cat /sys/class/power_supply/BAT0/capacity<span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">%&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>cpu<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>sed -n 5p /proc/cpuinfo | cut -d: -f2<span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>ram<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>free -h | sed -n 2p | awk <span style="color:#b44">&#39;{print $3}&#39;</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44"> /
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">           </span><span style="color:#a2f;font-weight:bold">$(</span>free -h | sed -n 2p | awk <span style="color:#b44">&#39;{print $2}&#39;</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>swap<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>free -h | sed -n 3p | awk <span style="color:#b44">&#39;{print $3}&#39;</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44"> /
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">            </span><span style="color:#a2f;font-weight:bold">$(</span>free -h | sed -n 3p | awk <span style="color:#b44">&#39;{print $2}&#39;</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#666">[</span>display<span style="color:#666">]=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>xrandr | grep <span style="color:#b44">&#39;*&#39;</span> | awk <span style="color:#b44">&#39;{print $1}&#39;</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">, 
-</span></span></span><span style="display:flex;"><span><span style="color:#b44">    	       </span><span style="color:#a2f;font-weight:bold">$(</span>xrandr | grep <span style="color:#b44">&#39;*&#39;</span> | awk <span style="color:#b44">&#39;{print $2}&#39;</span> | sed <span style="color:#b44">&#39;s/*/Hz/ ; s/+//&#39;</span><span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#666">)</span>
-</span></span></code></pre></div><p>Each of these elements fetches a differenet piece of info. You could just use environment variables to get quite a few things (user), some were an issue of grabbing a particular piece of info from a file (distro name), and some of the more complicated ones I just reformatted output from other commands (ram usage).</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">23
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#81a1c1">declare</span> -A fetch<span style="color:#81a1c1">=(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>user<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span>$USER<span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>host<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>cat /etc/hostname<span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>uptime<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>uptime <span style="color:#eceff4">|</span> awk <span style="color:#a3be8c">&#39;{print $3}&#39;</span> <span style="color:#eceff4">|</span> sed <span style="color:#a3be8c">&#39;s/:/h / ; s/,/m/&#39;</span><span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>kernel<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>awk <span style="color:#a3be8c">&#39;{print $3}&#39;</span> /proc/version<span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>distro<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>sed -n <span style="color:#a3be8c">&#39;s/^PRETTY_NAME=&#34;//p&#39;</span> /etc/os-release <span style="color:#eceff4">|</span> sed <span style="color:#a3be8c">&#39;s/&#34;//&#39;</span><span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>shell<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>basename $SHELL<span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>de<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span>$XDG_CURRENT_DESKTOP<span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>terminal<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span>$TERM<span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>editor<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span>$EDITOR<span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>root<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>df -Th / <span style="color:#eceff4">|</span> tail -n <span style="color:#b48ead">1</span> <span style="color:#eceff4">|</span> awk <span style="color:#a3be8c">&#39;{print $6}&#39;</span><span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">,
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">            </span><span style="color:#81a1c1;font-weight:bold">$(</span>df -Th / <span style="color:#eceff4">|</span> tail -n <span style="color:#b48ead">1</span> <span style="color:#eceff4">|</span> awk <span style="color:#a3be8c">&#39;{print $2}&#39;</span><span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>ip<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>host myip.opendns.com resolver1.opendns.com <span style="color:#eceff4">|</span>
+</span></span><span style="display:flex;"><span>          tail -n <span style="color:#b48ead">1</span> <span style="color:#eceff4">|</span> awk <span style="color:#a3be8c">&#39;{print $4}&#39;</span><span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>battery<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>cat /sys/class/power_supply/BAT0/capacity<span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">%&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>cpu<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>sed -n 5p /proc/cpuinfo <span style="color:#eceff4">|</span> cut -d: -f2<span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>ram<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>free -h <span style="color:#eceff4">|</span> sed -n 2p <span style="color:#eceff4">|</span> awk <span style="color:#a3be8c">&#39;{print $3}&#39;</span><span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c"> /
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">           </span><span style="color:#81a1c1;font-weight:bold">$(</span>free -h <span style="color:#eceff4">|</span> sed -n 2p <span style="color:#eceff4">|</span> awk <span style="color:#a3be8c">&#39;{print $2}&#39;</span><span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>swap<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>free -h <span style="color:#eceff4">|</span> sed -n 3p <span style="color:#eceff4">|</span> awk <span style="color:#a3be8c">&#39;{print $3}&#39;</span><span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c"> /
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">            </span><span style="color:#81a1c1;font-weight:bold">$(</span>free -h <span style="color:#eceff4">|</span> sed -n 3p <span style="color:#eceff4">|</span> awk <span style="color:#a3be8c">&#39;{print $2}&#39;</span><span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">[</span>display<span style="color:#81a1c1">]=</span><span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>xrandr <span style="color:#eceff4">|</span> grep <span style="color:#a3be8c">&#39;*&#39;</span> <span style="color:#eceff4">|</span> awk <span style="color:#a3be8c">&#39;{print $1}&#39;</span><span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">, 
+</span></span></span><span style="display:flex;"><span><span style="color:#a3be8c">    	       </span><span style="color:#81a1c1;font-weight:bold">$(</span>xrandr <span style="color:#eceff4">|</span> grep <span style="color:#a3be8c">&#39;*&#39;</span> <span style="color:#eceff4">|</span> awk <span style="color:#a3be8c">&#39;{print $2}&#39;</span> <span style="color:#eceff4">|</span> sed <span style="color:#a3be8c">&#39;s/*/Hz/ ; s/+//&#39;</span><span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#81a1c1">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Each of these elements fetches a differenet piece of info. You could just use environment variables to get quite a few things (user), some were an issue of grabbing a particular piece of info from a file (distro name), and some of the more complicated ones I just reformatted output from other commands (ram usage).</p>
 <p>Next order of business: colors. I wanted to put a chunk or randomly colored text at the start of each line so that each time you ran the command you got something that looked a little different. I made this array of escape codes each one referring to a different bold color:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#a2f">declare</span> -a <span style="color:#b8860b">colors</span><span style="color:#666">=(</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;\e[0;1;30m&#34;</span> <span style="color:#080;font-style:italic"># black</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;\e[0;1;31m&#34;</span> <span style="color:#080;font-style:italic"># red</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;\e[0;1;32m&#34;</span> <span style="color:#080;font-style:italic"># green</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;\e[0;1;33m&#34;</span> <span style="color:#080;font-style:italic"># blue</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;\e[0;1;34m&#34;</span> <span style="color:#080;font-style:italic"># yellow</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;\e[0;1;35m&#34;</span> <span style="color:#080;font-style:italic"># pink</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;\e[0;1;36m&#34;</span> <span style="color:#080;font-style:italic"># magenta</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;\e[0;1;37m&#34;</span> <span style="color:#080;font-style:italic"># white</span>
-</span></span><span style="display:flex;"><span><span style="color:#666">)</span>
-</span></span></code></pre></div><p>I then repurposed a nice function from someone on stackoverflow to get a random element from this array. The variable &lsquo;pre&rsquo; here is the text that I want formatted:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#b8860b">pre</span><span style="color:#666">=</span><span style="color:#b44">&#34;-&gt;&#34;</span>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#81a1c1">declare</span> -a colors<span style="color:#81a1c1">=(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;\e[0;1;30m&#34;</span> <span style="color:#616e87;font-style:italic"># black</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;\e[0;1;31m&#34;</span> <span style="color:#616e87;font-style:italic"># red</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;\e[0;1;32m&#34;</span> <span style="color:#616e87;font-style:italic"># green</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;\e[0;1;33m&#34;</span> <span style="color:#616e87;font-style:italic"># blue</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;\e[0;1;34m&#34;</span> <span style="color:#616e87;font-style:italic"># yellow</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;\e[0;1;35m&#34;</span> <span style="color:#616e87;font-style:italic"># pink</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;\e[0;1;36m&#34;</span> <span style="color:#616e87;font-style:italic"># magenta</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;\e[0;1;37m&#34;</span> <span style="color:#616e87;font-style:italic"># white</span>
+</span></span><span style="display:flex;"><span><span style="color:#81a1c1">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>I then repurposed a nice function from someone on stackoverflow to get a random element from this array. The variable &lsquo;pre&rsquo; here is the text that I want formatted:</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pre<span style="color:#81a1c1">=</span><span style="color:#a3be8c">&#34;-&gt;&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>random_color <span style="color:#666">()</span> <span style="color:#666">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b8860b">size</span><span style="color:#666">=</span><span style="color:#b68;font-weight:bold">${#</span><span style="color:#b8860b">colors</span>[@]<span style="color:#b68;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b8860b">index</span><span style="color:#666">=</span><span style="color:#a2f;font-weight:bold">$((</span><span style="color:#b8860b">$RANDOM</span> <span style="color:#666">%</span> <span style="color:#b8860b">$size</span><span style="color:#a2f;font-weight:bold">))</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a2f">echo</span> <span style="color:#b44">&#34;</span><span style="color:#b68;font-weight:bold">${</span><span style="color:#b8860b">colors</span>[<span style="color:#b8860b">$index</span>]<span style="color:#b68;font-weight:bold">}${</span><span style="color:#b8860b">pre</span><span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">\e[0m&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#666">}</span>
-</span></span></code></pre></div><p>My plan was then to simply loop through the array, &rsquo;echo-ing&rsquo; out the random_color function, the key from the fetch array, a separator, and then the value form the fetch array. This worked mainly, the only issue being that each element from the fetch was not printed in the order it was declared. Ideally, I wanted the fetch elements to be printed in the order they were put in the array so you could configure the how they appeared. Once again my primitive understanding of bash had let me down; I turned to stackoverflow. I found the solution was to define another array containing the fetch keys and then use it to attack the other associative &lsquo;fetch&rsquo; array:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#a2f">declare</span> -a <span style="color:#b8860b">order</span><span style="color:#666">=(</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;user&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;host&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;uptime&#34;</span> <span style="color:#080;font-style:italic"># uses uptime command</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;kernel&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;distro&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;shell&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;de&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;terminal&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#b44">&#34;editor&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-style:italic"># &#34;ip&#34; # uses host command</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-style:italic"># &#34;cpu&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-style:italic"># &#34;ram&#34; # uses free command</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-style:italic"># &#34;swap&#34; # uses free also</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-style:italic"># &#34;root&#34; # uses df command</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-style:italic"># &#34;battery&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-style:italic"># &#34;display&#34; # uses xrandr</span>
-</span></span><span style="display:flex;"><span><span style="color:#666">)</span>
+</span></span><span style="display:flex;"><span>random_color <span style="color:#81a1c1">()</span> <span style="color:#81a1c1">{</span>
+</span></span><span style="display:flex;"><span>    size<span style="color:#81a1c1">=</span><span style="color:#a3be8c">${#</span>colors<span style="color:#eceff4">[@]</span><span style="color:#a3be8c">}</span>
+</span></span><span style="display:flex;"><span>    index<span style="color:#81a1c1">=</span><span style="color:#81a1c1;font-weight:bold">$((</span>$RANDOM <span style="color:#81a1c1">%</span> $size<span style="color:#81a1c1;font-weight:bold">))</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">echo</span> <span style="color:#a3be8c">&#34;</span><span style="color:#a3be8c">${</span>colors<span style="color:#eceff4">[</span>$index<span style="color:#eceff4">]</span><span style="color:#a3be8c">}${</span>pre<span style="color:#a3be8c">}</span><span style="color:#a3be8c">\e[0m&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#81a1c1">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>My plan was then to simply loop through the array, &rsquo;echo-ing&rsquo; out the random_color function, the key from the fetch array, a separator, and then the value form the fetch array. This worked mainly, the only issue being that each element from the fetch was not printed in the order it was declared. Ideally, I wanted the fetch elements to be printed in the order they were put in the array so you could configure the how they appeared. Once again my primitive understanding of bash had let me down; I turned to stackoverflow. I found the solution was to define another array containing the fetch keys and then use it to attack the other associative &lsquo;fetch&rsquo; array:</p>
+<div class="highlight"><div style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#6c6f74">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#81a1c1">declare</span> -a order<span style="color:#81a1c1">=(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;user&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;host&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;uptime&#34;</span> <span style="color:#616e87;font-style:italic"># uses uptime command</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;kernel&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;distro&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;shell&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;de&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;terminal&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a3be8c">&#34;editor&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#616e87;font-style:italic"># &#34;ip&#34; # uses host command</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#616e87;font-style:italic"># &#34;cpu&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#616e87;font-style:italic"># &#34;ram&#34; # uses free command</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#616e87;font-style:italic"># &#34;swap&#34; # uses free also</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#616e87;font-style:italic"># &#34;root&#34; # uses df command</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#616e87;font-style:italic"># &#34;battery&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#616e87;font-style:italic"># &#34;display&#34; # uses xrandr</span>
+</span></span><span style="display:flex;"><span><span style="color:#81a1c1">)</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">for</span> info in <span style="color:#b44">&#34;</span><span style="color:#b68;font-weight:bold">${</span><span style="color:#b8860b">order</span>[@]<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;</span>; <span style="color:#a2f;font-weight:bold">do</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a2f">echo</span> -e <span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>random_color<span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44"> \e[0;1;3m</span><span style="color:#b8860b">$info</span><span style="color:#b44">\e[0m</span><span style="color:#b68;font-weight:bold">${</span><span style="color:#b8860b">sep</span><span style="color:#b68;font-weight:bold">}${</span><span style="color:#b8860b">fetch</span>[<span style="color:#b8860b">$info</span>]<span style="color:#b68;font-weight:bold">}</span><span style="color:#b44">&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">done</span>
-</span></span></code></pre></div><p>This had the happy unintended consequence of allowing you to very easily configure which items you wanted in the fetch by simply commenting out keys from the order array. You can check out the script in its entirety <a href="https://gitlab.com/robbygozzarder/golazo">here</a>. This is a pretty picture of a few variations.</p>
+</span></span><span style="display:flex;"><span><span style="color:#81a1c1;font-weight:bold">for</span> info in <span style="color:#a3be8c">&#34;</span><span style="color:#a3be8c">${</span>order<span style="color:#eceff4">[@]</span><span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;</span><span style="color:#eceff4">;</span> <span style="color:#81a1c1;font-weight:bold">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#81a1c1">echo</span> -e <span style="color:#a3be8c">&#34;</span><span style="color:#81a1c1;font-weight:bold">$(</span>random_color<span style="color:#81a1c1;font-weight:bold">)</span><span style="color:#a3be8c"> \e[0;1;3m</span>$info<span style="color:#a3be8c">\e[0m</span><span style="color:#a3be8c">${</span>sep<span style="color:#a3be8c">}${</span>fetch<span style="color:#eceff4">[</span>$info<span style="color:#eceff4">]</span><span style="color:#a3be8c">}</span><span style="color:#a3be8c">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#81a1c1;font-weight:bold">done</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This had the happy unintended consequence of allowing you to very easily configure which items you wanted in the fetch by simply commenting out keys from the order array. You can check out the script in its entirety <a href="https://gitlab.com/robbygozzarder/golazo">here</a>. This is a pretty picture of a few variations.</p>
 <p><img src="/image/golazo.png" alt="golazo"></p>
 
 </div>
 
 </div> 
-<footer>
-<small>
-  <div class="foot-item">
-    
-      <a href="/posts/">all posts</a>
-    
-      <a href="/tags/">topics</a>
-    
-  </div>
-  <div class="foot-item">
+<div class="foot-container">
+    <div class="foot-item">
     
       <a href="/index.xml">rss</a>
     
       <a href="https://github.com/ryfrd">github</a>
     
+    </div>
+    <div class="foot-item">
+    made with <a href="https://gohugo.io">hugo</a> and my wonky theme <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
+    </div>
   </div>
-  <div class="foot-item">
-    made with <a href="https://gohugo.io">hugo</a> and <a href="https://github.com/ryfrd/hugo-goose">hugo-goose</a>
-  </div>
-</small>
-</footer>
+
+  <script src="/js/toggle.js"></script>
 </body>
 </html>
 
