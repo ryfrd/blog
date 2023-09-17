@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/chess.com-api-and-the-continuing-search-for-en-passant-checkmate/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>chess.com api and the continuing search for en passant checkmate</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>chess.com api and the continuing search for en passant checkmate</h1>
+        <div>
+                <time>November 8, 2022</time>
+            </div>
+    </header><p>Last time we worked out how to get info for all the games played by titled players in a particular month. Today, we have three objectives:</p>
+<ul>
+<li>Parse this info for the pgn (portable game notation) of each game.</li>
+<li>Write these to a file so we dont have to spend forever downloading them everytime we run the script.</li>
+<li>Devise a way to convert this pgn to a more convenient pythonic format so we can analyse it later.</li>
+</ul>
+<p>First of all, I wrote a little function to get the pgn from the games we downloaded. I added this KeyError exception, but if I&rsquo;m honest I&rsquo;m not sure why I was getting this error. Maybe, chess.com doesn&rsquo;t store pgn for all games? I don&rsquo;t know.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_pgns</span><span class="p">(</span><span class="n">games</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pgns</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">game</span> <span class="ow">in</span> <span class="n">games</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pgn</span> <span class="o">=</span> <span class="n">game</span><span class="p">[</span><span class="s1">&#39;pgn&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pgns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pgn</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;key error um&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">pgns</span>
+</span></span></code></pre></div><p>Now we have this list of pgns, the next goal is to write them to a file so we theoretically only have to run the stuff from last post once. All the analysis we do on the games can then just be done on the files we save without any talking to the internet required.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">write_pgns</span><span class="p">(</span><span class="n">pgns</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">month</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">pgn</span> <span class="ow">in</span> <span class="n">pgns</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">	    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pgn</span><span class="p">)</span>
+</span></span></code></pre></div><p>Now a pgn looks something like this if it&rsquo;s just printed as a string:</p>
+<p><img src="/image/pgn.webp" alt="image alt text"></p>
+<p>It contains lots of very useful info but for our purposes of finding en passant checkmates, we would ideally just have a list of each move looking something like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">moves</span> <span class="o">=</span> <span class="p">[</span> <span class="s1">&#39;e4&#39;</span><span class="p">,</span> <span class="s1">&#39;e5&#39;</span><span class="p">,</span> <span class="s1">&#39;Bc4&#39;</span><span class="p">,</span> <span class="s1">&#39;Nc6&#39;</span><span class="p">,</span> <span class="s1">&#39;Qh5&#39;</span><span class="p">,</span> <span class="s1">&#39;Nf6&#39;</span><span class="p">,</span> <span class="s1">&#39;Qxf7#&#39;</span><span class="p">]</span>
+</span></span></code></pre></div><p>We don&rsquo;t need the headers, we don&rsquo;t need the result, and we don&rsquo;t really need the move numbers (these can be deduced from the list indexes). So the challenge is how to convert the pgn to a list; this is the slightly janky solution I came up wtih.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_move_list</span><span class="p">(</span><span class="n">pgn</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">=</span> <span class="n">pgn</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">moves</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># start fresh list at move 1 - effectively skipping the headers from the list</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="s1">&#39;1.&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">moves</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># gets rid of clock bits and bobs</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;{&#39;</span> <span class="ow">or</span> <span class="n">item</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;}&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">pass</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">#remove even indexes from list</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">#this gets rid of move numbers and the result of the game</span>
+</span></span><span class="line"><span class="cl">    <span class="k">del</span> <span class="n">moves</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">moves</span>
+</span></span></code></pre></div><p>I don&rsquo;t doubt it could be done more elegantly but it works I guess. Next time, we&rsquo;ll deal with working out what a list containing an en passant checkmate would look like.</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/multi-user-qtile-fiddling/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>multi user qtile fiddling</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>multi user qtile fiddling</h1>
+        <div>
+                <time>December 20, 2022</time>
+            </div>
+    </header><p>This post is going to detail how I solved a very particular problem I had created for myself. First, a quick description of the problem. I use home-manager on nixos to declaratively configure what happens on my computer. In the cases where home-manager does not expose sufficient configuration options for my liking (qtile for example), I instead link a configuration file from my nixos config to where it belongs in my home using <code>xdg.configFile</code>. This is what I do with my qtile <code>config.py</code>. I use qtile on my desktop and laptop but I dont want an identical setup on the two machines. I have jumped through many different slightly silly hoops in my nixos config sort of solving this problem until the other day it occured to me this could all be achieved with my python in my qtile config.</p>
+<h3 id="the-nub-of-the-problem">THE NUB OF THE PROBLEM</h3>
+<p>I basically just want the config to work out which computer it&rsquo;&rsquo;s on and then change some things accordingly. This can be achieved by getting the hostname with the socket module:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;baron&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># some stuff i want to happen on my desktop</span>
+</span></span><span class="line"><span class="cl"><span class="k">elif</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;countess&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># some stuff i want to happen on my laptop </span>
+</span></span></code></pre></div><p>There are three main things that I like to differ between my two computers:</p>
+<ul>
+<li>widgets on my bar (I don&rsquo;t need brightness and battery on my desktop)</li>
+<li>keybindings</li>
+<li>programs to autostart</li>
+</ul>
+<h3 id="widgets">WIDGETS</h3>
+<p>My current solution for this is to define to separate lists of widgets and then point to each one when I make my bar for each computer. This isn&rsquo;t perfect; it would be nice to have a list of all common widgets and then add to that with the unique ones. I haven&rsquo;t worked out a way to add the additional widgets without just plopping them all at the end of the bar which isn&rsquo;t necessarily where I want them (thinking about this now I think I might be able to use the insert method with a little for loop).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">countess_widgets</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># all the great widgets i want on my laptop</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">screens</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Screen</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">	    <span class="n">top</span> <span class="o">=</span> <span class="n">bar</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">		    <span class="n">widgets</span> <span class="o">=</span> <span class="n">countess_widgets</span>
+</span></span><span class="line"><span class="cl">		<span class="p">),</span>
+</span></span><span class="line"><span class="cl">	<span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre></div><h3 id="keybindings">KEYBINDINGS</h3>
+<p>For keybindings I use extend to add some additional bindings to my global ones. This is mainly useful for the ones I use to change brightness on my laptop.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">countess_keys</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Key</span><span class="p">([</span><span class="n">m</span><span class="p">],</span> <span class="s1">&#39;Up&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">lazy</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="s1">&#39;light -A 5&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;backlight up&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Key</span><span class="p">([</span><span class="n">m</span><span class="p">],</span> <span class="s1">&#39;Down&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">lazy</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="s1">&#39;light -U 5&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;backlight down&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">keys</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">countess_keys</span><span class="p">)</span>
+</span></span></code></pre></div><p>You could even change a specific global binding on one computer if you knew its index in the list:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">keys</span><span class="p">[</span><span class="mi">420</span><span class="p">]</span> <span class="o">=</span> <span class="n">Key</span><span class="p">([</span><span class="n">m</span><span class="p">],</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">lazy</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="s1">&#39;dmenu_run&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                <span class="n">desc</span> <span class="o">=</span> <span class="s1">&#39;dmenu&#39;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">)</span>
+</span></span></code></pre></div><h3 id="autostart">AUTOSTART</h3>
+<p>Finally, I use this to autostart different programs which I want to change on each computer. For example  I use an xrandr command to make sure my desktop monitor is at 144hz. It looks like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="nd">@hook.subscribe.startup_once</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">autostart</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">processes</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;feh&#39;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;--bg-scale&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;/home/james/pics/wallpapers/beaut.jpg&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">],</span>
+</span></span><span class="line"><span class="cl">        <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;xrandr&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;--output&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;DisplayPort2&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;--primary&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;--mode&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;1920x1080&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;--rate&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;143.85&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">processes</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</span></span></code></pre></div><p>Of course, there are many ways that this could all be achievd but I think it&rsquo;s quite neat having it all in my one qtile config. That&rsquo;s about it for today. lots of love x</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

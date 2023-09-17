@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/upgrade-your-qtile-setup-with-a-cute-dropdown-terminal/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>upgrade your qtile setup with a cute dropdown terminal</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>upgrade your qtile setup with a cute dropdown terminal</h1>
+        <div>
+                <time>September 23, 2022</time>
+            </div>
+    </header><p>I didn&rsquo;t know you could do this until recently, very fun and playful little feature. How you want to do it will depend slightly on how you have your groups set up but I start with importing the relevant libraries and defining an empty list.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">libqtile.config</span> <span class="kn">import</span> <span class="n">Dropdown</span><span class="p">,</span> <span class="n">Scratchpad</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">groups</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span></code></pre></div><p>I&rsquo;m then able to append all the groups I want to this list. For the dropdown terminal you need the ScratchPad group which to quote the <a href="https://docs.qtile.org/en/latest/manual/config/groups.html">qtile docs</a> is a &ldquo;special - by default invisible - group which acts as a container for DropDown configurations&rdquo;. My configuration looks like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ScratchPad</span><span class="p">(</span> <span class="s2">&#34;scratchpad&#34;</span><span class="p">,</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">		<span class="n">DropDown</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;term&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">kitty</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">opacity</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">]</span>
+</span></span><span class="line"><span class="cl">	<span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span></code></pre></div><p>This gives you a terminal (kitty in this case) with a little tranparency. By default, it will pop up with this size:</p>
+<p><img src="/image/dropdown.webp" alt="alt"></p>
+<p>Though this can easily be altered with the x, y, height, and width keys:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ScratchPad</span><span class="p">(</span><span class="s2">&#34;scratchpad&#34;</span><span class="p">,</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="n">DropDown</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">           <span class="s2">&#34;term&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">           <span class="n">kitty</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">           <span class="n">opacity</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">           <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">           <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">           <span class="n">width</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">           <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span></code></pre></div><p>This gives us a little boxy guy in the top left corner:</p>
+<p><img src="/image/dropdown2.webp" alt="alt"></p>
+<p>We also have the option to set keybindings to toggle the appearance of the window. I&rsquo;ve got this in my config.py now:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">keys</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Key</span><span class="p">([</span><span class="n">m</span><span class="p">,</span> <span class="s2">&#34;shift&#34;</span><span class="p">],</span> <span class="s2">&#34;Return&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">lazy</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="s2">&#34;scratchpad&#34;</span><span class="p">]</span><span class="o">.</span><span class="n">dropdown_toggle</span><span class="p">(</span><span class="s2">&#34;terminal&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;dropdown term&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre></div><p>Anyway, hope this was useful, happy configurating :)</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

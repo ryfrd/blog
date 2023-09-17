@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/get-the-thoughts-out-of-your-head-and-into-a-digital-format-with-this-python-journal-script/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>get the thoughts out of your head and into a digital format with this python journal script</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>get the thoughts out of your head and into a digital format with this python journal script</h1>
+        <div>
+                <time>December 1, 2022</time>
+            </div>
+    </header><p>Since getting going with emacs I&rsquo;ve gone down the org-mode rabbit hole a little bit. In particular the very nice <a href="https://github.com/bastibe/org-journal">org-journal</a> package. It basically does what it says on the tin: maintains a journal with a selection of org files. This has been very nice for me. I have often thought about journalling but never really got up a head of steam. Somehow having an entry a keybinding away while I&rsquo;m doing something with my text editor makes it a lot more palletable.</p>
+<p>Having said all this, I am not completely converted to the church of emacs. Thus, I thoght it would be nice to write a little editor agnostic script which would emulate some of org-journal&rsquo;s features but allow you to use whatever editor you like with markdown.</p>
+<h3 id="whats-the-time">WHAT&rsquo;S THE TIME?</h3>
+<p>First things first, I wrote this little function that would give you a formatted version of your local time. This will be important as a lot of this comes down to dates and times really. It uses python&rsquo;s time module:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">whats_the_time</span><span class="p">(</span><span class="nb">format</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
+</span></span></code></pre></div><p>This function takes a string using <a href="https://www.w3schools.com/python/gloss_python_date_format_codes.asp">python date format codes</a> and spits out the corresponding time. For example, <code>'%A %d %B, %Y'</code> would give you Wednesday 12 December, 2022.</p>
+<h3 id="what-to-call-the-files">WHAT TO CALL THE FILES?</h3>
+<p>My plan is to have three options for <code>journal_frequency</code>: daily, monthly, and yearly. Depending on the value of this variable, each journal file the script creates will represent a day, month, or year. This function gives you a different filename depending on the <code>journal_frequency</code> that is set:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">make_filename</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">journal_frequency</span> <span class="o">==</span> <span class="s1">&#39;daily&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">whats_the_time</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.md&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">elif</span> <span class="n">journal_frequency</span> <span class="o">==</span> <span class="s1">&#39;monthly&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">whats_the_time</span><span class="p">(</span><span class="s1">&#39;%Y%m&#39;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.md&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">elif</span> <span class="n">journal_frequency</span> <span class="o">==</span> <span class="s1">&#39;yearly&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">whats_the_time</span><span class="p">(</span><span class="s1">&#39;%Y&#39;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.md&#39;</span>
+</span></span></code></pre></div><h3 id="do-we-need-a-new-file">DO WE NEED A NEW FILE?</h3>
+<p>As I could see it, the next problem was determining whether a new journal file was needed. This would only happen if it was the first entry for a day, month, or year. Otherwise, you would simply want to add to the existing file. I came up with this little function using the os module to check if the file that would be created already exists:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">new_file_required</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">journal_dir</span><span class="p">,</span><span class="n">make_filename</span><span class="p">())):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">True</span>
+</span></span></code></pre></div><p>MAKING FILES AND PUTTING THINGS IN THEM</p>
+<p>Now we have that admin out the way, we&rsquo;re on the home straight. This function creates a file and adds a little title heading at the top using the <code>title_string</code> variable. This will be called when we do need a new file:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">create_file</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">journal_dir</span><span class="p">,</span><span class="n">make_filename</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# &#39;</span> <span class="o">+</span> <span class="n">whats_the_time</span><span class="p">(</span><span class="n">title_string</span><span class="p">))</span>
+</span></span></code></pre></div><p>This guy adds a subheading wtih the current time as default using the <code>entry_string</code> variable. If you had <code>journal_frequency</code> set to monthly or yearly though you would likely want to edit this to include bits fo the date. This is called evry time you run the script.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">write_date</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">journal_dir</span><span class="p">,</span><span class="n">make_filename</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="s1">&#39;### &#39;</span><span class="o">+</span> <span class="n">whats_the_time</span><span class="p">(</span><span class="n">entry_string</span><span class="p">))</span>
+</span></span></code></pre></div><h3 id="opening-a-text-editor">OPENING A TEXT EDITOR</h3>
+<p>Final order of business: how to open the appropriate journal file with the user&rsquo;s chosen editor. For this we can use the subprocess module and <a href="https://docs.python.org/3/library/subprocess.html#popen-constructor">Popen</a>. By default I have this set to get your EDITOR environemnt variable and use that (come to think of it that probs won&rsquo;t work with tui programs) but it could be set to anything.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">open_editor</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span> <span class="n">editor</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">journal_dir</span><span class="p">,</span> <span class="n">make_filename</span><span class="p">())</span> <span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+</span></span></code></pre></div><p>Now it&rsquo;s just a matter of sticking all the functions together:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">new_file_required</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">        <span class="n">create_file</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">write_date</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">open_editor</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">write_date</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">open_editor</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">main</span><span class="p">()</span>
+</span></span></code></pre></div><p>As simple as it is, it works reasonalby well as it stands. I would though like to add the ability to customise the file format you want to use so you could have org, plain text, markdown, or whatever. I&rsquo;ve got the script set to just run with a keybinding at the moment so it fulfils the immediacy I was enjoying with org-journal. You can find the script <a href="https://gitlab.com/robbygozzarder/py">here</a> atm. BYEBYE xxx</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

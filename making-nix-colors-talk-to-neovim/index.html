@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/making-nix-colors-talk-to-neovim/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>making nix-colors talk to neovim</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>making nix-colors talk to neovim</h1>
+        <div>
+                <time>August 18, 2023</time>
+            </div>
+    </header><p>I recently started fiddling around with home-managerifying my neovim config.
+After moving across most of my stuff I came across the problem of how to hook things up with with <a href="https://github.com/misterio77/nix-colors">nix-colors</a> so that my neovim theme would follow color changes in home-manager.</p>
+<p>Luckily, I came across <a href="https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-base16.md">this</a> handy little plugin from the lovely <a href="https://github.com/echasnovski/mini.nvim">mini.nvim</a> suite of plugins which lets you create your own theme with your custom colors.</p>
+<p>Beneath is a little snippet of how you could make it all happen.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">inputs</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">imports</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">inputs</span><span class="o">.</span><span class="n">nix-colors</span><span class="o">.</span><span class="n">homeManagerModules</span><span class="o">.</span><span class="n">default</span>
+</span></span><span class="line"><span class="cl">  <span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="n">scheme</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">nix-colors</span><span class="o">.</span><span class="n">schemes</span><span class="o">.</span><span class="n">onedark</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">programs</span><span class="o">.</span><span class="n">neovim</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plugins</span> <span class="o">=</span> <span class="k">with</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">vimPlugins</span><span class="p">;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">plugin</span> <span class="o">=</span> <span class="n">mini-nvim</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">config</span> <span class="o">=</span> <span class="s1">&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">          lua &lt;&lt; END
+</span></span></span><span class="line"><span class="cl"><span class="s1">            require(&#39;mini.base16&#39;).setup({
+</span></span></span><span class="line"><span class="cl"><span class="s1">              palette = {
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base00 = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base00</span><span class="si">}</span><span class="s1">&#39;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base01 = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base01</span><span class="si">}</span><span class="s1">&#39;,   
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base02 = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base02</span><span class="si">}</span><span class="s1">&#39;,    
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base03 = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base03</span><span class="si">}</span><span class="s1">&#39;,    
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base04 = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base04</span><span class="si">}</span><span class="s1">&#39;,    
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base05 = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base05</span><span class="si">}</span><span class="s1">&#39;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base06 = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base06</span><span class="si">}</span><span class="s1">&#39;,    
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base07 = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base07</span><span class="si">}</span><span class="s1">&#39;,    
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base08 = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base08</span><span class="si">}</span><span class="s1">&#39;,    
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base09 = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base09</span><span class="si">}</span><span class="s1">&#39;,   
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base0A = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base0A</span><span class="si">}</span><span class="s1">&#39;,    
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base0B = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base0B</span><span class="si">}</span><span class="s1">&#39;,    
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base0C = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base0C</span><span class="si">}</span><span class="s1">&#39;,   
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base0D = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base0D</span><span class="si">}</span><span class="s1">&#39;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base0E = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base0E</span><span class="si">}</span><span class="s1">&#39;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">                base0F = &#39;#</span><span class="si">${</span><span class="n">scheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base0F</span><span class="si">}</span><span class="s1">&#39;,    
+</span></span></span><span class="line"><span class="cl"><span class="s1">              },
+</span></span></span><span class="line"><span class="cl"><span class="s1">            })
+</span></span></span><span class="line"><span class="cl"><span class="s1">          END
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Happy theming!</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/translating-docker-to-nix/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>translating docker to nix?!</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>translating docker to nix?!</h1>
+        <div>
+                <time>February 28, 2023</time>
+            </div>
+    </header><p>In my opinion, there are moments when the convenience of docker and its surrounding ecosystem can&rsquo;t be beat. I&rsquo;ve been dabbling in the self hosting world and oftentimes the best maintained packaging option is a docker image. As a result of this I&rsquo;ve been playing around with the nixos approach to managing docker containers.</p>
+<h3 id="nix---docker-compose---docker-run">nix -&gt; docker compose -&gt; docker run</h3>
+<p>To illustrate how to translate a simple example from the world of docker to nix let&rsquo;s have a look at the config for my <a href="https://docs.searxng.org/">searxng</a> instance.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">virtualisation</span><span class="o">.</span><span class="n">oci-containers</span><span class="o">.</span><span class="n">containers</span><span class="o">.</span><span class="s2">&#34;searxng&#34;</span> <span class="err">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">autoStart</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">image</span> <span class="o">=</span> <span class="s2">&#34;searxng/searxng&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">volumes</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;/srv/searx:/etc/searxng&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="n">environment</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">BASE_URL</span> <span class="o">=</span> <span class="s2">&#34;https://searx.jdysmcl.xyz/&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INSTANCE_NAME</span> <span class="o">=</span> <span class="s2">&#34;go on big boy dont be shy&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ports</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&#34;8080:8080&#34;</span> <span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>Here is the same thing written in a <code>docker-compose.yml</code> style format.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">searxng</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">searxng/searxng</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/srv/searxng:/etc/searxng</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">BASE_URL=https://searx.jdysmcl.xyz/;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	  </span>- <span class="l">INSTANCE_NAME=go on big boy dont be shy;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;8080:8080&#34;</span><span class="w">
+</span></span></span></code></pre></div><p>Also, this is what it would look like as a simple old <code>docker run</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ docker pull searxng/searxng
+</span></span><span class="line"><span class="cl">$ docker run --rm <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             -d -p 8080:8080 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             -v <span class="s2">&#34;/srv/searxng:/etc/searxng&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             -e <span class="s2">&#34;BASE_URL=http://searx.jdysmcl.xyz/&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             -e <span class="s2">&#34;INSTANCE_NAME=go on big boy dont be shy&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             searxng/searxng
+</span></span></code></pre></div><h3 id="bits-and-bobs">bits and bobs</h3>
+<p>As you can see, nix very kindly provides you with convenient options for the most essential tasks: mounting volumes, exposing ports, passing environment variables etc. But what about some more niche configurations that aren&rsquo;t exposed in <a href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/oci-containers.nix">oci-containers.nix</a>. As far as I can tell, your best bet in these scenarios is <code>virtualisation.oci-containers.containers.&lt;name&gt;.extraOptions</code>; this lets you pass a list of command line arguments to your docker run command. For example, I had this in my config for a vpn container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">virtualisation</span><span class="o">.</span><span class="n">oci-containers</span><span class="o">.</span><span class="n">containers</span><span class="o">.</span><span class="s2">&#34;vpn&#34;</span><span class="o">.</span><span class="n">extraOptions</span> <span class="err">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;--cap-add=net_admin&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;--device=/dev/net/tun&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;--network=bridge&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">];</span>
+</span></span></code></pre></div><p>With a mishmash of these different bits and bobs I was able to do everything that I needed to. It doesn&rsquo;t really open any more doors than docker compose but it&rsquo;s nice to have the option when you&rsquo;re already invested in the nix ecosystem.</p>
+<p>One final note: nix provides the option to choose between docker and podman with <code>virtualisation.oci-containers.containers.backend</code>. This defaults to podman.</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

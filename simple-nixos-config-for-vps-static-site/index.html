@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/simple-nixos-config-for-vps-static-site/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>simple nixos config for vps static site</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>simple nixos config for vps static site</h1>
+        <div>
+                <time>January 29, 2023</time>
+            </div>
+    </header><p>Setting up a little static site is something I&rsquo;ve done a few different times on a few different operating systems. It&rsquo;s a slightly fiddly task with a few disparate jobs that all need looking after: ssh, let&rsquo;s encrypt, nginx. In my opinion, it is one of the moments where consolidating all the little bits and bobs you need to setup into one common configuration is very useful.</p>
+<p>I&rsquo;m going to go through a bit of the nixos config I&rsquo;ve got for my vps.</p>
+<h3 id="ssh">SSH</h3>
+<p>Having a way to to get into your server is useful. Managing ssh on nix is very simple; this enables the ssh daemon, tells it what port to run on, disables plain text passwords, and disables root login.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">services</span><span class="o">.</span><span class="n">openssh</span> <span class="err">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ports</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">69</span> <span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">passwordAuthentication</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">permitRootLogin</span> <span class="o">=</span> <span class="s2">&#34;no&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h3 id="adding-a-user">ADDING A USER</h3>
+<p>Generally, it&rsquo;s nice to have a user so you&rsquo;re not just rawdogging everything as root. This adds a user called ronald, sets their default shell, and adds them to some useful groups. You can even add your public ssh keys here for ultimate convenience.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">users</span><span class="o">.</span><span class="n">users</span> <span class="err">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ronald</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">isNormalUser</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">shell</span> <span class="o">=</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">fish</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">extraGroups</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&#34;wheel&#34;</span> <span class="s2">&#34;nginx&#34;</span> <span class="p">];</span>
+</span></span><span class="line"><span class="cl">	<span class="n">openssh</span><span class="o">.</span><span class="n">authorizedKeys</span><span class="o">.</span><span class="n">keyFiles</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&#34;/path/to/public/key/file&#34;</span> <span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h3 id="nginx">NGINX</h3>
+<p>I use nginx to serve my sites. Compared to the nginx config I used to mess around with, the equivalent nix config is very clean. This chunk tells nginx to serve the contents of <code>/var/www/example-site</code> at <code>example-site.here</code>. It also opens the ports for http and https in the firewall.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">services</span><span class="o">.</span><span class="n">nginx</span> <span class="err">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">virtualHosts</span><span class="o">.</span><span class="s2">&#34;example-site.here&#34;</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="n">enableACME</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">   <span class="n">forceSSL</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">   <span class="n">root</span> <span class="o">=</span> <span class="s2">&#34;/var/www/example-site/&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">networking</span><span class="o">.</span><span class="n">firewall</span><span class="o">.</span><span class="n">allowedTCPPorts</span> <span class="err">=</span> <span class="p">[</span> <span class="mi">80</span> <span class="mi">443</span> <span class="p">];</span>
+</span></span></code></pre></div><h3 id="https">HTTPS</h3>
+<p>You can also make nix deal with all the let&rsquo;s encrypt certbot stuff. It looks like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">security</span><span class="o">.</span><span class="n">acme</span> <span class="err">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">acceptTerms</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">defaults</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="s2">&#34;ronald@email.yes&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>This will set up certificates for any sites you set the <code>enableAMCE</code> to true option for.</p>
+<h3 id="cron">CRON</h3>
+<p>This is one final little tidbit I set up the other day. I had got bored of having to ssh into my server to manually copy my updated site to the website root. The problem was I would need root privileges on the server to rsync the files to the website root. This seemed like a whole minefield I didn&rsquo;t want to mess with. Instead I set up a little cron job which copies a directory from my home to the website root every hour.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">services</span><span class="o">.</span><span class="n">cron</span> <span class="err">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">systemCronJobs</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;@hourly      root    cp -r /home/ronald/example-site /var/www/&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>This means I can just rsync the updated site from my laptop to the server and it&rsquo;ll be updated within the hour. Good enough for me.</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

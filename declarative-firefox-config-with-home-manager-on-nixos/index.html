@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/declarative-firefox-config-with-home-manager-on-nixos/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>declarative firefox config with home-manager on nixos</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>declarative firefox config with home-manager on nixos</h1>
+        <div>
+                <time>October 2, 2022</time>
+            </div>
+    </header><p>As a man who finds himself reinstalling his OS more than is probably sensible, any opportunity to minimise the post install admin of sorting out all your settings is an attractive one. With that in mind lets take a look at some of the firefox (my current browser of choice) configuration options avilable to you through home-manager. This assumes you have some sort of home-manager setup working. If you do not I found <a href="https://github.com/misterio77/nix-starter-configs">this</a> friendly githubber&rsquo;s templates to be very helpful.</p>
+<p>First of all you&rsquo;ll need to enable firefox with <code>programs.firefox.enable = true;</code></p>
+<h3 id="extensions">EXTENSIONS</h3>
+<p>This will require having the NUR (nix user repo) enabled. But once you do, you can configure any extension you want to be auto installed with something like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span><span class="n">pkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
+</span></span><span class="line"><span class="cl">  <span class="k">let</span>
+</span></span><span class="line"><span class="cl">    <span class="n">addons</span> <span class="o">=</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">nur</span><span class="o">.</span><span class="n">repos</span><span class="o">.</span><span class="n">rycee</span><span class="o">.</span><span class="n">firefox-addons</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">programs</span><span class="o">.</span><span class="n">firefox</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">extensions</span> <span class="o">=</span> <span class="k">with</span> <span class="n">addons</span><span class="p">;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ublock-origin</span>
+</span></span><span class="line"><span class="cl">        <span class="n">bitwarden</span>
+</span></span><span class="line"><span class="cl">        <span class="n">darkreader</span>
+</span></span><span class="line"><span class="cl">      <span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></div><p>This is the list of <a href="https://nur.nix-community.org/repos/rycee/">all extensions</a> available in the repo.</p>
+<h3 id="bookmarks">BOOKMARKS</h3>
+<p>Bookmarks can be added per profile. The format for it goes something like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">profiles</span><span class="o">.</span><span class="n">james</span> <span class="err">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">bookmarks</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	  <span class="n">name</span> <span class="o">=</span> <span class="s2">&#34;best website ever!&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;https://jdysmcl.xyz&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	  <span class="n">name</span> <span class="o">=</span> <span class="s2">&#34;best OS ever&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;https://nixos.org&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h3 id="settings">SETTINGS</h3>
+<p>Again, these can be added per profile. Basically, any option you can find in about:config can be added here; this is a selection of potentially useful options I have set:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">profiles</span><span class="o">.</span><span class="n">james</span> <span class="err">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">#newtab stuff</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;browser.startup.homepage&#34;</span> <span class="o">=</span> <span class="s2">&#34;https://searx.jdysmcl.xyz&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;browser.newtabpage.enabled&#34;</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;browser.newtabpage.activity-stream.enabled&#34;</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">#some firefox features i don&#39;t really want</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;extensions.pocket.enabled&#34;</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;extensions.formautofill.creditCards.enabled&#34;</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;identity.fxaccounts.enabled&#34;</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;signon.rememberSignons&#34;</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;browser.search.suggest.enabled&#34;</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">#some privacy stuff</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;privacy.resistFingerprinting&#34;</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;privacy.trackingprotection.enabled&#34;</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;dom.security.https_only_mode&#34;</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>Of course I am sure there are many more exciting things that could be done here but this is as far as I have got. For all avilable options you can check out <a href="https://nix-community.github.io/home-manager/options.html">this</a> or alternatively run a <code>man home-configuration.nix</code>. Hope this has been helpful :)</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

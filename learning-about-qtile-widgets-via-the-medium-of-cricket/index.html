@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/learning-about-qtile-widgets-via-the-medium-of-cricket/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>learning about qtile widgets via the medium of cricket</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>learning about qtile widgets via the medium of cricket</h1>
+        <div>
+                <time>April 3, 2023</time>
+            </div>
+    </header><p>I&rsquo;m a person who has spent an unreasonable amount of time making minute changes to the appearance of my bar in qtile. Despite the very nice selection of widgets availabe by default with qtile, it was only a matter of time before I decided I wanted to experiment with making my own custom widget. Fortunately, if you can do a bit of python this is quite an approachable undertaking.</p>
+<p>The dream widget I was lacking was a little live crikcet score ticker type thing; something which would scroll along on my bar showing me the score in live cricket matches. I&rsquo;m sure this will interest very few people but I learnt some good stuff along the way.</p>
+<h3 id="hello-world">Hello World?!</h3>
+<p>As far as I can tell from looking at the code for some of the <a href="https://github.com/qtile/qtile/tree/master/libqtile/widget">built-in widgets</a> and <a href="https://docs.qtile.org/en/latest/manual/howto/widget.html">this very helpful guide</a>, a basic hello world widget would look something like this.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">libqtile.widget</span> <span class="kn">import</span> <span class="n">base</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">HelloWorld</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">_TextBox</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;Hello world!&#39;</span>
+</span></span></code></pre></div><p>Qtile provides a selection of base widget classes to do various useful things. This example uses the simple <code>_TextBox</code> which displays the content of the <code>self.text</code> property.</p>
+<h3 id="hello-world-version-2">Hello World Version 2</h3>
+<p>Very nice, but for the cricket widget we&rsquo;ll need something which lets us update the text. The answer is <code>ThreadPoolText</code>. This class lets you periodically update the text by overridding its <code>poll</code> method with a function that returns the updated text.</p>
+<p>This example updates itself with hello world in a different language every five seconds.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">random</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">HolaMundo</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">ThreadPoolText</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">defaults</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;update_interval&#34;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&#34;Update interval for the widget&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">add_defaults</span><span class="p">(</span><span class="n">HolaMundo</span><span class="o">.</span><span class="n">defaults</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">poll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;Hola mundo&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;Ciao mondo&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;مرحبا بالعالم&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;Saluton Mondo&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;Sawubona Mhlaba&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+</span></span></code></pre></div><p>Along with the whole poll thing, this example also introduces <code>defaults</code>. This is a list of tuples which define parameters that the user can configure. Here we&rsquo;ve added <code>update_interval</code> which defines how often the widget is updated.</p>
+<h3 id="cricket-scores">Cricket Scores</h3>
+<p>For getting the cricket scores we&rsquo;ll be using a handy rss feed from cricinfo so no brute force scraping will be required, just my beloved <a href="https://pypi.org/project/feedparser/">feedparser</a>. This doesn&rsquo;t involve anything directly widget related, just massaging the rss feed into something that would look useful on your bar. Anyway, this is what the finished item looked like.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">libqtile.widget</span> <span class="kn">import</span> <span class="n">base</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">feedparser</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">CricketScores</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">ThreadPoolText</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">defaults</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;update_interval&#34;</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="s2">&#34;Update interval for the cricket scores widget&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;teams&#34;</span><span class="p">,[],</span><span class="s2">&#34;Teams to display scores for&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;separator&#34;</span><span class="p">,</span><span class="s2">&#34; </span><span class="se">\U0001F3CF</span><span class="s2"> &#34;</span><span class="p">,</span><span class="s2">&#34;Text to place between scores&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;no_scores_string&#34;</span><span class="p">,</span><span class="s2">&#34;&#34;</span><span class="p">,</span><span class="s2">&#34;Text to show when there are no scores to show&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">add_defaults</span><span class="p">(</span><span class="n">CricketScores</span><span class="o">.</span><span class="n">defaults</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">get_scores</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># parse rss feed and get </span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># live matches from title field</span>
+</span></span><span class="line"><span class="cl">        <span class="n">feed</span> <span class="o">=</span> <span class="n">feedparser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&#34;http://static.cricinfo.com/rss/livescores.xml&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="k">match</span> <span class="ow">in</span> <span class="n">feed</span><span class="o">.</span><span class="n">entries</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># filter live matches</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="s2">&#34;*&#34;</span> <span class="ow">in</span> <span class="k">match</span><span class="o">.</span><span class="n">title</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="k">match</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># remove scores not involving chosen teams</span>
+</span></span><span class="line"><span class="cl">        <span class="n">filtered_scores</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">team</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">teams</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">team</span> <span class="ow">in</span> <span class="n">score</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">filtered_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># if no scores, show no_scores_string</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_scores</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_scores_string</span> 
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># form pretty string with separators</span>
+</span></span><span class="line"><span class="cl">            <span class="n">final_scores</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">filtered_scores</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">score</span> <span class="o">!=</span> <span class="n">filtered_scores</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">final_scores</span> <span class="o">+=</span> <span class="n">score</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">separator</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">final_scores</span> <span class="o">+=</span> <span class="n">score</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">final_scores</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">poll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">get_scores</span><span class="p">()</span>
+</span></span></code></pre></div><h3 id="actaully-using-it-in-your-config">Actaully Using It In Your Config</h3>
+<p>Assuming you have a <code>my_widget.py</code> file in the same directory as your <code>config.py</code>, you simply have to import it and add it your list of widgets.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">my_widget</span> <span class="kn">import</span> <span class="n">LovelyWidget</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">screens</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Screen</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">top</span> <span class="o">=</span> <span class="n">bar</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">widgets</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                <span class="n">LovelyWidget</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">                <span class="n">widget</span><span class="o">.</span><span class="n">GroupBox</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">            <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre></div><p>Happy widget writing.</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

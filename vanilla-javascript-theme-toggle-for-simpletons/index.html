@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/vanilla-javascript-theme-toggle-for-simpletons/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>vanilla javascript theme toggle for simpletons</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>vanilla javascript theme toggle for simpletons</h1>
+        <div>
+                <time>June 26, 2023</time>
+            </div>
+    </header><p>Sometimes when I&rsquo;m trawling the internet and happen upon a particularly nice looking website, I develop css and javascript FOMO. The thing I&rsquo;ve been lusting after above all else is one of those fancy little dark theme toggle buttons. As you can probably tell from the website you&rsquo;re looking at my web dev skills are limited. As a result of this I had assumed such niceties were out of reach.</p>
+<p>Last week though I decided it was time for this to change! I would do a teeny bit of javascript. I could have nice things. This is a rundown of the very simple implementation I came up with.</p>
+<h3 id="html">HTML</h3>
+<p>First things first, we&rsquo;ll need a button for users to click. This can be plopped wherever you want on your site.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;themeButton&#34;</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&#34;toggleTheme()&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;theme-button&#34;</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>The <code>id</code> will let us reference the button from our javascript, <code>onclick</code> tells the button to call the <code>toggleTheme()</code> function we&rsquo;ll write in a minute, and the <code>theme-button</code> class will let us theme the button from our css.</p>
+<h3 id="css">CSS</h3>
+<p>In order to achieve our magic theme switching we&rsquo;re going to split our css out in to three files: <code>base.css</code>, <code>dark.css</code>, and <code>light.css</code>. The <code>dark.css</code> and <code>light.css</code> files will do the same thing: import all the common css and define a root pseudo-class to store our color variables. For example a very simple <code>dark.css</code> would look like this.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="line"><span class="cl"><span class="c">/* import common css */</span>
+</span></span><span class="line"><span class="cl"><span class="p">@</span><span class="k">import</span> <span class="nt">url</span><span class="o">(</span><span class="s2">&#34;base.css&#34;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">/* define colors */</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nd">root</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">--bg</span><span class="p">:</span> <span class="kc">black</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">--fg</span><span class="p">:</span> <span class="kc">white</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The <code>base.css</code> will simply store all the other styling you want. Here you can reference the color variables defined in the <code>dark.css</code> and <code>light.css</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="line"><span class="cl"><span class="nt">body</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">background-color</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">bg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">color</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">fg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="js">JS</h3>
+<p>Now with the groundwork in place we can stick it all together with the javascript. The gameplan here is to check the <code>href</code> attribute of the <code>stylesheet</code> element. Then if it&rsquo;s set to <code>dark.css</code> switch it to <code>light.css</code> and vice-versa. my <code>toggleTheme</code> function looked like this.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">toggleTheme</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">stylesheet</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;stylesheet&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">stylesheet</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;/dark.css&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// update stylesheet
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">stylesheet</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="s1">&#39;/light.css&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// update stylesheet
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">stylesheet</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="s1">&#39;/dark.css&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>This works well except for one little problem: when you refresh or load a new page, the stylesheet is returned to its default. This short term memory can be fixed though so theme changes persist through page loads.</p>
+<p>First we need to update our <code>toggleTheme</code> function to store our theme changes locally.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">toggleTheme</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">stylesheet</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;stylesheet&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">stylesheet</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;/dark.css&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// update stylesheet
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">stylesheet</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="s1">&#39;/light.css&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// store theme
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="s1">&#39;stylesheet&#39;</span><span class="p">,</span> <span class="s1">&#39;/light.css&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// update stylesheet
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">stylesheet</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="s1">&#39;/dark.css&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// store theme
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="s1">&#39;stylesheet&#39;</span><span class="p">,</span> <span class="s1">&#39;/dark.css&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>We then add an event listener to check if there is a theme stored on page loads.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// get stored style
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kd">var</span> <span class="nx">storedStyle</span> <span class="o">=</span> <span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s1">&#39;stylesheet&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">stylesheet</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;stylesheet&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// set stored style if it exists
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="nx">storedStyle</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">stylesheet</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="nx">storedStyle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></div><p>Finally, don&rsquo;t forget to add your javascript to your html somewhere.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;/toggle.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>Hope you&rsquo;ve enjoyed. Toggle toggle toggle!</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

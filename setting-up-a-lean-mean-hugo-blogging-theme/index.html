@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/setting-up-a-lean-mean-hugo-blogging-theme/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>setting up a lean mean hugo blogging theme</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>setting up a lean mean hugo blogging theme</h1>
+        <div>
+                <time>November 10, 2022</time>
+            </div>
+    </header><p>When I first started messing around with hugo, I found the whole thing slihtly mystifying. I downloaded a theme like they asked me, edited the config file to try and customise things a little and quickly broke everything. To be fair, this was mainly due to my tinkering instinct to fly to close to the sun. But anyway, the point at which I started to really appreciate the power of hugo was when I tried to make my own - admittedly less feautureful - theme. This selection of tips and tricks will assume that you&rsquo;ve just run something like <code>hugo new site lovely-new-website</code>, entered the new directory with <code>cd lovely-new-website</code> and you&rsquo;ve got a selection of mostly empty directories looking something like this.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── archetypes
+</span></span><span class="line"><span class="cl">│   └── default.md
+</span></span><span class="line"><span class="cl">├── config.toml
+</span></span><span class="line"><span class="cl">├── content
+</span></span><span class="line"><span class="cl">├── data
+</span></span><span class="line"><span class="cl">├── layouts
+</span></span><span class="line"><span class="cl">├── public
+</span></span><span class="line"><span class="cl">├── static
+</span></span><span class="line"><span class="cl">└── themes
+</span></span></code></pre></div><p>Our first concern will be getting a barebones theme template that can be customised to our liking. I would recommend <a href="https://github.com/ericmurphyxyz/hugo-starter-theme">this</a> guy which I used to get up and running. You could also check out <a href="https://gitlab.com/robbygozzarder/mcl">my theme</a> which I&rsquo;m using on this site that is also very simple (as you can probably see from the website lol). Once you&rsquo;ve got a theme with (I&rsquo;m using mine as an example) <code>git clone https://gitlab.com/robbygozzarder/mcl</code> and placed it in the themes directory you&rsquo;ll need to adjust your config.toml file to point it to this theme.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="nx">theme</span><span class="p">=</span><span class="s2">&#34;mcl&#34;</span>
+</span></span></code></pre></div><p>The directory structure of your new theme will look something like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">└── mcl
+</span></span><span class="line"><span class="cl">    ├── archetypes
+</span></span><span class="line"><span class="cl">    │   └── default.md
+</span></span><span class="line"><span class="cl">    ├── layouts
+</span></span><span class="line"><span class="cl">    │   ├── 404.html
+</span></span><span class="line"><span class="cl">    │   ├── _default
+</span></span><span class="line"><span class="cl">    │   │   ├── list.html
+</span></span><span class="line"><span class="cl">    │   │   └── single.html
+</span></span><span class="line"><span class="cl">    │   ├── index.html
+</span></span><span class="line"><span class="cl">    │   └── partials
+</span></span><span class="line"><span class="cl">    │       ├── footer.html
+</span></span><span class="line"><span class="cl">    │       ├── header.html
+</span></span><span class="line"><span class="cl">    │       └── nav.html
+</span></span><span class="line"><span class="cl">    ├── README.md
+</span></span><span class="line"><span class="cl">    └── static
+</span></span><span class="line"><span class="cl">        └── css
+</span></span><span class="line"><span class="cl">            └── style.css
+</span></span></code></pre></div><p>This is where most of the magic happens:</p>
+<ul>
+<li>The default.md file in the archetypes directory dictates what template to follow when adding new post files.</li>
+<li>The layouts directory is where most of the meat is:
+<ul>
+<li>Firstly, there&rsquo;s the partials directory which contains outlines for sections which you want to be used multiple times across the site such as a footer (footer.html)</li>
+<li>Sceondly, we have _default which contains outlines for the two types of hugo pages; singles (single.html) such as this individual post page, and lists (list.html) such as the tags and posts pages on this site.</li>
+<li>Partials also contains index.html which (you guessed it!) is your home page.</li>
+</ul>
+</li>
+<li>Last but not least, there&rsquo;s static which as you can see just has the css for the site (this is all looks though - the action happens in partials).</li>
+</ul>
+<p>Now the theme is sorted the next three things you need to know anything about (imho) are the content, public, and static directories:</p>
+<ul>
+<li>Content is where you put your posts - these are just markdown files which hugo converts to html for you.</li>
+<li>Public is where hugo puts your built - ready to be served - site. You can then copy this directory to wherever your webserver is looking eg. /var/www/jdysmcl</li>
+<li>Static is where assets which you want to use with your site are kept. I basically just use it for images which I can then reference from my posts.</li>
+</ul>
+<p>Now we&rsquo;ve got the directory what&rsquo;s happening where admin out the way let&rsquo;s have a look at what some of the html files in the themes directory look like; this is the index.html for my site for example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl">{{ partial &#34;header.html&#34; . }}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>This is mainly a place for me to document various
+</span></span><span class="line"><span class="cl">bits and bobs I&#39;ve been doing on my computers.
+</span></span><span class="line"><span class="cl">I am a noob in most things so take anything written
+</span></span><span class="line"><span class="cl">here with a pinch of salt. Lots of love :)<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">{{ .Content }}
+</span></span><span class="line"><span class="cl">{{ range .Site.RegularPages | first 5 }}
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;{{ .RelPermalink }}&#34;</span><span class="p">&gt;</span>{{ .Title }}<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  {{ .Summary }}
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  {{ .Date.Format &#34;06 Jan, 2006&#34; }} |
+</span></span><span class="line"><span class="cl">  {{ .WordCount }} words |
+</span></span><span class="line"><span class="cl">  {{ .ReadingTime }} mins |
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  {{ range (.GetTerms &#34;tags&#34;) }}
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;{{ .Permalink }}&#39;</span><span class="p">&gt;</span>{{ .LinkTitle }}<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  {{ end }}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">{{ end }}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">{{ partial &#34;footer.html&#34; . }}
+</span></span></code></pre></div><p>In short, this plops the header and footer partials at the top and bottom of the page respectively, includes a short warning not to listen to me, and then displays my five most recent posts along with a snippet of the post and some accompanyning info: date, word count, reading time, and tags. The keen eyed among you will have noticed that this is a mish mash of normal html tags and strange stuff enclosed in double curly brackets. I&rsquo;m going to end on this cliffhanger but if you want to know more about the curly brackets check out the hugo docs <a href="https://gohugo.io/templates/introduction">here</a>.</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

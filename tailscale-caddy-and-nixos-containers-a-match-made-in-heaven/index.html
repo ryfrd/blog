@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/tailscale-caddy-and-nixos-containers-a-match-made-in-heaven/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>tailscale, caddy, and nixos containers - a match made in heaven</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>tailscale, caddy, and nixos containers - a match made in heaven</h1>
+        <div>
+                <time>May 16, 2023</time>
+            </div>
+    </header><p>For a little while now I&rsquo;ve been running some services (jellyfin etc.) on an old laptop in my house. I&rsquo;m not trying to sound like a podcast ad but as a networking novice, the simplicity <a href="https://tailscale.com/">tailscale</a> brings to accessing these services remotely is very nice. Until recently though, I had been accessing my services like a heathen with http and port numbers (eg http://tailscale-ip:service-port). This works and is perfectly secure thanks to tailscale though it lacks a certain finesse. In an ideal world you&rsquo;d have a reverse proxy and set up SSL certs so your browser doesn&rsquo;t get stressed and you dont have to rememeber ip addresses and port numbers.</p>
+<p>When I initially looked at how to do this it seemed like it was above my paygrade and not worth the stress; that was until I came across <a href="https://caddy.community/t/https-in-your-vpn-caddy-now-uses-tls-certificates-from-tailscale/15380">this</a>. This works great and is as simple as advertised though there is one drawback: you can only reverse proxy one service per host. So for my usecase of the laptop with multiple services running on it I could only use the magic caddy tailscale auto-https thing for one of them.</p>
+<h3 id="what-to-do">what to do?</h3>
+<p>Seeing as I was already using nixos on my latop server I turned to a  slightly cumbersome nixos solution. One <a href="https://nixos.wiki/wiki/NixOS_Containers">nixos-container</a> for each service I wanted over https. I&rsquo;d be lying If I said I completely understand all of this NAT business but this was the config I cobbled together (copied from the nixos docs).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl">  <span class="n">networking</span><span class="o">.</span><span class="n">nat</span> <span class="err">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">internalInterfaces</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;ve-+&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">externalInterface</span> <span class="o">=</span> <span class="s2">&#34;ens3&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">containers</span><span class="o">.</span><span class="n">jellyfin</span> <span class="err">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">autoStart</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enableTun</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">privateNetwork</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">hostAddress</span> <span class="o">=</span> <span class="s2">&#34;192.168.100.10&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">localAddress</span> <span class="o">=</span> <span class="s2">&#34;192.168.100.11&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bindMounts</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;/films&#34;</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">hostPath</span> <span class="o">=</span> <span class="s2">&#34;/mnt/films&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">config</span> <span class="o">=</span> <span class="p">{</span> <span class="n">pkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      
+</span></span><span class="line"><span class="cl">      <span class="n">services</span><span class="o">.</span><span class="n">tailscale</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># permit caddy to get certs from tailscale</span>
+</span></span><span class="line"><span class="cl">        <span class="n">permitCertUid</span> <span class="o">=</span> <span class="s2">&#34;caddy&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">};</span>
+</span></span><span class="line"><span class="cl">      
+</span></span><span class="line"><span class="cl">      <span class="n">services</span><span class="o">.</span><span class="n">jellyfin</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">openFirewall</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">services</span><span class="o">.</span><span class="n">caddy</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">extraConfig</span> <span class="o">=</span> <span class="s1">&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">          jellyfin.tailnet-name.ts.net {
+</span></span></span><span class="line"><span class="cl"><span class="s1">            reverse_proxy localhost:8096
+</span></span></span><span class="line"><span class="cl"><span class="s1">          }
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c1"># open https port</span>
+</span></span><span class="line"><span class="cl">      <span class="n">networking</span><span class="o">.</span><span class="n">firewall</span><span class="o">.</span><span class="n">allowedTCPPorts</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">443</span> <span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">system</span><span class="o">.</span><span class="n">stateVersion</span> <span class="o">=</span> <span class="s2">&#34;23.05&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="err">}</span>
+</span></span></code></pre></div><p>This example enables the jellyfin, tailscale, and caddy services, mounts a film folder from the host, and lets the container talk to the internet.</p>
+<p>Once you&rsquo;ve logged into the container <code>sudo nixos-container root-login jellyfin</code> and authenticated with tailscale <code>sudo tailscale up</code>, you should be able to access your jellyfin in your browser at <code>https://jellyfin.tailnet-name.ts.net</code>.</p>
+<p>As well as solving the multiple services problem, separating services onto their own hosts is nice if you want to <a href="https://tailscale.com/kb/1084/sharing/">share</a> a particular service with someone else. I personaly feel happier just sharing one container running jellyfin rather than the whole host with multiple things on it. Anyway thanks for listening to my TED talk.</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

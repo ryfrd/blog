@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/lowkey-emacs-setup/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>lowkey emacs setup</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>lowkey emacs setup</h1>
+        <div>
+                <time>November 18, 2022</time>
+            </div>
+    </header><p>About a month ago I was a little bored and thought I&rsquo;d give emacs a go. There&rsquo;s something fun about trying out these mythical pieces of software that have been around forever; kind of like watching The Godfather for the first time. Like many extensible, super configurable programs, emacs seems kind of impenetrable at first glance. I tried doing the tutorial but kind of glazed over after a while with the endless stream of C-a C-b C-c. There&rsquo;s also the quite jarring default theme which wasn&rsquo;t vibing with the lovely screenshots I had seen on the internet. Anyway, after quite a bit of fiddling I&rsquo;ve landed on a simple little setup that I&rsquo;ve been quite enjoying. Here are a few little pointers to hopefully ease you in.</p>
+<h3 id="aesthetic-niceties">AESTHETIC NICETIES</h3>
+<p>First things first, assuming you&rsquo;re on linux emacs is configured with a file at <code>~/.emacs.d/init.el</code>. As a terrible aesthete, the first thing I was worried about was changing the theme. This can be achieved with <code>M-x load-theme</code>; if you want the setting to persist though you can add this to you init.el:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nv">load-theme</span> <span class="ss">&#39;misterioso</span> <span class="no">t</span><span class="p">)</span>
+</span></span></code></pre></div><p>There are a few themes out of the box but if you&rsquo;re looking for some more I would recomment the doom-themes package. Speaking of packages, emacs has a built in package-manager that installs packages from the Emacs Lisp Package Archive (GNU ELPA); I unfortunately know very little about this as I&rsquo;ve been using nix to manage my emacs packages.</p>
+<p>Anyway we&rsquo;ve got a theme, how about a custom startup message for our initial buffer:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="k">setq</span> <span class="nv">inhibit-startup-message</span> <span class="no">t</span>
+</span></span><span class="line"><span class="cl">      <span class="nv">inhibit-startup-echo-area-message</span> <span class="no">t</span>
+</span></span><span class="line"><span class="cl">      <span class="nv">initial-scratch-message</span>
+</span></span><span class="line"><span class="cl">      <span class="s">&#34;;;oh how i adore to edit text with emacs!&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><p>Maybe you dont want those big old cumbersome toolbars cluttering up your screen:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nv">scroll-bar-mode</span> <span class="mi">-1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nv">tool-bar-mode</span> <span class="mi">-1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nv">menu-bar-mode</span> <span class="mi">-1</span><span class="p">)</span>
+</span></span></code></pre></div><p>Perhaps some line highlighting and numbering:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="c1">;;line numbering</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nv">global-display-line-numbers-mode</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="k">setq</span> <span class="nv">display-line-numbers-type</span> <span class="ss">&#39;relative</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;;line higlight</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nv">global-hl-line-mode</span> <span class="no">t</span><span class="p">)</span>
+</span></span></code></pre></div><p>Custom font?</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="k">setq</span> <span class="nv">default-frame-alist</span> <span class="o">&#39;</span><span class="p">((</span><span class="nv">font</span> <span class="o">.</span> <span class="s">&#34;agave Nerd Font 14&#34;</span><span class="p">)))</span>
+</span></span></code></pre></div><h3 id="custom-keybindings-and-evil">CUSTOM KEYBINDINGS AND EVIL</h3>
+<p>I don&rsquo;t know if it&rsquo;s just sunk cost fallacy or what but having gone to the trouble of learning to some extent how vim works, I kind of feel incomplete without vim keybindings now. Fortunately, emacs has evil mode which effectively emulates vim modal editing in emacs. To configure evil in our init.el we&rsquo;ll use use-package. This is a macro which - to my understanding - talks to your package manager allowing you to configure installed packages in a nice neat efficient manner. To enable it, add this to your init.el:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nv">eval-when-compile</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nf">require</span> <span class="ss">&#39;use-package</span><span class="p">))</span>
+</span></span></code></pre></div><p>These are the keybindings that I currently have going; nothing too crazy just a few simple things:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nf">use-package</span> <span class="nv">evil</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:config</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">evil-mode</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">evil-select-search-module</span> <span class="ss">&#39;evil-search-module</span> <span class="ss">&#39;evil-search</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">;;manage panes</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">evil-normal-state-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;M-s&#34;</span><span class="p">)</span> <span class="ss">&#39;evil-window-split</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">evil-normal-state-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;M-v&#34;</span><span class="p">)</span> <span class="ss">&#39;evil-window-vsplit</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">evil-normal-state-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;M-h&#34;</span><span class="p">)</span> <span class="ss">&#39;evil-window-left</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">evil-normal-state-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;M-j&#34;</span><span class="p">)</span> <span class="ss">&#39;evil-window-down</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">evil-normal-state-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;M-k&#34;</span><span class="p">)</span> <span class="ss">&#39;evil-window-up</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">evil-normal-state-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;M-l&#34;</span><span class="p">)</span> <span class="ss">&#39;evil-window-right</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">;;get files open quick</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">evil-normal-state-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;M-f&#34;</span><span class="p">)</span> <span class="ss">&#39;find-file</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">evil-normal-state-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;M-b&#34;</span><span class="p">)</span> <span class="ss">&#39;dired-jump</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">;;terminal</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">evil-normal-state-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;M-t&#34;</span><span class="p">)</span> <span class="ss">&#39;ansi-term</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">;;nav buffers</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">evil-normal-state-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;M-,&#34;</span><span class="p">)</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;C-x &lt;left&gt;&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">evil-normal-state-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;M-.&#34;</span><span class="p">)</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&#34;C-x &lt;right&gt;&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span></code></pre></div><h3 id="some-friednly-ide-features-you-may-like">SOME FRIEDNLY IDE FEATURES YOU MAY LIKE</h3>
+<p>I don&rsquo;t know about you but having used vscode here and there I&rsquo;ve become accustomed to a lot of these little IDE crutches (completion, autopair and the like) and now when I don&rsquo;t have thme I feel a little sad. Emacs has it covered though as long as you&rsquo;re happy with installing some additional stuff. Auto-completion? Try company:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="c1">;; enable company in all buffers</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nv">add-hook</span> <span class="ss">&#39;after-init-hook</span> <span class="ss">&#39;global-company-mode</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nf">use-package</span> <span class="nv">company</span>			
+</span></span><span class="line"><span class="cl">  <span class="ss">:commands</span> <span class="nv">company-tng-configure-default</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:custom</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">;; delay to start completion</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">company-idle-delay</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">;; nb of chars before triggering completion</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">company-minimum-prefix-length</span> <span class="mi">1</span><span class="p">)</span>
+</span></span></code></pre></div><p>You want the nice little autopair brackets?</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nf">use-package</span> <span class="nv">flex-autopair</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:config</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">flex-autopair-mode</span> <span class="mi">1</span><span class="p">))</span>
+</span></span></code></pre></div><p>Clever commenting?</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nf">use-package</span> <span class="nv">smart-comment</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:bind</span> <span class="p">(</span><span class="s">&#34;M-c&#34;</span> <span class="o">.</span> <span class="nv">smart-comment</span><span class="p">))</span>
+</span></span></code></pre></div><p>Here&rsquo;s a little pic of the current setup :)</p>
+<p><img src="/image/emacs.png" alt="emacs"></p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

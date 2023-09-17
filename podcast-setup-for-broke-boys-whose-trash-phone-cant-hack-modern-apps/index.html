@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/podcast-setup-for-broke-boys-whose-trash-phone-cant-hack-modern-apps/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>podcast setup for broke boys whose trash phone cant hack modern apps</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>podcast setup for broke boys whose trash phone cant hack modern apps</h1>
+        <div>
+                <time>January 24, 2023</time>
+            </div>
+    </header><p>I have an old sad android phone with 2GB of ram which nowadays seems to struggle with anything but the most lightweight apps. As a result of this I have been &lsquo;podcast-player-hopping&rsquo; without success for the last couple of months trying to find something which doesn&rsquo;t nuke my phone whenever I use it. In a moment of desperation it occured to me that a creative solution might be required. The gameplan was this:</p>
+<ul>
+<li>write python script to download podcasts</li>
+<li>set up cron job on my server to run script every couple of hours</li>
+<li>sync podcasts across my devices using the lovely <a href="https://syncthing.net/">syncthing</a></li>
+<li>listen to podcasts using vlc which my phone loves</li>
+</ul>
+<p>For the python script I used the lovely <a href="https://feedparser.readthedocs.io/en/latest/introduction.html">feedparser</a> module for easy talking to my rss feeds.</p>
+<h3 id="where-the-podcasts-go">WHERE THE PODCASTS GO</h3>
+<p>First thing I would want my script to do is create a subdirectory of my main podcast directory for each individual podcast. After plopping all my feeds in a list like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">rss_urls</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;https://anchor.fm/s/1311c8b8/podcast/rss&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;https://feeds.acast.com/public/shows/5e7b777ba085cbe7192b0607&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre></div><p>I wrote a little function that would parse each of these feeds get its name, and make a directory if one does not already exist.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">create_dirs</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">rss_urls</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span> <span class="o">=</span> <span class="n">feedparser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">feed_name</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;feed&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="n">current_feeds</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">pod_dir</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">feed_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_feeds</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">pod_dir</span> <span class="o">+</span> <span class="n">feed_name</span><span class="p">)</span>
+</span></span></code></pre></div><h3 id="downloading">DOWNLOADING</h3>
+<p>With this sorted I now turned to the actual downloading of podcasts. This function parses each rss feed, filters it for entries from the last week, then grabs a title and a url for the audio file. These are stuck together into a list of lists with each list representing a separate entry.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_pods</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">global</span> <span class="n">feed_info</span>
+</span></span><span class="line"><span class="cl">    <span class="n">feed_info</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">rss_urls</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span> <span class="o">=</span> <span class="n">feedparser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">pod</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">entries</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">pod</span><span class="o">.</span><span class="n">published_parsed</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">86400</span><span class="o">*</span><span class="mi">7</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="n">feed_name</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">feed</span><span class="o">.</span><span class="n">title</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pod_name</span> <span class="o">=</span> <span class="n">pod</span><span class="o">.</span><span class="n">title</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pod_dl</span> <span class="o">=</span> <span class="n">pod</span><span class="o">.</span><span class="n">enclosures</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">href</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pod_info</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">					<span class="n">feed_name</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">					<span class="n">pod_name</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">					<span class="n">pod_dl</span>
+</span></span><span class="line"><span class="cl">				<span class="p">]</span>
+</span></span><span class="line"><span class="cl">                <span class="n">feed_info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pod_info</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">feed_info</span>
+</span></span></code></pre></div><p>This next function looks at all the podcast subdirectories and returns a list of all the podcasts I already have downloaded. This can be used when downloading to only get new podcasts.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_downloads</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">downloads</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pods</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">pod_dir</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">pods</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">pod_dir</span> <span class="o">+</span> <span class="nb">dir</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">pod_dir</span> <span class="o">+</span> <span class="nb">dir</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="n">downloads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">downloads</span>
+</span></span></code></pre></div><p>Now for the actual getting of the audio files. Here we use requests to make a request to the audio file url and write the content to the relevant directory. I also append a .mp3 to the filenames so they play nice with media players.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">download</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">a</span> <span class="o">=</span> <span class="n">get_pods</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">pod</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">b</span> <span class="o">=</span> <span class="n">get_downloads</span><span class="p">()</span> 
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">pod</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;.mp3&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">dl</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pod</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">            <span class="k">except</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Download Error&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pod_dir</span> <span class="o">+</span> <span class="n">pod</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pod</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.mp3&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dl</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</span></span></code></pre></div><h3 id="pruning">PRUNING</h3>
+<p>As it stands, the script does downloading great. The only thing we need is some kind of automatic deletion so my phone doesnt get clogged up with old podcasts. This function checks for files which were created over a week ago and deletes the offenders.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">trim</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">pod_dir</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">pod_dir</span> <span class="o">+</span> <span class="nb">dir</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pods</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">pod_dir</span> <span class="o">+</span> <span class="nb">dir</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">pod</span> <span class="ow">in</span> <span class="n">pods</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">st</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">pod_dir</span> <span class="o">+</span> <span class="nb">dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pod</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">mtime</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">st_mtime</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">mtime</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">86400</span><span class="o">*</span><span class="n">trim_age</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">pod_dir</span> <span class="o">+</span> <span class="nb">dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pod</span><span class="p">)</span>
+</span></span></code></pre></div><p>The last thing is to call the functions:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">create_dirs</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">download</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">trim</span><span class="p">()</span>
+</span></span></code></pre></div><p>Of course this slightly ramshackle approach is certainly not for everyone lol but as it stands it&rsquo;s working quite nicely for me. Lots of love and happy listening :)</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

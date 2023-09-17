@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/theming-nirvana/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>theming nirvana</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>theming nirvana</h1>
+        <div>
+                <time>March 13, 2023</time>
+            </div>
+    </header><p>As I fall deeper and deeper down the nixos rabbit hole, I find myself becoming more and more obsessed with controlling every little thing on my computers declaratively. It starts with: &lsquo;oh this is cool I can specify which desktop environment to use in my configuration.nix&rsquo;. Next thing you know you&rsquo;ve discovered <a href="https://github.com/nix-community/home-manager">home-manager</a> and every program on every linux system you use needs to be controlled in your nix-config. Of course this slightly insane approach has its downsides; it also opens some doors though.</p>
+<p><a href="https://sr.ht/~misterio/nix-colors/">Nix-colors</a> lets you dyanmically change the theming of programs controlled in your nix config. So when you want to change the color of everything and have it match and all be pretty lol, you are able to do so with one word as opposed to poring over everything changing each individual color. For a certain type of person, this is very nice!</p>
+<h3 id="how-to-make-it-work">how to make it work</h3>
+<p>This will be a quick rundown of how I&rsquo;ve got things set up; this is basically just a rehash of <a href="https://sr.ht/~misterio/nix-colors/#setup">this</a>.</p>
+<p>First of all, you need to add nix-colors to your flake inputs and then point home-manager in its direction. The relevant parts of my <code>flake.nix</code> look something like this.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nix-colors</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;github:misterio77/nix-colors&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="n">homeConfigurations</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;randy@computer&#34;</span> <span class="o">=</span> <span class="n">home-manager</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">homeManagerConfiguration</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">extraSpecialArgs</span> <span class="o">=</span> <span class="p">{</span> <span class="k">inherit</span> <span class="n">nix-colors</span><span class="p">;</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Then you can import the module into your home-manager config, specify a scheme (<a href="https://github.com/tinted-theming/base16-schemes">available schemes here</a>), and get to theming.</p>
+<p>Here&rsquo;s a simple example where I make my dunst notifications follow the everforest theme.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">pkgs</span><span class="o">,</span> <span class="n">config</span><span class="o">,</span> <span class="n">nix-colors</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">imports</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nix-colors</span><span class="o">.</span><span class="n">homeManagerModule</span>
+</span></span><span class="line"><span class="cl">  <span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">colorScheme</span> <span class="o">=</span> <span class="n">nix-colors</span><span class="o">.</span><span class="n">colorSchemes</span><span class="o">.</span><span class="n">everforest</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">services</span><span class="o">.</span><span class="n">dunst</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">urgency_normal</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	  <span class="n">background</span> <span class="o">=</span> <span class="s2">&#34;#</span><span class="si">${</span><span class="n">config</span><span class="o">.</span><span class="n">colorScheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base01</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	  <span class="n">foreground</span> <span class="o">=</span> <span class="s2">&#34;#</span><span class="si">${</span><span class="n">config</span><span class="o">.</span><span class="n">colorScheme</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">base05</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="a-couple-of-additional-tips-and-tricks">a couple of additional tips and tricks</h3>
+<p>First tip and trick: generate and dynamically alter gtk themes depending on current nix-colors theme.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="n">inputs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">let</span>
+</span></span><span class="line"><span class="cl">  <span class="k">inherit</span> <span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">nix-colors</span><span class="o">.</span><span class="n">lib-contrib</span> <span class="p">{</span> <span class="k">inherit</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">})</span> <span class="n">gtkThemeFromScheme</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">in</span> <span class="k">rec</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">gtk</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">theme</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">name</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">${</span><span class="n">config</span><span class="o">.</span><span class="n">colorScheme</span><span class="o">.</span><span class="n">slug</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">package</span> <span class="o">=</span> <span class="n">gtkThemeFromScheme</span> <span class="p">{</span> <span class="n">scheme</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">colorScheme</span><span class="p">;</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">services</span><span class="o">.</span><span class="n">xsettingsd</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;Net/ThemeName&#34;</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">${</span><span class="n">gtk</span><span class="o">.</span><span class="n">theme</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;Net/IconThemeName&#34;</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">${</span><span class="n">gtk</span><span class="o">.</span><span class="n">iconTheme</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Second tip and trick: if you&rsquo;re not using nix to configure everything you can still pass your colors across in the relevant format with <code>home.file</code>. I do this for qtile.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span><span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
+</span></span><span class="line"><span class="cl">  <span class="k">let</span>
+</span></span><span class="line"><span class="cl">    <span class="n">c</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">colorScheme</span><span class="o">.</span><span class="n">colors</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">in</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">home</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;.config/qtile/colors.py&#34;</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	  <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">        scheme = {
+</span></span></span><span class="line"><span class="cl"><span class="s1">          &#39;yellow&#39;: &#34;#</span><span class="si">${</span><span class="n">c</span><span class="o">.</span><span class="n">base0A</span><span class="si">}</span><span class="s1">&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">          &#39;orange&#39;: &#34;#</span><span class="si">${</span><span class="n">c</span><span class="o">.</span><span class="n">base09</span><span class="si">}</span><span class="s1">&#34;,	
+</span></span></span><span class="line"><span class="cl"><span class="s1">          &#39;red&#39;: &#34;#</span><span class="si">${</span><span class="n">c</span><span class="o">.</span><span class="n">base0F</span><span class="si">}</span><span class="s1">&#34;,	
+</span></span></span><span class="line"><span class="cl"><span class="s1">          &#39;magenta&#39;: &#34;#</span><span class="si">${</span><span class="n">c</span><span class="o">.</span><span class="n">base08</span><span class="si">}</span><span class="s1">&#34;,	
+</span></span></span><span class="line"><span class="cl"><span class="s1">          &#39;violet&#39;: &#34;#</span><span class="si">${</span><span class="n">c</span><span class="o">.</span><span class="n">base0E</span><span class="si">}</span><span class="s1">&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">          &#39;blue&#39;: &#34;#</span><span class="si">${</span><span class="n">c</span><span class="o">.</span><span class="n">base0D</span><span class="si">}</span><span class="s1">&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">          &#39;cyan&#39;: &#34;#</span><span class="si">${</span><span class="n">c</span><span class="o">.</span><span class="n">base0C</span><span class="si">}</span><span class="s1">&#34;,	
+</span></span></span><span class="line"><span class="cl"><span class="s1">          &#39;green&#39;: &#34;#</span><span class="si">${</span><span class="n">c</span><span class="o">.</span><span class="n">base0B</span><span class="si">}</span><span class="s1">&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">        }
+</span></span></span><span class="line"><span class="cl"><span class="s1">      &#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>You can then import the colors into your <code>config.py</code> and use them as you see fit.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">colors</span> <span class="kn">import</span> <span class="n">scheme</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">layouts</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">layout</span><span class="o">.</span><span class="n">MonadTall</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">	    <span class="n">border_normal</span> <span class="o">=</span> <span class="n">scheme</span><span class="p">[</span><span class="s1">&#39;yellow&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">	    <span class="n">border_focus</span> <span class="o">=</span> <span class="n">scheme</span><span class="p">[</span><span class="s1">&#39;green&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">	<span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre></div><p>That&rsquo;s it for today. Thank you to the <a href="https://github.com/Misterio77">hero</a> that made this.</p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>

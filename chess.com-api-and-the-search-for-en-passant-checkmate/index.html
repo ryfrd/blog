@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expect linux and self-hosting tinkering, some novice programming, and maybe the occasional recipe :)">
+    
+    <link rel="shortcut icon" href="https://dymc.win/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="canonical" href="https://dymc.win/chess.com-api-and-the-search-for-en-passant-checkmate/" />
+    <a rel="me" href="https://mastodon.dymc.win/@rayford"></a>
+    <title>chess.com api and the search for en passant checkmate</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://dymc.win">dymc.win</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/links/" title="links">links</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>chess.com api and the search for en passant checkmate</h1>
+        <div>
+                <time>October 26, 2022</time>
+            </div>
+    </header><p>The chess.com API gives you access to a crazy amount of data on games played on the site. Armed with the knowledge that this data was at my fingertips, I set out to do what any sane person would do: find en passant checkmates. For those not in the know, en passant check mate is kind of the king of moves in chess meme circles. So some sort of python script that identified en passant check mates that occured on the site would be of great value to me.</p>
+<p>First things first, I would need a method of grabbing lots of games from the api. This would be achieved by looking at players on the site and searching their game archives. As I couldn&rsquo;t think of any obvious way to get completely random players on the site, I used the API&rsquo;s lists of all titled players (GM, IM, WIM, etc.) on the site. This is what I came up with -&gt;</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">  <span class="k">def</span> <span class="nf">get_archive_urls</span><span class="p">(</span><span class="n">titled_urls</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	  <span class="n">players</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">	  <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">titled_urls</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">		  <span class="n">title_list</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		  <span class="n">title_list</span> <span class="o">=</span> <span class="n">title_list</span><span class="p">[</span><span class="s1">&#39;players&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">		  <span class="n">players</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">title_list</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	  <span class="n">archive_urls</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">	  <span class="k">for</span> <span class="n">username</span> <span class="ow">in</span> <span class="n">players</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">		  <span class="n">games</span> <span class="o">=</span> <span class="s1">&#39;https://api.chess.com/pub/player/&#39;</span> <span class="o">+</span> <span class="n">username</span> <span class="o">+</span> <span class="s1">&#39;/games/2022/05&#39;</span>
+</span></span><span class="line"><span class="cl">		  <span class="n">archive_urls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">games</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	  <span class="k">return</span> <span class="n">archive_urls</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">get_archive_urls</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">	  <span class="s1">&#39;https://api.chess.com/pub/titled/GM&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	  <span class="s1">&#39;https://api.chess.com/pub/titled/WGM&#39;</span>
+</span></span><span class="line"><span class="cl">	  <span class="p">])</span> 
+</span></span></code></pre></div><p>This function reads a list of urls, gets a list of all the usernames from the api and then inserts this username into a new url which will allow us to access their games from a particular month. I then returns a list of all of these game archive urls.</p>
+<p>The next order of business is taking this list of urls and turning it into a list of games. It looks quite similar to the previous example -&gt;</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">  <span class="k">def</span> <span class="nf">grab_games</span><span class="p">(</span><span class="n">archive_urls</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">games</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">archive_urls</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">archive</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">archive_games</span> <span class="o">=</span> <span class="n">archive</span><span class="p">[</span><span class="s1">&#39;games&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="n">games</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">archive_games</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">games</span>
+</span></span></code></pre></div><p>Feeding the first function into the second -&gt;</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">  <span class="n">grab_games</span><span class="p">(</span><span class="n">get_archive_urls</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;https://api.chess.com/pub/titled/GM&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;https://api.chess.com/pub/titled/WGM&#39;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">]))</span>
+</span></span></code></pre></div><p>We get a very long list of json objects (is that the right phrase? um). Each corresponding to one of games played by GMs and WGMs on chess.com during May of 2022. Come back next time to see what we can do with this very long list. Here&rsquo;s a taster of what the list looks like printed to a terminal - lots of possiblities.</p>
+<p><img src="/image/output.webp" alt="image alt text"></p>
+</article>
+
+        </main><footer id="footer">
+    Copyright © 2023 James McLaren
+</footer>
+</body>
+</html>
